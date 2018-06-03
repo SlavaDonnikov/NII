@@ -6,8 +6,126 @@
 		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:NII"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Height="700" Width="1300" WindowStartupLocation="CenterScreen" Topmost="False" 
+        ShowInTaskbar="true" ResizeMode="NoResize" WindowStyle="None" AllowsTransparency="False" 
+		Icon="Resources\miranda.ico" Loaded="Window_Loaded" MouseDown="Window_MouseDown" >
+	<Grid x:Name="RootGrid" Background="#F5F5F5">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="0.047*"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="0.047*"/>
+		</Grid.RowDefinitions>
+
+		<!-- Menu & Upper panel -->
+		<Grid Grid.Row="0" Margin="0,0,0,0" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#D2B48C">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="0.26*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<!-- Menu Toggle Button -->
+			<StackPanel Panel.ZIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Left">
+				<ToggleButton x:Name="TglBtnMenu" Margin="0" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"                    
+                          Foreground="White" Background="#4682B4" BorderThickness="0" BorderBrush="{x:Null}" IsChecked="False" Height="30" Width="30">
+					<ToggleButton.ToolTip>
+						<ToolTip Content="Menu" Placement="Relative" Background="{x:Null}" Foreground="#4682B4"
+                                 HasDropShadow="False" HorizontalOffset="30" VerticalOffset="-1"
+                                 FontFamily="Stencil" FontSize="14"/>
+					</ToggleButton.ToolTip>
+					<materialDesign:PackIcon Kind="Menu" Height="25" Width="25" />
+				</ToggleButton>
+			</StackPanel>
+
+			<!-- Menu -->
+			<Canvas>
+				<StackPanel Background="#D2B48C" >
+					<StackPanel.Style>
+						<Style TargetType="StackPanel">
+							<Setter Property="HorizontalAlignment" Value="Stretch"/>
+							<Setter Property="VerticalAlignment" Value="Stretch"/>
+							<Setter Property="Orientation" Value="Vertical"/>
+							<Setter Property="Visibility" Value="Visible"/>
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnMenu}" Value="True">
+									<Setter Property="Visibility" Value="Visible"/>
+									<Setter Property="Height" Value="270"/>
+								</DataTrigger>
+								<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnMenu}" Value="False">
+									<Setter Property="Visibility" Value="Collapsed"/>
+									<Setter Property="Height" Value="30"/>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</StackPanel.Style>
+
+					<Border Style="{StaticResource BorderEdge}" Margin="1,35,1,1" >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+							<Label Style="{DynamicResource MenuLabel}" Content="Home page" />
+							<materialDesign:PackIcon Kind="HomeAssistant" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Border>
+
+					<Border Style="{StaticResource BorderEdge}" >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+							<Label Style="{DynamicResource MenuLabel}" Content="Search In DB" />
+							<materialDesign:PackIcon Kind="DatabaseSearch" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Border>
+					<Border Style="{StaticResource BorderEdge}" >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+							<Label Style="{DynamicResource MenuLabel}" Content="Add Record" />
+							<materialDesign:PackIcon Kind="DatabasePlus" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Border>
+					<Border Style="{StaticResource BorderEdge}" >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"  >
+							<Label Style="{DynamicResource MenuLabel}" Content="Delete Record" />
+							<materialDesign:PackIcon Kind="DatabaseMinus" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Border>
+					<Border Style="{StaticResource BorderEdge}" >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+							<Label Style="{DynamicResource MenuLabel}" Content="Settings" />
+							<materialDesign:PackIcon Kind="Settings" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+						</StackPanel>						
+					</Border>
+
+
+				</StackPanel>
+			</Canvas>
+			
+			<!-- "Power" Button-->
+			<StackPanel Grid.Column="1" Panel.ZIndex="2" Margin="0,0,2,0" Orientation="Horizontal" Height="30" HorizontalAlignment="Right">				
+				<Button x:Name="Application_Shutdown" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+						Height="30" Width="30" BorderBrush="{x:Null}" Background="{x:Null}" Click="Application_Shutdown_Click" >
+					<materialDesign:PackIcon Kind="Power" Height="30" Width="30"/>
+				</Button>
+			</StackPanel>
+		</Grid>
+
+		<!-- Status bar -->
+		<Grid Grid.Row="2" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="#D2B48C">
+			<StackPanel Panel.ZIndex="2" Orientation="Horizontal" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+				<Label x:Name="ApplicationFullDate" Content="Saturday, March 31, 2018" Margin="0,0,10,0" FontFamily="Stencil" FontSize="13" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+				<Label x:Name="ApplicationRealTime" Content="00:00:00 AM" Margin="0,0,8,0" FontFamily="Stencil" FontSize="13" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+				<Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Height="28" Width="28" Margin="0,0,2,0" BorderBrush="{x:Null}" Background="{x:Null}">
+					<Button.ToolTip>
+						<ToolTip Content="About Application" Placement="Relative" Background="{x:Null}" Foreground="#4682B4"
+                                 HasDropShadow="False" HorizontalOffset="-85" VerticalOffset="-25"
+                                 FontFamily="Stencil" FontSize="10"/>
+					</Button.ToolTip>
+					<materialDesign:PackIcon Kind="Information" Height="28" Width="28" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+				</Button>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
+				<Ellipse Margin="20,0" Height="10" Width="10" HorizontalAlignment="Left" VerticalAlignment="Center" Fill="#12ae44" StrokeStartLineCap="Round">
+
+				</Ellipse>
+				<Label x:Name="CurrentApplicationActionStatus" Content="Current Application Status" Margin="0,0,0,0" FontFamily="Stencil" FontSize="12"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+			</StackPanel>
+		</Grid>
+
+
+	</Grid>
 </Window>

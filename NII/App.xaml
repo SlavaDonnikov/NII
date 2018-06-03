@@ -13,6 +13,59 @@
 				<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Blue.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+
+			<!-- Рамка вокруг элементов меню при наведении курсора -->
+			<Style x:Key="BorderEdge" TargetType="Border">
+				<Setter Property="HorizontalAlignment" Value="Stretch"/>
+				<Setter Property="Padding" Value="0,3,0,3"/>
+				<Setter Property="CornerRadius" Value="15"/>
+				<Setter Property="BorderThickness" Value="3.5"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+				<Setter Property="Margin" Value="1"/>
+
+				<Style.Triggers>
+
+					<Trigger Property="IsMouseOver" Value="true">
+						<Setter Property="BorderBrush" Value="#E6E6FA"/>
+					</Trigger>
+
+					<Trigger Property="IsMouseOver" Value="false">
+						<Setter Property="BorderBrush" Value="{x:Null}"/>
+					</Trigger>
+
+				</Style.Triggers>
+			</Style>
+
+			<!-- Для подсвечивания надписей меню при наведении курсора -->
+			<Style x:Key="MenuLabel" TargetType="Label">
+				<Setter Property="Width" Value="184"/>
+				<Setter Property="FontFamily" Value="Stencil"/>
+				<Setter Property="FontSize" Value="18"/>
+				<Setter Property="Padding" Value="5,0,0,0"/>
+				<Setter Property="Foreground" Value="#4682B4"/>
+				<Setter Property="VerticalAlignment" Value="Center"/>
+				<Setter Property="HorizontalAlignment" Value="Left"/>
+				<Setter Property="VerticalContentAlignment" Value="Center"/>
+				<Setter Property="HorizontalContentAlignment" Value="Left"/>
+				<Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+				<Setter Property="TextOptions.TextRenderingMode" Value="Auto"/>
+
+				<Style.Triggers>
+					<Trigger Property="IsMouseOver" Value="True">
+						<Setter Property="Foreground" Value="#E6E6FA"/>
+						<Setter Property="Cursor" Value="Hand"/>
+						<Setter Property="FontWeight" Value="Bold"/>
+
+					</Trigger>
+					<Trigger Property="IsMouseOver" Value="False">
+						<Setter Property="Foreground" Value="#4682B4"/>
+					</Trigger>
+				</Style.Triggers>
+			</Style>
+			
+			
+			
+			
 		</ResourceDictionary>
     </Application.Resources>
 </Application>
