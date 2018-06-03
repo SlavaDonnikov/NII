@@ -21,7 +21,7 @@
 				<Setter Property="CornerRadius" Value="15"/>
 				<Setter Property="BorderThickness" Value="3.5"/>
 				<Setter Property="BorderBrush" Value="{x:Null}"/>
-				<Setter Property="Margin" Value="1"/>
+				<Setter Property="Margin" Value="1,1,0,1"/>
 
 				<Style.Triggers>
 

@@ -24,9 +24,9 @@
 			</Grid.ColumnDefinitions>
 
 			<!-- Menu Toggle Button -->
-			<StackPanel Panel.ZIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Left">
-				<ToggleButton x:Name="TglBtnMenu" Margin="0" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"                    
-                          Foreground="White" Background="#4682B4" BorderThickness="0" BorderBrush="{x:Null}" IsChecked="False" Height="30" Width="30">
+			<StackPanel Panel.ZIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+				<ToggleButton x:Name="TglBtnMenu" Margin="1" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"                    
+                          Foreground="White" Background="#4682B4" BorderThickness="0" BorderBrush="{x:Null}" IsChecked="False" Height="28" Width="28">
 					<ToggleButton.ToolTip>
 						<ToolTip Content="Menu" Placement="Relative" Background="{x:Null}" Foreground="#4682B4"
                                  HasDropShadow="False" HorizontalOffset="30" VerticalOffset="-1"
@@ -38,60 +38,58 @@
 
 			<!-- Menu -->
 			<Canvas>
-				<StackPanel Background="#D2B48C" >
-					<StackPanel.Style>
-						<Style TargetType="StackPanel">
-							<Setter Property="HorizontalAlignment" Value="Stretch"/>
-							<Setter Property="VerticalAlignment" Value="Stretch"/>
-							<Setter Property="Orientation" Value="Vertical"/>
-							<Setter Property="Visibility" Value="Visible"/>
-							<Style.Triggers>
-								<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnMenu}" Value="True">
-									<Setter Property="Visibility" Value="Visible"/>
-									<Setter Property="Height" Value="270"/>
-								</DataTrigger>
-								<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnMenu}" Value="False">
-									<Setter Property="Visibility" Value="Collapsed"/>
-									<Setter Property="Height" Value="30"/>
-								</DataTrigger>
-							</Style.Triggers>
-						</Style>
-					</StackPanel.Style>
+				<Border CornerRadius="0,0,5,0" BorderThickness="0,0,3,3" BorderBrush="#D2B48C">
+					<StackPanel Background="#D2B48C">
+						<StackPanel.Style>
+							<Style TargetType="StackPanel">
+								<Setter Property="HorizontalAlignment" Value="Stretch"/>
+								<Setter Property="VerticalAlignment" Value="Stretch"/>
+								<Setter Property="Orientation" Value="Vertical"/>							
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnMenu}" Value="True">
+										<Setter Property="Visibility" Value="Visible"/>
+										<!--<Setter Property="Height" Value="270"/>-->
+									</DataTrigger>
+									<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnMenu}" Value="False">
+										<Setter Property="Visibility" Value="Collapsed"/>
+										<Setter Property="Height" Value="30"/>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</StackPanel.Style>
 
-					<Border Style="{StaticResource BorderEdge}" Margin="1,35,1,1" >
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
-							<Label Style="{DynamicResource MenuLabel}" Content="Home page" />
-							<materialDesign:PackIcon Kind="HomeAssistant" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
-						</StackPanel>
-					</Border>
-
-					<Border Style="{StaticResource BorderEdge}" >
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
-							<Label Style="{DynamicResource MenuLabel}" Content="Search In DB" />
-							<materialDesign:PackIcon Kind="DatabaseSearch" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
-						</StackPanel>
-					</Border>
-					<Border Style="{StaticResource BorderEdge}" >
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
-							<Label Style="{DynamicResource MenuLabel}" Content="Add Record" />
-							<materialDesign:PackIcon Kind="DatabasePlus" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
-						</StackPanel>
-					</Border>
-					<Border Style="{StaticResource BorderEdge}" >
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"  >
-							<Label Style="{DynamicResource MenuLabel}" Content="Delete Record" />
-							<materialDesign:PackIcon Kind="DatabaseMinus" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
-						</StackPanel>
-					</Border>
-					<Border Style="{StaticResource BorderEdge}" >
-						<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
-							<Label Style="{DynamicResource MenuLabel}" Content="Settings" />
-							<materialDesign:PackIcon Kind="Settings" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
-						</StackPanel>						
-					</Border>
-
-
-				</StackPanel>
+						<Border Style="{StaticResource BorderEdge}" Margin="1,35,0,1" >
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+								<Label Style="{DynamicResource MenuLabel}" Content="Home page" />
+								<materialDesign:PackIcon Kind="HomeAssistant" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+							</StackPanel>
+						</Border>
+						<Border Style="{StaticResource BorderEdge}" >
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+								<Label Style="{DynamicResource MenuLabel}" Content="Search In DB" />
+								<materialDesign:PackIcon Kind="DatabaseSearch" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+							</StackPanel>
+						</Border>
+						<Border Style="{StaticResource BorderEdge}" >
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+								<Label Style="{DynamicResource MenuLabel}" Content="Add Record" />
+								<materialDesign:PackIcon Kind="DatabasePlus" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+							</StackPanel>
+						</Border>
+						<Border Style="{StaticResource BorderEdge}" >
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"  >
+								<Label Style="{DynamicResource MenuLabel}" Content="Delete Record" />
+								<materialDesign:PackIcon Kind="DatabaseMinus" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+							</StackPanel>
+						</Border>
+						<Border Style="{StaticResource BorderEdge}" Margin="1,1,0,0">
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+								<Label Style="{DynamicResource MenuLabel}" Content="Settings" />
+								<materialDesign:PackIcon Kind="Settings" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</Border>
 			</Canvas>
 			
 			<!-- "Power" Button-->
