@@ -31,6 +31,11 @@ namespace NII   // Программа ведения базы данных "Со
 			GetRealTime();
 		}
 
+        /// <summary>
+        /// Для перемещения окна приложения 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			DragMove();

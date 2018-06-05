@@ -47,8 +47,7 @@
 								<Setter Property="Orientation" Value="Vertical"/>							
 								<Style.Triggers>
 									<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnMenu}" Value="True">
-										<Setter Property="Visibility" Value="Visible"/>
-										<!--<Setter Property="Height" Value="270"/>-->
+										<Setter Property="Visibility" Value="Visible"/>										
 									</DataTrigger>
 									<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnMenu}" Value="False">
 										<Setter Property="Visibility" Value="Collapsed"/>
