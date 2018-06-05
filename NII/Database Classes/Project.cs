@@ -54,8 +54,6 @@ namespace NII.Database_Classes
 		// Many-to-many <Scientist> <Technician>
 		public virtual ICollection<Scientist> Scientists { get; set; }
         public virtual ICollection<Technician> Technicians { get; set; }
-
-		// One-to-many
         public virtual ICollection<Sample> Samples { get; set; }
         public virtual ICollection<Equipment> Equipments { get; set; }
         
@@ -63,9 +61,8 @@ namespace NII.Database_Classes
         {
             Scientists = new HashSet<Scientist>();
             Technicians = new HashSet<Technician>();
-
-            Samples = new List<Sample>();
-            Equipments = new List<Equipment>();
+            Samples = new HashSet<Sample>();
+            Equipments = new HashSet<Equipment>();
         }
 
 		[Column(TypeName = "DateTime2(7)", Order = 8)]
