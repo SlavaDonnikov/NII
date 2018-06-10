@@ -39,7 +39,11 @@ namespace NII.Database_Classes
 		[Required(ErrorMessage = "'Qualification' field is required!")]
 		public string Qualification { get; set; }
 
-		[Column(TypeName = "DateTime2(7)", Order = 6)]
+        [Column(TypeName = "VARCHAR", Order = 6)]
+        [Required(ErrorMessage = "'EducationalBackground' field is required!")]
+        public string EducationalBackground { get; set; }
+
+        [Column(TypeName = "Date", Order = 7)]
 		[Required(ErrorMessage = "'DateOfEmployment' field is required!")]
 		public DateTime DateOfEmployment { get; set; }
 
@@ -47,16 +51,16 @@ namespace NII.Database_Classes
 		public virtual ICollection<Project> Projects { get; set; }
 		public Technician()
 		{
-			Projects = new HashSet<Project>();
+            this.Projects = new HashSet<Project>();
 		}
 
-		[Column(TypeName = "DateTime2(7)", Order = 7)]
+		[Column(TypeName = "DateTime2", Order = 8)]
 		[Required(ErrorMessage = "'AddOrUpdateDate' field is required! This field must be set automatically!")]
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public DateTime AddOrUpdateDate { get; set; }          // defaultValueSql: "GETDATE()"
 
 		[Timestamp]
-		[Column(Order = 8)]
+		[Column(Order = 9)]
 		public byte[] RowVersion { get; set; }
 	}
 }

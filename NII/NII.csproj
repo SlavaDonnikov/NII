@@ -68,6 +68,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Migrations\201806101822276_InitialCreate.cs" />
+    <Compile Include="Migrations\201806101822276_InitialCreate.Designer.cs">
+      <DependentUpon>201806101822276_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806101826456_GETDATE%28%29.cs" />
+    <Compile Include="Migrations\201806101826456_GETDATE%28%29.Designer.cs">
+      <DependentUpon>201806101826456_GETDATE%28%29.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806101840011_Date.cs" />
+    <Compile Include="Migrations\201806101840011_Date.Designer.cs">
+      <DependentUpon>201806101840011_Date.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806101908411_Date x2.cs" />
+    <Compile Include="Migrations\201806101908411_Date x2.Designer.cs">
+      <DependentUpon>201806101908411_Date x2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806101919199_Change Tb_Names.cs" />
+    <Compile Include="Migrations\201806101919199_Change Tb_Names.Designer.cs">
+      <DependentUpon>201806101919199_Change Tb_Names.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Support Classes\ComboBoxViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -93,19 +119,30 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201806101822276_InitialCreate.resx">
+      <DependentUpon>201806101822276_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806101826456_GETDATE%28%29.resx">
+      <DependentUpon>201806101826456_GETDATE%28%29.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806101840011_Date.resx">
+      <DependentUpon>201806101840011_Date.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806101908411_Date x2.resx">
+      <DependentUpon>201806101908411_Date x2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806101919199_Change Tb_Names.resx">
+      <DependentUpon>201806101919199_Change Tb_Names.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -119,5 +156,6 @@
   <ItemGroup>
     <Resource Include="Resources\miranda.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

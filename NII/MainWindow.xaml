@@ -17,14 +17,14 @@
 		</Grid.RowDefinitions>
 
 		<!-- Menu & Upper panel -->
-		<Grid Grid.Row="0" Margin="0,0,0,0" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#D2B48C">
+		<Grid Grid.Row="0" Panel.ZIndex="999" Margin="0,0,0,0" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#D2B48C">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="0.26*"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 
 			<!-- Menu Toggle Button -->
-			<StackPanel Panel.ZIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+			<StackPanel Panel.ZIndex="4" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
 				<ToggleButton x:Name="TglBtnMenu" Margin="1" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"                    
                           Foreground="White" Background="#4682B4" BorderThickness="0" BorderBrush="{x:Null}" IsChecked="False" Height="28" Width="28">
 					<ToggleButton.ToolTip>
@@ -36,7 +36,7 @@
 				</ToggleButton>
 			</StackPanel>
 
-			<!-- Menu -->
+			<!-- Menu -->			
 			<Canvas>
 				<Border CornerRadius="0,0,5,0" BorderThickness="0,0,3,3" BorderBrush="#D2B48C">
 					<StackPanel Background="#D2B48C">
@@ -57,16 +57,22 @@
 							</Style>
 						</StackPanel.Style>
 
-						<Border Style="{StaticResource BorderEdge}" Margin="1,35,0,1" >
+						<Border x:Name="Menu_Home_Page" Style="{StaticResource BorderEdge}" Margin="1,35,0,1" MouseLeftButtonDown="Menu_Home_Page_MouseLeftButtonDown" >
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
 								<Label Style="{DynamicResource MenuLabel}" Content="Home page" />
 								<materialDesign:PackIcon Kind="HomeAssistant" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
 							</StackPanel>
 						</Border>
-						<Border Style="{StaticResource BorderEdge}" >
+						<Border x:Name="Menu_Samples" Style="{StaticResource BorderEdge}" MouseLeftButtonDown="Menu_Samples_MouseLeftButtonDown" >
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
-								<Label Style="{DynamicResource MenuLabel}" Content="Search In DB" />
-								<materialDesign:PackIcon Kind="DatabaseSearch" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+								<Label Style="{DynamicResource MenuLabel}" Content="Samples" />
+								<materialDesign:PackIcon Kind="FlaskOutline" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+							</StackPanel>
+						</Border>
+						<Border x:Name="Menu_Equipment" Style="{StaticResource BorderEdge}" MouseLeftButtonDown="Menu_Equipment_MouseLeftButtonDown" >
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+								<Label Style="{DynamicResource MenuLabel}" Content="Equipment" />
+								<materialDesign:PackIcon Kind="Chip" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
 							</StackPanel>
 						</Border>
 						<Border Style="{StaticResource BorderEdge}" >
@@ -101,7 +107,7 @@
 		</Grid>
 
 		<!-- Status bar -->
-		<Grid Grid.Row="2" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="#D2B48C">
+		<Grid Grid.Row="2" Panel.ZIndex="999" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Background="#D2B48C">
 			<StackPanel Panel.ZIndex="2" Orientation="Horizontal" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right">
 				<Label x:Name="ApplicationFullDate" Content="Saturday, March 31, 2018" Margin="0,0,10,0" FontFamily="Stencil" FontSize="13" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 				<Label x:Name="ApplicationRealTime" Content="00:00:00 AM" Margin="0,0,8,0" FontFamily="Stencil" FontSize="13" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
@@ -123,6 +129,153 @@
 			</StackPanel>
 		</Grid>
 
+		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+		
+		<!-- Home Page -->
+		<Grid x:Name="Grid_Home_Page" Background="#E6E6FA" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed"/>
+		
+		<!-- Samples -->
+		<Grid x:Name="Grid_Samples" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
+			<!-- DataGrid -->
+			<StackPanel Height="595" VerticalAlignment="Top">
+				<DataGrid x:Name="Samples_DataGrid" Padding="0" Margin="0" Background="{x:Null}" Foreground="Black" Height="610" MaxHeight="610"
+                                      ItemsSource="{Binding}"
+                                      IsReadOnly="True"
+                                      CanUserAddRows="False"                                 
+                                      CanUserDeleteRows="False" 
+                                      CanUserResizeRows="False"                                   
+                                      CanUserResizeColumns="False"                                   
+                                      CanUserSortColumns="True" 
+                                      CanUserReorderColumns="False" 
+                                      AutoGenerateColumns="False"
+                                      VerticalScrollBarVisibility="Visible" 
+                                      HorizontalContentAlignment="Stretch" 
+                                      VerticalContentAlignment="Top">
+					<DataGrid.Resources>
+						<Style TargetType="{x:Type DataGridColumnHeader}">
+							<Setter Property="FontFamily" Value="Stencil"/>
+							<Setter Property="BorderThickness" Value="1 1 0 1"/>
+							<Setter Property="Height" Value="40"/>
+							<Setter Property="Foreground" Value="#4682B4"/>
+							<Setter Property="BorderBrush" Value="#E6E6FA"/>
+							<Setter Property="HorizontalContentAlignment" Value="Center"/>
+							<Setter Property="VerticalContentAlignment" Value="Center"/>
+						</Style>						
+					</DataGrid.Resources>
+					<DataGrid.Style>
+						<StaticResource ResourceKey="MaterialDesignDataGrid"/>						
+					</DataGrid.Style>
+					<DataGrid.Columns>
+						<materialDesign:MaterialDataGridTextColumn Header="Title" Width="0.7*" Binding="{Binding Title}">
+							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
+								<Style>	
+									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+								</Style>
+							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
+						</materialDesign:MaterialDataGridTextColumn>
+						
+						<materialDesign:MaterialDataGridTextColumn Header="Quantity" Width="0.4*" Binding="{Binding Quantity}">
+							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
+								<Style>
+									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>									
+								</Style>
+							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
+						</materialDesign:MaterialDataGridTextColumn>
+						
+						<materialDesign:MaterialDataGridTextColumn Header="Description" Width="3.45*" Binding="{Binding Description}">
+							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
+								<Style>
+									<Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+									<Setter Property="TextBlock.TextAlignment" Value="Left"/>
+								</Style>
+							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
+						</materialDesign:MaterialDataGridTextColumn>
+						
+						<materialDesign:MaterialDataGridTextColumn Header="Add Or Update Date" Width="0.65*" Binding="{Binding AddOrUpdateDate}">
+							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
+								<Style>
+									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>									
+								</Style>
+							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
+						</materialDesign:MaterialDataGridTextColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+			</StackPanel>
+		</Grid>
 
+		<!-- Home Page -->
+		<Grid x:Name="Grid_Equipment" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
+			<!-- DataGrid -->
+			<StackPanel Height="595" VerticalAlignment="Top">
+				<DataGrid x:Name="Equipment_DataGrid" Padding="0" Margin="0" Background="{x:Null}" Foreground="Black" Height="610" MaxHeight="610"
+                                      ItemsSource="{Binding}"
+                                      IsReadOnly="True"
+                                      CanUserAddRows="False"                                 
+                                      CanUserDeleteRows="False" 
+                                      CanUserResizeRows="False"                                   
+                                      CanUserResizeColumns="False"                                   
+                                      CanUserSortColumns="True" 
+                                      CanUserReorderColumns="False" 
+                                      AutoGenerateColumns="False"
+                                      VerticalScrollBarVisibility="Visible" 
+                                      HorizontalContentAlignment="Stretch" 
+                                      VerticalContentAlignment="Top">
+					<DataGrid.Resources>
+						<Style TargetType="{x:Type DataGridColumnHeader}">
+							<Setter Property="FontFamily" Value="Stencil"/>
+							<Setter Property="BorderThickness" Value="1 1 0 1"/>
+							<Setter Property="Height" Value="40"/>
+							<Setter Property="Foreground" Value="#4682B4"/>
+							<Setter Property="BorderBrush" Value="#E6E6FA"/>
+							<Setter Property="HorizontalContentAlignment" Value="Center"/>
+							<Setter Property="VerticalContentAlignment" Value="Center"/>
+						</Style>
+					</DataGrid.Resources>
+					<DataGrid.Style>
+						<StaticResource ResourceKey="MaterialDesignDataGrid"/>
+					</DataGrid.Style>
+					<DataGrid.Columns>
+						<materialDesign:MaterialDataGridTextColumn Header="Title" Width="0.7*" Binding="{Binding Title}">
+							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
+								<Style>
+									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+								</Style>
+							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
+						</materialDesign:MaterialDataGridTextColumn>
+
+						<materialDesign:MaterialDataGridTextColumn Header="Quantity" Width="0.4*" Binding="{Binding Quantity}">
+							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
+								<Style>
+									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+								</Style>
+							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
+						</materialDesign:MaterialDataGridTextColumn>
+
+						<materialDesign:MaterialDataGridTextColumn Header="Description" Width="3.45*" Binding="{Binding Description}">
+							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
+								<Style>
+									<Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+									<Setter Property="TextBlock.TextAlignment" Value="Left"/>
+								</Style>
+							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
+						</materialDesign:MaterialDataGridTextColumn>
+
+						<materialDesign:MaterialDataGridTextColumn Header="Add Or Update Date" Width="0.65*" Binding="{Binding AddOrUpdateDate}">
+							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
+								<Style>
+									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+								</Style>
+							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
+						</materialDesign:MaterialDataGridTextColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+			</StackPanel>
+		</Grid>
 	</Grid>
 </Window>

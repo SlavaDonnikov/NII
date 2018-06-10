@@ -82,27 +82,129 @@ namespace NII.Support_Classes
 		{
 			ScientistPositionCollection = new ObservableCollection<string>()
 			{
-				"",
-				""
-			};
+                "Analytical Services Chemist",
+                "Bioanalytical Scientist",
+                "Biochemist",
+                "Bioinformatics Research Scientist",
+                "Biology Professor",
+                "Cell Biology Scientist",
+                "Chemical Engineer",
+                "Clinical Pharmacology Professor",
+                "Environmental Data Analyst",
+                "Environmental Health Scientist",
+                "Environmental Scientist",
+                "Gene Editing Manager",
+                "Health Research Assistant",
+                "Immunology Scientist",
+                "Medical Physics Researcher",
+                "Molecular Biologist",
+                "Molecular Scientist",
+                "Oncology Researcher",
+                "Research Chemist",
+                "Research and Development Chemist",
+                "Research Scientist",
+                "Safety Data Specialist",
+                "Satellite Data Analyst",
+                "Scientific Programmer",
+                "Stem Cell Researcher",
+                "Structural Biologist",
+                "Toxicologist"                
+            };
 
 			TechnicianPositionCollection = new ObservableCollection<string>()
 			{
-				"",
-				""
-			};
+                "Analytical Lab Technician",
+                "Assistant Technician",
+                "Chemical Technician",
+                "Clinical Pharmacy Assistant",
+                "Compliance Technician",
+                "Computational Chemistry Manager",
+                "Computer Programmer",
+                "Conservation Technician",
+                "Development Technologist",
+                "Environmental Emergencies Assistant",
+                "Environmental Research Assistant",
+                "Exploration Director",
+                "Genetic Counselor",
+                "Hardware Designer",
+                "Health Technology Assistant",
+                "Industrial Designer",
+                "Laboratory Assistant",
+                "Laboratory Manager",
+                "Laboratory Technician",
+                "Medical Research Assistant",
+                "Medical Research Technician",
+                "Organic Lab Research Assistant",
+                "Pharmaceutical Research Assistant",
+                "Pharmaceutical Research Technician",                
+                "Power Regulator",
+                "Process Engineer",
+                "Product Engineer",
+                "Product Test Specialist",
+                "Quality Assurance Technologist",
+                "Research Assistant",
+                "Research Technician",
+                "Research and Development Technician",
+                "Research and Development Tester",
+                "Science Technician",
+                "Software Developer",
+                "Software Engineering Assistant",
+                "Structural Engineer",
+                "Technical Support Technician"
+            };
 
 			ScientistQualificationCollection = new ObservableCollection<string>()
 			{
-				"",
-				""
-			};
+                "Advanced Laboratory Operation",
+                "Metallurgy",
+                "Scientific Networking",
+                "Amarr Encryption Methods",
+                "Caldari Encryption Methods",
+                "Defensive Subsystem Technology",
+                "Electromagnetic Physics",
+                "Gallente Encryption Methods",
+                "Graviton Physics",
+                "High Energy Physics",
+                "Hydromagnetic Physics",
+                "Laser Physics",
+                "Nuclear Physics",
+                "Plasma Physics",
+                "Quantum Physics",
+                "Rocket Science",
+                "Sleeper Encryption Methods",
+                "Sleeper Technology",
+                "Takmahl Technology",
+                "Talocan Technology",
+                "Yan Jung Technology"                
+            };
 
 			TechnicianQualificationCollection = new ObservableCollection<string>()
 			{
-				"",
-				""
-			};
+                "Engineering analysis",
+                "Chemistry",
+                "Linear networks",
+                "Fluid mechanics",
+                "Circuits",
+                "Thermodynamics",
+                "Dynamics",
+                "Machine design",
+                "Welding",
+                "Robotics",
+                "Manufacturing Skills",
+                "Amarr Starship Engineering",
+                "Astronautic Engineering",
+                "Caldari Starship Engineering",
+                "Electronic Engineering",
+                "Electronic Subsystem Technology",
+                "Engineering Subsystem Technology",
+                "Gallente Starship Engineering",
+                "Mechanical Engineering",
+                "Minmatar Starship Engineering",
+                "Molecular Engineering",
+                "Nanite Engineering",
+                "Offensive Subsystem Technology",
+                "Propulsion Subsystem Technology"                
+            };
 
 			RefreshDbEntitiesCollections();
 		}

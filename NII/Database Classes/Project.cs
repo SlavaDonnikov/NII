@@ -25,33 +25,35 @@ namespace NII.Database_Classes
         [Required(ErrorMessage = "'CodeName' field is required!")]
         public string CodeName { get; set; }
 
-        [Column(TypeName = "INT", Order = 3)]   // Срок        
+        [Column(TypeName = "VARCHAR", Order = 3)]        
+        [Required(ErrorMessage = "'Description' field is required!")]
+        public string Description { get; set; }
+
+        [Column(TypeName = "INT", Order = 4)]   // Срок        
         [Required(ErrorMessage = "'Term' field is required! Enter the duration of the project in days!")]
         public int Term { get; set; }
 
-		[Column(TypeName = "VARCHAR", Order = 4)]
-		[Required(ErrorMessage = "'Location' field is required!")]  // The location of the scientific project == Address
+		[Column(TypeName = "VARCHAR", Order = 5)]
+		[Required(ErrorMessage = "'Location' field is required!")]  
 		public string Location { get; set; }
 
-		[Column(TypeName = "DateTime2(7)", Order = 5)]
-        [Required(ErrorMessage = "'DateOfBeginning' field is required!")]
-		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+		[Column(TypeName = "Date", Order = 6)]
+        [Required(ErrorMessage = "'DateOfBeginning' field is required!")]		
         public DateTime DateOfBeginning { get; set; }
                
-        [Column(TypeName = "DateTime2(7)", Order = 6)]
+        [Column(TypeName = "Date", Order = 7)]
         [Required(ErrorMessage = "'DateOfEnding' field is required! DateOfEnding = DateOfBeginning + Term")]        
         public DateTime DateOfEnding
         {
             get { return this.DateOfBeginning.AddDays(this.Term); }
             private set { }            
-        }
-        private DateTime dateOfEnding;
+        }        
 
-        [Column(TypeName = "decimal(18,2)", Order = 7)]       
+        [Column(TypeName = "decimal", Order = 8)]       
         [Required(ErrorMessage = "'Cost' field is required! Cost : decimal(18,2)")]
         public decimal Cost { get; set; }
 
-		// Many-to-many <Scientist> <Technician>
+		// Many-to-many
 		public virtual ICollection<Scientist> Scientists { get; set; }
         public virtual ICollection<Technician> Technicians { get; set; }
         public virtual ICollection<Sample> Samples { get; set; }
@@ -59,19 +61,19 @@ namespace NII.Database_Classes
         
         public Project()
         {
-            Scientists = new HashSet<Scientist>();
-            Technicians = new HashSet<Technician>();
-            Samples = new HashSet<Sample>();
-            Equipments = new HashSet<Equipment>();
+            this.Scientists = new HashSet<Scientist>();
+            this.Technicians = new HashSet<Technician>();
+            this.Samples = new HashSet<Sample>();
+            this.Equipments = new HashSet<Equipment>();
         }
 
-		[Column(TypeName = "DateTime2(7)", Order = 8)]
+		[Column(TypeName = "DateTime2", Order = 9)]
 		[Required(ErrorMessage = "'AddOrUpdateDate' field is required! This field must be set automatically!")]
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public DateTime AddOrUpdateDate { get; set; }          // defaultValueSql: "GETDATE()"
 
 		[Timestamp]
-        [Column(Order = 9)]
+        [Column(Order = 10)]
         public byte[] RowVersion { get; set; }
     }
 }
