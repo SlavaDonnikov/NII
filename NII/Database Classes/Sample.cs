@@ -40,8 +40,26 @@ namespace NII.Database_Classes
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public DateTime AddOrUpdateDate { get; set; }          // defaultValueSql: "GETDATE()"
 
-		[Timestamp]
-		[Column(Order = 5)]
+        [Column(TypeName = "VARCHAR", Order = 5)]
+        public string ProjectsZCode
+        {
+            get
+            {
+                string tmp = "";
+                if (Projects != null)
+                {
+                    foreach (Project prj in Projects)
+                    {
+                        tmp += prj.CodeName + "\n";
+                    }                    
+                }
+                return tmp.Trim();
+            }
+            set { }
+        }
+
+        [Timestamp]
+		[Column(Order = 6)]
 		public byte[] RowVersion { get; set; }
 	}
 }

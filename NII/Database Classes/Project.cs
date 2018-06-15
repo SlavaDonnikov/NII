@@ -64,7 +64,7 @@ namespace NII.Database_Classes
             this.Scientists = new HashSet<Scientist>();
             this.Technicians = new HashSet<Technician>();
             this.Samples = new HashSet<Sample>();
-            this.Equipments = new HashSet<Equipment>();
+            this.Equipments = new HashSet<Equipment>();			
         }
 
 		[Column(TypeName = "DateTime2", Order = 9)]
@@ -72,8 +72,80 @@ namespace NII.Database_Classes
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public DateTime AddOrUpdateDate { get; set; }          // defaultValueSql: "GETDATE()"
 
-		[Timestamp]
-        [Column(Order = 10)]
+        [Column(TypeName = "VARCHAR", Order = 10)]
+        public string ScientistsZ
+        {
+            get
+            {
+                string tmp = "";
+                if (Scientists != null)
+                {
+                    foreach (Scientist s in this.Scientists)
+                    {
+                        tmp += s.Name + "\n";
+                    }                   
+                }
+                return tmp.Trim();
+            }
+            set { }
+        }
+
+        [Column(TypeName = "VARCHAR", Order = 11)]
+        public string TechniciansZ
+        {
+            get
+            {
+                string tmp = "";
+                if(Technicians != null)
+                {
+                    foreach (Technician t in Technicians)
+                    {
+                        tmp += t.Name + "\n";
+                    }                    
+                }                
+                return tmp.Trim();
+            }
+            set { }
+        }
+
+        [Column(TypeName = "VARCHAR", Order = 12)]
+        public string SamplesZ
+        {
+            get
+            {
+                string tmp = "";
+                if (Samples != null)
+                {
+                    foreach (Sample smp in Samples)
+                    {
+                        tmp += smp.Title + "\n";
+                    }                    
+                }
+                return tmp.Trim();
+            }
+            set { }
+        }
+
+        [Column(TypeName = "VARCHAR", Order = 13)]
+        public string EquipmentsZ
+        {
+            get
+            {
+                string tmp = "";
+                if(Equipments != null)
+                {
+                    foreach (Equipment eq in this.Equipments)
+                    {
+                        tmp += eq.Title + "\n";
+                    }
+                }
+                return tmp.Trim();
+            }
+            set { }
+        }    
+
+        [Timestamp]
+        [Column(Order = 14)]
         public byte[] RowVersion { get; set; }
     }
 }

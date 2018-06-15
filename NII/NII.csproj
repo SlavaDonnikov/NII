@@ -33,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -88,6 +89,34 @@
     <Compile Include="Migrations\201806101919199_Change Tb_Names.Designer.cs">
       <DependentUpon>201806101919199_Change Tb_Names.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806141358344_Z-Properties %28From List Converter%29.cs" />
+    <Compile Include="Migrations\201806141358344_Z-Properties %28From List Converter%29.Designer.cs">
+      <DependentUpon>201806141358344_Z-Properties %28From List Converter%29.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806141535084_Update Project-class constructor.cs" />
+    <Compile Include="Migrations\201806141535084_Update Project-class constructor.Designer.cs">
+      <DependentUpon>201806141535084_Update Project-class constructor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806141657371_Add null check to Project-class Z-properties. Add Z-Property to Sample-Class.cs" />
+    <Compile Include="Migrations\201806141657371_Add null check to Project-class Z-properties. Add Z-Property to Sample-Class.Designer.cs">
+      <DependentUpon>201806141657371_Add null check to Project-class Z-properties. Add Z-Property to Sample-Class.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806141703105_Add Z-Properties to Scientist, Technician, Equipment classes..cs" />
+    <Compile Include="Migrations\201806141703105_Add Z-Properties to Scientist, Technician, Equipment classes..Designer.cs">
+      <DependentUpon>201806141703105_Add Z-Properties to Scientist, Technician, Equipment classes..cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806141710049_Update Z-Properties in all EF-model classes.cs" />
+    <Compile Include="Migrations\201806141710049_Update Z-Properties in all EF-model classes.Designer.cs">
+      <DependentUpon>201806141710049_Update Z-Properties in all EF-model classes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806141859219_Update Project-class.cs" />
+    <Compile Include="Migrations\201806141859219_Update Project-class.Designer.cs">
+      <DependentUpon>201806141859219_Update Project-class.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806151521405_Z-Properties tmp.Trim%28%29.cs" />
+    <Compile Include="Migrations\201806151521405_Z-Properties tmp.Trim%28%29.Designer.cs">
+      <DependentUpon>201806151521405_Z-Properties tmp.Trim%28%29.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -95,6 +124,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Support Classes\ComboBoxViewModel.cs" />
+    <Compile Include="Support Classes\DbConvertor_Project.cs" />
+    <Compile Include="Support Classes\DbConvertor_Sample.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -139,6 +170,27 @@
     <EmbeddedResource Include="Migrations\201806101919199_Change Tb_Names.resx">
       <DependentUpon>201806101919199_Change Tb_Names.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806141358344_Z-Properties %28From List Converter%29.resx">
+      <DependentUpon>201806141358344_Z-Properties %28From List Converter%29.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806141535084_Update Project-class constructor.resx">
+      <DependentUpon>201806141535084_Update Project-class constructor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806141657371_Add null check to Project-class Z-properties. Add Z-Property to Sample-Class.resx">
+      <DependentUpon>201806141657371_Add null check to Project-class Z-properties. Add Z-Property to Sample-Class.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806141703105_Add Z-Properties to Scientist, Technician, Equipment classes..resx">
+      <DependentUpon>201806141703105_Add Z-Properties to Scientist, Technician, Equipment classes..cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806141710049_Update Z-Properties in all EF-model classes.resx">
+      <DependentUpon>201806141710049_Update Z-Properties in all EF-model classes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806141859219_Update Project-class.resx">
+      <DependentUpon>201806141859219_Update Project-class.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806151521405_Z-Properties tmp.Trim%28%29.resx">
+      <DependentUpon>201806151521405_Z-Properties tmp.Trim%28%29.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -151,7 +203,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\miranda.ico" />

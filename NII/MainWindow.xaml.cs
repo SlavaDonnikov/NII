@@ -22,6 +22,8 @@ namespace NII   // Программа ведения базы данных "Со
     /// </summary>
     public partial class MainWindow : Window
     {
+		public List<string> Project_CodeName { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,15 +43,22 @@ namespace NII   // Программа ведения базы данных "Со
             DataContext = new ComboBoxViewModel();
         }
 
-		private void LoadDB()
+        #region Load DB
+        /// <summary>
+        /// Loading data from DB with Context
+        /// </summary>
+        private void LoadDB()
 		{
 			using(NIIDbContext db = new NIIDbContext())
 			{
 				Equipment_DataGrid.ItemsSource = Samples_DataGrid.ItemsSource = null;
-				try
-				{
-					Samples_DataGrid.ItemsSource = db.Samples.ToList();
-					Equipment_DataGrid.ItemsSource = db.Equipment.ToList();
+                try
+                {                      
+                    Projects_DataGrid.ItemsSource = db.Projects.Include("Scientists").Include("Technicians").Include("Samples").Include("Equipments").ToList();      
+                    Scientists_DataGrid.ItemsSource = db.Scientists.Include("Projects").ToList();
+                    Technicians_DataGrid.ItemsSource = db.Technicians.Include("Projects").ToList();
+                    Samples_DataGrid.ItemsSource = db.Samples.Include("Projects").ToList();                    
+					Equipment_DataGrid.ItemsSource = db.Equipment.Include("Projects").ToList();					
 				}
 				catch (Exception e)
 				{
@@ -57,28 +66,34 @@ namespace NII   // Программа ведения базы данных "Со
 				}
 			}
 		}
-		/// <summary>
-		/// Button to move the application window 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        #endregion
+
+        #region Window DragMove()
+        /// <summary>
+        /// Button to move the application window 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			DragMove();
 		}
+        #endregion
 
-		/// <summary>
-		/// Application "Power" button
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void Application_Shutdown_Click(object sender, RoutedEventArgs e)
+        #region Application Shutdown
+        /// <summary>
+        /// Application "Power" button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Application_Shutdown_Click(object sender, RoutedEventArgs e)
 		{
 			Application.Current.Shutdown();
 		}
+        #endregion
 
-		#region Application Full Format Date & Time
-		public void GetFullDate()
+        #region Application Full Format Date & Time
+        public void GetFullDate()
 		{
 			ApplicationFullDate.Content = DateTime.Now.ToLongDateString();
 			// In ru-RU culture : ApplicationFullDate.Content = DateTime.Now.DayOfWeek.ToString() + ", " + DateTime.Now.ToLongDateString();
@@ -107,31 +122,57 @@ namespace NII   // Программа ведения базы данных "Со
 
 			// In ru-RU culture : ApplicationRealTime.Content = DateTime.Now.ToLongTimeString() + " " + DateTime.Now.AddHours(12).ToString("tt", CultureInfo.InvariantCulture)
 		}
-		#endregion
+        #endregion
 
-		private void InvisibleGrids()
+        #region InvisibleGrids()
+        private void InvisibleGrids()
 		{
 			Grid_Home_Page.Visibility = Visibility.Collapsed;
+			Grid_Projects.Visibility = Visibility.Collapsed;
+			Grid_Scientists.Visibility = Visibility.Collapsed;
+			Grid_Technicians.Visibility = Visibility.Collapsed;
 			Grid_Samples.Visibility = Visibility.Collapsed;
 			Grid_Equipment.Visibility = Visibility.Collapsed;
+		}
+        #endregion
+
+        #region Menu Buttons Clicks
+        private void Menu_Home_Page_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			InvisibleGrids();
+			Grid_Home_Page.Visibility = Visibility.Visible;
+		}
+
+		private void Menu_Projects_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			InvisibleGrids();
+			Grid_Projects.Visibility = Visibility.Visible;
+		}
+
+		private void Menu_Scientists_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			InvisibleGrids();
+			Grid_Scientists.Visibility = Visibility.Visible;
+		}
+
+		private void Menu_Technicians_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			InvisibleGrids();
+			Grid_Technicians.Visibility = Visibility.Visible;
 		}
 
 		private void Menu_Samples_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			InvisibleGrids();
 			Grid_Samples.Visibility = Visibility.Visible;
-		}
-
-		private void Menu_Home_Page_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			InvisibleGrids();
-			Grid_Home_Page.Visibility = Visibility.Visible;
-		}
+		}		
 
 		private void Menu_Equipment_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			InvisibleGrids();
 			Grid_Equipment.Visibility = Visibility.Visible;
 		}
-	}
+        #endregion
+    }
 }
+// Chart : https://code.msdn.microsoft.com/Chart-Control-in-WPF-c9727c28  

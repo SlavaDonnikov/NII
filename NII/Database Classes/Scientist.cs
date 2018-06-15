@@ -27,7 +27,7 @@ namespace NII.Database_Classes
         [Column(TypeName = "VARCHAR", Order = 3)]
         [MaxLength(100, ErrorMessage = "Position must be 100 characters or less")]
         [Required(ErrorMessage = "'Position' field is required!")]
-        public string Position { get; set; }    // должность
+        public string Position { get; set; }    
 
         [Column(TypeName = "VARCHAR", Order = 4)]
         [MaxLength(100, ErrorMessage = "Personal Identification Number must be 100 characters or less")]
@@ -59,13 +59,26 @@ namespace NII.Database_Classes
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public DateTime AddOrUpdateDate { get; set; }          // defaultValueSql: "GETDATE()"
 
-		[Timestamp]
-        [Column(Order = 9)]
-        public byte[] RowVersion { get; set; }
+        [Column(TypeName = "VARCHAR", Order = 9)]
+        public string ProjectsZCode
+        {
+            get
+            {
+                string tmp = "";
+                if (Projects != null)
+                {
+                    foreach (Project prj in Projects)
+                    {
+                        tmp += prj.CodeName + "\n";
+                    }                    
+                }
+                return tmp.Trim();
+            }
+            set { }
+        }
 
-		//[ForeignKey("Project")]
-		//[Column(Order = 7)]
-		//public int ProjectId { get; set; }
-		//public virtual Project Project { get; set; }
+        [Timestamp]
+        [Column(Order = 10)]
+        public byte[] RowVersion { get; set; }
 	}
 }

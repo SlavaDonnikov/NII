@@ -27,3 +27,10 @@ E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.Date.resources
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.Datex2.resources
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.ChangeTb_Names.resources
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.csprojResolveAssemblyReference.cache
+E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.ZPropertiesFromListConverter.resources
+E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.UpdateProjectclassconstructor.resources
+E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.AddnullchecktoProjectclassZpropertiesAddZPropertytoSampleClass.resources
+E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.AddZPropertiestoScientistTechnicianEquipmentclasses.resources
+E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.UpdateZPropertiesinallEFmodelclasses.resources
+E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.UpdateProjectclass.resources
+E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.ZPropertiestmpTrim.resources

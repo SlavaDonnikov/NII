@@ -11,7 +11,9 @@ namespace NII.Support_Classes
 	public class ComboBoxViewModel
 	{
 		public ObservableCollection<string> ProjectCollection { get; set; }
-		public ObservableCollection<string> ScientistCollection { get; set; }
+        public ObservableCollection<string> ProjectCodeCollection { get; set; }
+
+        public ObservableCollection<string> ScientistCollection { get; set; }
 		public ObservableCollection<string> TechnicianCollection { get; set; }
 		public ObservableCollection<string> SampleCollection { get; set; }
 		public ObservableCollection<string> EquipmentCollection { get; set; }
@@ -28,15 +30,20 @@ namespace NII.Support_Classes
 			{
 				var projects = db.Projects.ToList();
 				ProjectCollection = new ObservableCollection<string>();
-				foreach (Project p in projects)
+                ProjectCodeCollection = new ObservableCollection<string>();
+                foreach (Project p in projects)
 				{
 					if (!ProjectCollection.Contains(p.Name))
 					{
 						ProjectCollection.Add(p.Name.ToString());
 					}
+                    if (!ProjectCodeCollection.Contains(p.CodeName))
+                    {
+                        ProjectCodeCollection.Add(p.CodeName.ToString());
+                    }
 				}
-
-				var scientists = db.Scientists.ToList();
+                
+                var scientists = db.Scientists.ToList();
 				ScientistCollection = new ObservableCollection<string>();
 				foreach (Scientist s in scientists)
 				{
