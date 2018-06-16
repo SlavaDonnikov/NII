@@ -134,45 +134,468 @@ namespace NII   // Программа ведения базы данных "Со
 			Grid_Samples.Visibility = Visibility.Collapsed;
 			Grid_Equipment.Visibility = Visibility.Collapsed;
 		}
-        #endregion
+		#endregion
 
-        #region Menu Buttons Clicks
-        private void Menu_Home_Page_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		#region Menu Buttons Clicks
+		private void Menu_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			InvisibleGrids();
-			Grid_Home_Page.Visibility = Visibility.Visible;
+
+			switch ((sender as Border).Name)
+			{
+				case "Menu_Home_Page":
+					Grid_Home_Page.Visibility = Visibility.Visible;
+					break;
+				case "Menu_Projects":
+					Grid_Projects.Visibility = Visibility.Visible;
+					break;
+				case "Menu_Scientists":
+					Grid_Scientists.Visibility = Visibility.Visible;
+					break;
+				case "Menu_Technicians":
+					Grid_Technicians.Visibility = Visibility.Visible;
+					break;
+				case "Menu_Samples":
+					Grid_Samples.Visibility = Visibility.Visible;
+					break;
+				case "Menu_Equipment":
+					Grid_Equipment.Visibility = Visibility.Visible;
+					break;				
+
+				default: 
+					break;
+			}
+		}
+		#endregion
+
+		#region CRUD
+		// Modify / Save button
+		private void Modify_Button_Click(object sender, RoutedEventArgs e)
+		{
+			switch ((sender as Button).Name)
+			{
+				case "Grid_Samples_Modify_Button":
+					if (Samples_DataGrid.SelectedItem != null)
+					{
+						if (TglBtnSample.IsChecked == false)
+						{
+							TglBtnSample.IsChecked = true;
+							TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+							Samples_DataGrid.IsEnabled = false;
+							//Samples_DataGrid.Visibility = Visibility.Collapsed;
+						}
+						else
+						{
+							TglBtnSample.IsChecked = false;
+							TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+							Samples_DataGrid.IsEnabled = true;
+							//Samples_DataGrid.Visibility = Visibility.Visible;
+						}
+
+						if (Grid_Samples_Modify_Button.Content.ToString() == "Modify")
+						{
+							Grid_Samples_Modify_Button.Content = "Save";
+							Grid_Samples_Delete_Button.IsEnabled = false;
+							Grid_Samples_CreateNewSample_Button.IsEnabled = false;
+
+							Grid_Samples_Cancel_Button.Visibility = Visibility.Visible;
+							Grid_Samples_Cancel_Button.IsEnabled = true;
+
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								//
+							}
+						}
+						else if (Grid_Samples_Modify_Button.Content.ToString() == "Save")
+						{
+							Grid_Samples_Modify_Button.Content = "Modify";
+							Grid_Samples_Delete_Button.IsEnabled = true;
+							Grid_Samples_CreateNewSample_Button.IsEnabled = true;
+
+							Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
+							Grid_Samples_Cancel_Button.IsEnabled = false;
+
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								// Call Save Event or Save function??
+							}
+						}
+					}               // Чтобы не нужно было выбирать строку датагрида при сохранении новой записи (нажата кнопка "Новый", а событие сохранения переадресовывается кнопке "Сохранить")
+					else if (Samples_DataGrid.SelectedItem == null & Grid_Samples_CreateNewSample_Button.IsEnabled == false & TglBtnSample.IsChecked == true)
+					{
+						if (TglBtnSample.IsChecked == false)
+						{
+							TglBtnSample.IsChecked = true;
+							TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+							Samples_DataGrid.IsEnabled = false;
+							//Samples_DataGrid.Visibility = Visibility.Collapsed;
+						}
+						else
+						{
+							TglBtnSample.IsChecked = false;
+							TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+							Samples_DataGrid.IsEnabled = true;
+							//Samples_DataGrid.Visibility = Visibility.Visible;
+						}
+
+						Grid_Samples_Modify_Button.Content = "Modify";
+						Grid_Samples_Delete_Button.IsEnabled = true;
+						Grid_Samples_CreateNewSample_Button.IsEnabled = true;
+
+						Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
+						Grid_Samples_Cancel_Button.IsEnabled = false;
+
+						using (NIIDbContext db = new NIIDbContext())
+						{
+							// Call Save Event or Save function??
+						}
+					}
+					else MessageBox.Show("Please select target record!", "Modify sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+					break;
+
+				case "Grid_Equipment_Modify_Button":
+					if (Equipment_DataGrid.SelectedItem != null)
+					{
+						if (TglBtnEquipment.IsChecked == false)
+						{
+							TglBtnEquipment.IsChecked = true;
+							TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+							Equipment_DataGrid.IsEnabled = false;
+							//Equipment_DataGrid.Visibility = Visibility.Collapsed;
+						}
+						else
+						{
+							TglBtnEquipment.IsChecked = false;
+							TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+							Equipment_DataGrid.IsEnabled = true;
+							//Equipment_DataGrid.Visibility = Visibility.Visible;
+						}
+
+						if (Grid_Equipment_Modify_Button.Content.ToString() == "Modify")
+						{
+							Grid_Equipment_Modify_Button.Content = "Save";
+							Grid_Equipment_Delete_Button.IsEnabled = false;
+							Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled = false;
+
+							Grid_Equipment_Cancel_Button.Visibility = Visibility.Visible;
+							Grid_Equipment_Cancel_Button.IsEnabled = true;
+
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								//
+							}
+						}
+						else if (Grid_Equipment_Modify_Button.Content.ToString() == "Save")
+						{
+							Grid_Equipment_Modify_Button.Content = "Modify";
+							Grid_Equipment_Delete_Button.IsEnabled = true;
+							Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled = true;
+
+							Grid_Equipment_Cancel_Button.Visibility = Visibility.Collapsed;
+							Grid_Equipment_Cancel_Button.IsEnabled = false;
+
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								// Call Save Event or Save function??
+							}
+						}
+					}
+					else if (Equipment_DataGrid.SelectedItem == null & Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled == false & TglBtnEquipment.IsChecked == true)
+					{
+						if (TglBtnEquipment.IsChecked == false)
+						{
+							TglBtnEquipment.IsChecked = true;
+							TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+							Equipment_DataGrid.IsEnabled = false;
+							//Samples_DataGrid.Visibility = Visibility.Collapsed;
+						}
+						else
+						{
+							TglBtnEquipment.IsChecked = false;
+							TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+							Equipment_DataGrid.IsEnabled = true;
+							//Samples_DataGrid.Visibility = Visibility.Visible;
+						}
+
+						Grid_Equipment_Modify_Button.Content = "Modify";
+						Grid_Equipment_Delete_Button.IsEnabled = true;
+						Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled = true;
+
+						Grid_Equipment_Cancel_Button.Visibility = Visibility.Collapsed;
+						Grid_Equipment_Cancel_Button.IsEnabled = false;
+
+						using (NIIDbContext db = new NIIDbContext())
+						{
+							// Call Save Event or Save function??
+						}
+					}
+					else MessageBox.Show("Please select target record!", "Modify piece of equipment", MessageBoxButton.OK, MessageBoxImage.Warning);
+					break;
+
+				default:
+					break;
+			}
 		}
 
-		private void Menu_Projects_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		// Cancel button
+		private void Cancel_Button_Click(object sender, RoutedEventArgs e)
 		{
-			InvisibleGrids();
-			Grid_Projects.Visibility = Visibility.Visible;
+			switch ((sender as Button).Name)
+			{
+				case "Grid_Samples_Cancel_Button":
+					TglBtnSample.IsChecked = false;
+					TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+					Samples_DataGrid.IsEnabled = true;
+					//Samples_DataGrid.Visibility = Visibility.Visible;
+
+					Grid_Samples_Modify_Button.Content = "Modify";
+					Grid_Samples_Delete_Button.IsEnabled = true;
+					Grid_Samples_CreateNewSample_Button.IsEnabled = true;
+
+					Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
+					Grid_Samples_Cancel_Button.IsEnabled = false;
+					break;
+
+				case "Grid_Equipment_Cancel_Button":
+					TglBtnEquipment.IsChecked = false;
+					TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+					Equipment_DataGrid.IsEnabled = true;
+					//Equipment_DataGrid.Visibility = Visibility.Visible;
+
+					Grid_Equipment_Modify_Button.Content = "Modify";
+					Grid_Equipment_Delete_Button.IsEnabled =true;
+					Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled = true;
+
+					Grid_Equipment_Cancel_Button.Visibility = Visibility.Collapsed;
+					Grid_Equipment_Cancel_Button.IsEnabled = false;
+					break;
+
+				default:
+					break;
+			}
 		}
 
-		private void Menu_Scientists_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		// Create new record button
+		private void CreateNew_Button_Click(object sender, RoutedEventArgs e)
 		{
-			InvisibleGrids();
-			Grid_Scientists.Visibility = Visibility.Visible;
+			switch ((sender as Button).Name)
+			{
+				case "Grid_Samples_CreateNewSample_Button":
+					TglBtnSample.IsChecked = true;
+					TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+					Grid_Samples_Modify_Button.Content = "Save";
+
+					Grid_Samples_CreateNewSample_Button.IsEnabled = false;
+					Grid_Samples_Delete_Button.IsEnabled = false;
+					Samples_DataGrid.IsEnabled = false;
+
+					Grid_Samples_Cancel_Button.Visibility = Visibility.Visible;
+					Grid_Samples_Cancel_Button.IsEnabled = true;
+
+					// Очистка полей
+					break;
+
+				case "Grid_Equipment_CreateNewPieceOfEquipment_Button":
+					TglBtnEquipment.IsChecked = true;
+					TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+					Grid_Equipment_Modify_Button.Content = "Save";
+
+					Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled = false;
+					Grid_Equipment_Delete_Button.IsEnabled = false;
+					Equipment_DataGrid.IsEnabled = false;
+
+					Grid_Equipment_Cancel_Button.Visibility = Visibility.Visible;
+					Grid_Equipment_Cancel_Button.IsEnabled = true;
+
+					// Очистка полей
+					break;
+
+				default:
+					break;
+			}
 		}
 
-		private void Menu_Technicians_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		// Delete button
+		private void Delete_Button_Click(object sender, RoutedEventArgs e)
 		{
-			InvisibleGrids();
-			Grid_Technicians.Visibility = Visibility.Visible;
+			switch ((sender as Button).Name)
+			{
+				case "Grid_Samples_Delete_Button":
+					if (Samples_DataGrid.SelectedItem != null)
+					{
+						var messageResult = MessageBox.Show("Are you sure?", "Deleting the sample", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+						if (messageResult == MessageBoxResult.Yes)
+						{
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								// Delete functional
+							}
+						}
+					}
+					else MessageBox.Show("Please select a record you want to delete!", "Deleting the sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+					break;
+
+				case "Grid_Equipment_Delete_Button":
+					if (Equipment_DataGrid.SelectedItem != null)
+					{
+						var messageResult = MessageBox.Show("Are you sure?", "Deleting the piece of equipment", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+						if (messageResult == MessageBoxResult.Yes)
+						{
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								// Delete functional
+							}
+						}
+					}
+					else MessageBox.Show("Please select a record you want to delete!", "Deleting the piece of equipment", MessageBoxButton.OK, MessageBoxImage.Warning);
+					break;
+
+				default:
+					break;
+			}
+		}
+		#endregion
+
+		// --------------------------------------------------------------------------------------------------------------------------------------->
+		// Old Modify / Save button
+		private void Grid_Samples_Modify_Button_Click(object sender, RoutedEventArgs e)
+		{
+			if (Samples_DataGrid.SelectedItem != null)
+			{
+				if (TglBtnSample.IsChecked == false)
+				{
+					TglBtnSample.IsChecked = true;
+					TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+					Samples_DataGrid.IsEnabled = false;
+					//Samples_DataGrid.Visibility = Visibility.Collapsed;
+				}
+				else
+				{
+					TglBtnSample.IsChecked = false;
+					TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+					Samples_DataGrid.IsEnabled = true;
+					//Samples_DataGrid.Visibility = Visibility.Visible;
+				}
+
+				if (Grid_Samples_Modify_Button.Content.ToString() == "Modify")
+				{
+					Grid_Samples_Modify_Button.Content = "Save";
+					Grid_Samples_Delete_Button.IsEnabled = false;
+					Grid_Samples_CreateNewSample_Button.IsEnabled = false;
+
+					Grid_Samples_Cancel_Button.Visibility = Visibility.Visible;
+					Grid_Samples_Cancel_Button.IsEnabled = true;
+
+					using (NIIDbContext db = new NIIDbContext())
+					{
+						//
+					}
+				}
+				else if (Grid_Samples_Modify_Button.Content.ToString() == "Save")
+				{
+					Grid_Samples_Modify_Button.Content = "Modify";
+					Grid_Samples_Delete_Button.IsEnabled = true;
+					Grid_Samples_CreateNewSample_Button.IsEnabled = true;
+
+					Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
+					Grid_Samples_Cancel_Button.IsEnabled = false;
+
+					using (NIIDbContext db = new NIIDbContext())
+					{
+						// Call Save Event or Save function??
+					}
+				}
+			}               // Чтобы не нужно было выбирать строку датагрида при сохранении новой записи (нажата кнопка "Новый", а событие сохранения переадресовывается кнопке "Сохранить")
+			else if (Samples_DataGrid.SelectedItem == null & Grid_Samples_CreateNewSample_Button.IsEnabled == false & TglBtnSample.IsChecked == true)
+			{
+				if (TglBtnSample.IsChecked == false)
+				{
+					TglBtnSample.IsChecked = true;
+					TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+					Samples_DataGrid.IsEnabled = false;
+					//Samples_DataGrid.Visibility = Visibility.Collapsed;
+				}
+				else
+				{
+					TglBtnSample.IsChecked = false;
+					TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+					Samples_DataGrid.IsEnabled = true;
+					//Samples_DataGrid.Visibility = Visibility.Visible;
+				}
+
+				Grid_Samples_Modify_Button.Content = "Modify";
+				Grid_Samples_Delete_Button.IsEnabled = true;
+				Grid_Samples_CreateNewSample_Button.IsEnabled = true;
+
+				Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
+				Grid_Samples_Cancel_Button.IsEnabled = false;
+
+				using (NIIDbContext db = new NIIDbContext())
+				{
+					// Call Save Event or Save function??
+				}
+			}
+			else MessageBox.Show("Please select target record!", "Modify sample", MessageBoxButton.OK, MessageBoxImage.Warning);
 		}
 
-		private void Menu_Samples_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		// Old Cancel Button (Samples_Grid)
+		private void Grid_Samples_Cancel_Button_Click(object sender, RoutedEventArgs e)
 		{
-			InvisibleGrids();
-			Grid_Samples.Visibility = Visibility.Visible;
-		}		
+			TglBtnSample.IsChecked = false;
+			TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-		private void Menu_Equipment_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			InvisibleGrids();
-			Grid_Equipment.Visibility = Visibility.Visible;
+			Samples_DataGrid.IsEnabled = true;
+			//Samples_DataGrid.Visibility = Visibility.Visible;
+
+			Grid_Samples_Modify_Button.Content = "Modify";
+			Grid_Samples_Delete_Button.IsEnabled = true;
+			Grid_Samples_CreateNewSample_Button.IsEnabled = true;
+
+			Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
+			Grid_Samples_Cancel_Button.IsEnabled = false;
 		}
-        #endregion
-    }
+
+		// Old Create new record button
+		private void Grid_Samples_CreateNewSample_Button_Click(object sender, RoutedEventArgs e)
+		{
+			TglBtnSample.IsChecked = true;
+			TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+			Grid_Samples_Modify_Button.Content = "Save";
+
+			Grid_Samples_CreateNewSample_Button.IsEnabled = false;
+			Grid_Samples_Delete_Button.IsEnabled = false;
+			Samples_DataGrid.IsEnabled = false;
+
+			Grid_Samples_Cancel_Button.Visibility = Visibility.Visible;
+			Grid_Samples_Cancel_Button.IsEnabled = true;
+
+			// Очистка полей
+		}
+
+		// Old Delete button
+		private void Grid_Samples_Delete_Button_Click(object sender, RoutedEventArgs e)
+		{
+			if (Samples_DataGrid.SelectedItem != null)
+			{
+				var messageResult = MessageBox.Show("Are you sure?", "Deleting the sample", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+				if (messageResult == MessageBoxResult.Yes)
+				{
+					using (NIIDbContext db = new NIIDbContext())
+					{
+						// Delete functional
+					}
+				}
+			}
+			else MessageBox.Show("Please select a record you want to delete!", "Modify sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+		}
+	}
 }
 // Chart : https://code.msdn.microsoft.com/Chart-Control-in-WPF-c9727c28  
