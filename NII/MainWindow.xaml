@@ -181,11 +181,9 @@
 						<Setter Property="HorizontalAlignment" Value="Stretch"/>
 						<Setter Property="VerticalAlignment" Value="Bottom"/>
 						<Style.Triggers>
-							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnProjects}" Value="True">
-								<!--<Setter Property="Height" Value="600"/>-->
-
-								<Setter Property="Height" Value="450"/>
-								<Setter Property="Width" Value="750"/>
+							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnProjects}" Value="True">								
+								<Setter Property="Height" Value="560"/>
+								<Setter Property="Width" Value="960"/>
 								<Setter Property="HorizontalAlignment" Value="Center"/>
 								<Setter Property="VerticalAlignment" Value="Center"/>
 							</DataTrigger>
@@ -195,8 +193,74 @@
 						</Style.Triggers>
 					</Style>
 				</Grid.Style>
+				
 				<Border BorderThickness="3" BorderBrush="#D2B48C">
-
+					<Border BorderThickness="3" BorderBrush="#D2B48C">
+						<StackPanel Margin="0,00,0,0" Orientation="Vertical">
+							<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+								<Label Content="Name" Margin="40,0,176,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+								<TextBox x:Name="TextBox_Projects_Name" Width="600" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="106" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+							</StackPanel>
+							<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+								<Label Content="Code name" Margin="40,0,173,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+								<TextBox x:Name="TextBox_Projects_CodeName" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="70" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+							</StackPanel>
+							<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+								<Label Content="Location" Margin="40,0,211,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+								<TextBox x:Name="TextBox_Projects_Location" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="70" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" />
+							</StackPanel>
+							<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+								<Label Content="Term" Margin="40,0,361,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+								<TextBox x:Name="TextBox_Projects_Term" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="20" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" />
+								<Label Content="days." Margin="145,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							</StackPanel>
+							<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+								<Label Content="Date of beginning" Margin="40,0,205,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+								<DatePicker x:Name="DatePicker_Projects_DateOfBeginning" Width="150" Language="en-US" IsDropDownOpen="False" SelectedDateFormat="Short"
+										HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+										BorderBrush="#D2B48C" Style="{StaticResource MaterialDesignDatePicker}" SelectedDate="{Binding XX}"/>
+							</StackPanel>							
+							<StackPanel Margin="0,15,0,0" Orientation="Horizontal">
+								<StackPanel Margin="30,0,0,0">
+									<Label Content="Technicians" Margin="0,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+									<ComboBox x:Name="ComboBox_Projects_Technicians" Width="200" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" Foreground="Black" 
+                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                          ItemsSource="{Binding TechnicianCollection }" />									
+								</StackPanel>
+								<StackPanel Margin="30,0,0,0">
+									<Label Content="Scientists" Margin="0,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+									<ComboBox x:Name="ComboBox_Projects_Scientists" Width="200" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" Foreground="Black" 
+                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                          ItemsSource="{Binding ScientistCollection}" />
+								</StackPanel>
+								<StackPanel Margin="30,0,0,10">
+									<Label Content="Samples" Margin="0,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+									<ComboBox x:Name="ComboBox_Projects_Samples" Width="200" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" Foreground="Black" 
+                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                          ItemsSource="{Binding SampleCollection}" />
+								</StackPanel>
+								<StackPanel Margin="30,0,0,0">
+									<Label Content="Equipment" Margin="0,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+									<ComboBox x:Name="ComboBox_Projects_Equipment" Width="200" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" Foreground="Black" 
+                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                          ItemsSource="{Binding EquipmentCollection}" />
+								</StackPanel>								
+							</StackPanel>							
+							<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+								<Label Content="Description" Margin="40,0,48,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+								<TextBox x:Name="TextBox_Projects_Description" Width="655" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+                                        MaxLength="708" TextWrapping="Wrap" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+							</StackPanel>
+						</StackPanel>
+					</Border>
 				</Border>
 			</Grid>
 
@@ -379,17 +443,16 @@
 				</StackPanel>
 			</StackPanel>
 			
+			<!-- Raized panel -->
 			<Grid Margin="0,40,0,0" Panel.ZIndex="1" Background="#F5F5F5" Visibility="Visible" HorizontalAlignment="Stretch">
 				<Grid.Style>
 					<Style TargetType="Grid">
 						<Setter Property="HorizontalAlignment" Value="Stretch"/>
 						<Setter Property="VerticalAlignment" Value="Bottom"/>
 						<Style.Triggers>
-							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnScientists}" Value="True">
-								<!--<Setter Property="Height" Value="600"/>-->
-
-								<Setter Property="Height" Value="450"/>
-								<Setter Property="Width" Value="750"/>
+							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnScientists}" Value="True">								
+								<Setter Property="Height" Value="500"/>
+								<Setter Property="Width" Value="800"/>
 								<Setter Property="HorizontalAlignment" Value="Center"/>
 								<Setter Property="VerticalAlignment" Value="Center"/>
 							</DataTrigger>
@@ -399,8 +462,53 @@
 						</Style.Triggers>
 					</Style>
 				</Grid.Style>
+				
 				<Border BorderThickness="3" BorderBrush="#D2B48C">
-
+					<StackPanel Margin="0,00,0,0" Orientation="Vertical">
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Name" Margin="40,0,187,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+							<TextBox x:Name="TextBox_Scientists_Name" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="69" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Age" Margin="40,0,304,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+							<TextBox x:Name="TextBox_Scientists_Age" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Personal ID" Margin="40,0,194,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							<TextBox x:Name="TextBox_Scientists_Personal_Id" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" />
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Position" Margin="40,0,227,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							<ComboBox x:Name="ComboBox_Scientists_Position" Width="250" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" Foreground="Black" 
+                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                          ItemsSource="{Binding ScientistPositionCollection}" />
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Qualification" Margin="40,0,152,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							<ComboBox x:Name="ComboBox_Scientists_Qualification" Width="250" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" Foreground="Black" 
+                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                          ItemsSource="{Binding ScientistQualificationCollection}" />
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<StackPanel Margin="40,0,92,0">
+								<Label Content="Educational" Margin="0,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+								<Label Content="background" Margin="0,-15,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							</StackPanel>
+							<TextBox x:Name="TextBox_Scientists_EducationalBackground" Width="400" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="355" TextWrapping="Wrap" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Date of employment" Margin="40,0,150,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							<DatePicker x:Name="DatePicker_Scientists_DateOfEmployment" Width="150" Language="en-US" IsDropDownOpen="False" SelectedDateFormat="Short"
+										HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+										BorderBrush="#D2B48C" Style="{StaticResource MaterialDesignDatePicker}" SelectedDate="{Binding XX}"/>
+						</StackPanel>
+					</StackPanel>
 				</Border>
 			</Grid>
 
@@ -555,29 +663,73 @@
                                 Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="Delete_Button_Click"  />
 				</StackPanel>
 			</StackPanel>
-			
+
+			<!-- Raized panel -->
 			<Grid Margin="0,40,0,0" Panel.ZIndex="1" Background="#F5F5F5" Visibility="Visible" HorizontalAlignment="Stretch">
 				<Grid.Style>
 					<Style TargetType="Grid">
 						<Setter Property="HorizontalAlignment" Value="Stretch"/>
 						<Setter Property="VerticalAlignment" Value="Bottom"/>
 						<Style.Triggers>
-							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnTechnicians}" Value="True">
-								<!--<Setter Property="Height" Value="600"/>-->
-
-								<Setter Property="Height" Value="450"/>
-								<Setter Property="Width" Value="750"/>
+							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnTechnicians}" Value="True">								
+								<Setter Property="Height" Value="500"/>
+								<Setter Property="Width" Value="800"/>
 								<Setter Property="HorizontalAlignment" Value="Center"/>
 								<Setter Property="VerticalAlignment" Value="Center"/>
 							</DataTrigger>
 							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnTechnicians}" Value="False">
-								<Setter Property="Height" Value="0"/>
+								<Setter Property="Height" Value="0"/>								
 							</DataTrigger>
 						</Style.Triggers>
 					</Style>
 				</Grid.Style>
+				
 				<Border BorderThickness="3" BorderBrush="#D2B48C">
-
+					<StackPanel Margin="0,00,0,0" Orientation="Vertical">
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Name" Margin="40,0,187,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+							<TextBox x:Name="TextBox_Technicians_Name" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="69" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Age" Margin="40,0,304,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+							<TextBox x:Name="TextBox_Technicians_Age" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>								
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Personal ID" Margin="40,0,194,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							<TextBox x:Name="TextBox_Technicians_Personal_Id" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" />								
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Position" Margin="40,0,227,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							<ComboBox x:Name="ComboBox_Technicians_Position" Width="250" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" Foreground="Black" 
+                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                          ItemsSource="{Binding TechnicianPositionCollection}" />
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Qualification" Margin="40,0,152,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							<ComboBox x:Name="ComboBox_Technicians_Qualification" Width="250" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" Foreground="Black" 
+                                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                          ItemsSource="{Binding TechnicianQualificationCollection}" />
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<StackPanel Margin="40,0,92,0">
+								<Label Content="Educational" Margin="0,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+								<Label Content="background" Margin="0,-15,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							</StackPanel>
+							<TextBox x:Name="TextBox_Technicians_EducationalBackground" Width="400" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+										MaxLength="355" TextWrapping="Wrap" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Date of employment" Margin="40,0,150,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />							
+							<DatePicker x:Name="DatePicker_Technicians_DateOfEmployment" Width="150" Language="en-US" IsDropDownOpen="False" SelectedDateFormat="Short"
+										HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+										BorderBrush="#D2B48C" Style="{StaticResource MaterialDesignDatePicker}" SelectedDate="{Binding XX}"/>							
+						</StackPanel>
+					</StackPanel>
 				</Border>
 			</Grid>
 
@@ -735,30 +887,47 @@
                 </StackPanel>
             </StackPanel>
 
+			<!-- Raized panel -->
             <Grid Margin="0,40,0,0" Panel.ZIndex="1" Background="#F5F5F5" Visibility="Visible" HorizontalAlignment="Stretch">
                 <Grid.Style>
                     <Style TargetType="Grid">
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
                         <Setter Property="VerticalAlignment" Value="Bottom"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnSample}" Value="True">
-                                <!--<Setter Property="Height" Value="600"/>-->
-                                
+                            <DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnSample}" Value="True">  
                                 <Setter Property="Height" Value="450"/>
                                 <Setter Property="Width" Value="750"/>
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>                                
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnSample}" Value="False">
-                                <Setter Property="Height" Value="0"/>                                
-                            </DataTrigger>
+                                <Setter Property="Height" Value="0"/>								
+							</DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <Border BorderThickness="3" BorderBrush="#D2B48C">
-                    
-                </Border>
-            </Grid>
+				
+				<Border BorderThickness="3" BorderBrush="#D2B48C">
+					<StackPanel Margin="0,50,0,0" Orientation="Vertical">
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Title" Margin="40,0,130,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+							<TextBox x:Name="TextBox_Samples_Title" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+                                        MaxLength="69" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Quantity" Margin="40,0,170,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+							<TextBox x:Name="TextBox_Samples_Quantity" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+                                        MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+							<Label Content="m3." Margin="110,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Description" Margin="40,0,30,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							<TextBox x:Name="TextBox_Samples_Description" Width="400" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+                                        MaxLength="670" TextWrapping="Wrap" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>							
+						</StackPanel>
+					</StackPanel>
+				</Border>
+			</Grid>
             
 			<!-- DataGrid -->
 			<StackPanel Margin="0,40,0,0" Height="600" VerticalAlignment="Top">
@@ -880,6 +1049,7 @@
 				</StackPanel>
 			</StackPanel>
 			
+			<!-- Raized panel -->
 			<Grid Margin="0,40,0,0" Panel.ZIndex="1" Background="#F5F5F5" Visibility="Visible" HorizontalAlignment="Stretch">
 				<Grid.Style>
 					<Style TargetType="Grid">
@@ -887,8 +1057,6 @@
 						<Setter Property="VerticalAlignment" Value="Bottom"/>
 						<Style.Triggers>
 							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnEquipment}" Value="True">
-								<!--<Setter Property="Height" Value="600"/>-->
-
 								<Setter Property="Height" Value="450"/>
 								<Setter Property="Width" Value="750"/>
 								<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -900,8 +1068,26 @@
 						</Style.Triggers>
 					</Style>
 				</Grid.Style>
+				
 				<Border BorderThickness="3" BorderBrush="#D2B48C">
-
+					<StackPanel Margin="0,50,0,0" Orientation="Vertical">
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Title" Margin="40,0,130,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+							<TextBox x:Name="TextBox_Equipment_Title" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+                                        MaxLength="69" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Quantity" Margin="40,0,170,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+							<TextBox x:Name="TextBox_Equipment_Quantity" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+                                        MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+							<Label Content="pcs." Margin="110,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
+						</StackPanel>
+						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+							<Label Content="Description" Margin="40,0,30,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
+							<TextBox x:Name="TextBox_Equipment_Description" Width="400" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
+                                        MaxLength="670" TextWrapping="Wrap" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>								
+						</StackPanel>
+					</StackPanel>
 				</Border>
 			</Grid>
 
