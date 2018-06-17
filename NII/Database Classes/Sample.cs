@@ -24,9 +24,9 @@ namespace NII.Database_Classes
         [Required(ErrorMessage = "'Description' field is required!")]
         public string Description { get; set; }
 
-        [Column(TypeName = "VARCHAR", Order = 3)]
+        [Column(TypeName = "INT", Order = 3)]
 		[Required(ErrorMessage = "'Quantity' field is required!")]
-		public string Quantity { get; set; }
+		public int Quantity { get; set; }
         		
 		// Many-to-many <Project>
 		public virtual ICollection<Project> Projects { get; set; }

@@ -153,10 +153,56 @@
 		<Grid x:Name="Grid_Home_Page" Background="#E6E6FA" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed"/>
 
 		<!-- Projects -->
-		<Grid x:Name="Grid_Projects" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
+		<Grid x:Name="Grid_Projects" Panel.ZIndex="0" Grid.Row="1" Visibility="Visible">
+			<!-- Buttons -->
+			<StackPanel Panel.ZIndex="1" Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+				<Label Margin="0,-6,0,0" Content="Projects" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" />
+				<Button x:Name="Grid_Projects_CreateNewProject_Button" Content="New" Margin="27,0,0,7" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                        Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="CreateNew_Button_Click"  />
+			</StackPanel>
+			<StackPanel VerticalAlignment="Top" Height="40">
+				<StackPanel Orientation="Horizontal" Margin="0,4,0,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+					<ToggleButton x:Name="TglBtnProjects" Margin="0,0,10,0" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"                    
+                          Foreground="White" Background="#4682B4" IsChecked="False" Height="35" Width="35" Visibility="Collapsed">
+						<materialDesign:PackIcon Kind="Menu" Height="21" Width="21" />
+					</ToggleButton>
+					<Button x:Name="Grid_Projects_Cancel_Button" Content="Cancel" Margin="0,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                                Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Visibility="Collapsed" IsEnabled="False" Click="Cancel_Button_Click"   />
+					<Button x:Name="Grid_Projects_Modify_Button" Content="Modify" Margin="7,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                                Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="Modify_Button_Click"  />
+					<Button x:Name="Grid_Projects_Delete_Button" Content="Delete" Margin="7,0,20,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                                Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="Delete_Button_Click"  />
+				</StackPanel>
+			</StackPanel>
+
+			<Grid Margin="0,40,0,0" Panel.ZIndex="1" Background="#F5F5F5" Visibility="Visible" HorizontalAlignment="Stretch">
+				<Grid.Style>
+					<Style TargetType="Grid">
+						<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						<Setter Property="VerticalAlignment" Value="Bottom"/>
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnProjects}" Value="True">
+								<!--<Setter Property="Height" Value="600"/>-->
+
+								<Setter Property="Height" Value="450"/>
+								<Setter Property="Width" Value="750"/>
+								<Setter Property="HorizontalAlignment" Value="Center"/>
+								<Setter Property="VerticalAlignment" Value="Center"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnProjects}" Value="False">
+								<Setter Property="Height" Value="0"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Grid.Style>
+				<Border BorderThickness="3" BorderBrush="#D2B48C">
+
+				</Border>
+			</Grid>
+
 			<!-- DataGrid -->
-			<StackPanel Height="595" VerticalAlignment="Top">
-				<DataGrid x:Name="Projects_DataGrid" Padding="0" Margin="0" Background="{x:Null}" Foreground="Black" Height="610" MaxHeight="610"
+			<StackPanel Margin="0,40,0,0" Height="600" VerticalAlignment="Top">
+				<DataGrid x:Name="Projects_DataGrid" Padding="0" Margin="0" Background="{x:Null}" Foreground="Black" Height="600" MaxHeight="600"
                                       ItemsSource="{Binding}"
                                       IsReadOnly="True"
                                       CanUserAddRows="False"                                 
@@ -297,7 +343,7 @@
 							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
 						</materialDesign:MaterialDataGridTextColumn>
 
-						<materialDesign:MaterialDataGridTextColumn Header="Equipments" Width="1.4*" Binding="{Binding EquipmentsZ}">
+						<materialDesign:MaterialDataGridTextColumn Header="Equipments" Width="1.4*" Binding="{Binding EquipmentZ}">
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
 								<Style>
 									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
@@ -312,9 +358,55 @@
 
 		<!-- Scientists -->
 		<Grid x:Name="Grid_Scientists" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
+			<!-- Buttons -->
+			<StackPanel Panel.ZIndex="1" Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+				<Label Margin="0,-6,0,0" Content="Scientists" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" />
+				<Button x:Name="Grid_Scientists_CreateNewScientist_Button" Content="New" Margin="51,0,0,7" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                        Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="CreateNew_Button_Click"  />
+			</StackPanel>
+			<StackPanel VerticalAlignment="Top" Height="40">
+				<StackPanel Orientation="Horizontal" Margin="0,4,0,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+					<ToggleButton x:Name="TglBtnScientists" Margin="0,0,10,0" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"                    
+                          Foreground="White" Background="#4682B4" IsChecked="False" Height="35" Width="35" Visibility="Collapsed">
+						<materialDesign:PackIcon Kind="Menu" Height="21" Width="21" />
+					</ToggleButton>
+					<Button x:Name="Grid_Scientists_Cancel_Button" Content="Cancel" Margin="0,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                                Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Visibility="Collapsed" IsEnabled="False" Click="Cancel_Button_Click"   />
+					<Button x:Name="Grid_Scientists_Modify_Button" Content="Modify" Margin="7,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                                Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="Modify_Button_Click"  />
+					<Button x:Name="Grid_Scientists_Delete_Button" Content="Delete" Margin="7,0,20,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                                Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="Delete_Button_Click"  />
+				</StackPanel>
+			</StackPanel>
+			
+			<Grid Margin="0,40,0,0" Panel.ZIndex="1" Background="#F5F5F5" Visibility="Visible" HorizontalAlignment="Stretch">
+				<Grid.Style>
+					<Style TargetType="Grid">
+						<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						<Setter Property="VerticalAlignment" Value="Bottom"/>
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnScientists}" Value="True">
+								<!--<Setter Property="Height" Value="600"/>-->
+
+								<Setter Property="Height" Value="450"/>
+								<Setter Property="Width" Value="750"/>
+								<Setter Property="HorizontalAlignment" Value="Center"/>
+								<Setter Property="VerticalAlignment" Value="Center"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnScientists}" Value="False">
+								<Setter Property="Height" Value="0"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Grid.Style>
+				<Border BorderThickness="3" BorderBrush="#D2B48C">
+
+				</Border>
+			</Grid>
+
 			<!-- DataGrid -->
-			<StackPanel Height="595" VerticalAlignment="Top">
-				<DataGrid x:Name="Scientists_DataGrid" Padding="0" Margin="0" Background="{x:Null}" Foreground="Black" Height="620" MaxHeight="620"
+			<StackPanel Margin="0,40,0,0" Height="600" VerticalAlignment="Top">
+				<DataGrid x:Name="Scientists_DataGrid" Padding="0" Margin="0" Background="{x:Null}" Foreground="Black" Height="600" MaxHeight="600"
                                       ItemsSource="{Binding}"
                                       IsReadOnly="True"
                                       CanUserAddRows="False"                                 
@@ -356,6 +448,7 @@
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
 								<Style>
                                     <Setter Property="TextBlock.Margin" Value="20"/>
+									<Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
                                     <Setter Property="TextBlock.TextAlignment" Value="Left"/>
                                     <Setter Property="TextBlock.HorizontalAlignment" Value="Left"/>
                                     <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
@@ -442,9 +535,55 @@
 
 		<!-- Technicians -->
 		<Grid x:Name="Grid_Technicians" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
+			<!-- Buttons -->
+			<StackPanel Panel.ZIndex="1" Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+				<Label Margin="0,-6,0,0" Content="Technicians" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" />
+				<Button x:Name="Grid_Technicians_CreateNewTechnician_Button" Content="New" Margin="22,0,0,7" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                        Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="CreateNew_Button_Click"  />
+			</StackPanel>
+			<StackPanel VerticalAlignment="Top" Height="40">
+				<StackPanel Orientation="Horizontal" Margin="0,4,0,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+					<ToggleButton x:Name="TglBtnTechnicians" Margin="0,0,10,0" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"                    
+                          Foreground="White" Background="#4682B4" IsChecked="False" Height="35" Width="35" Visibility="Collapsed">
+						<materialDesign:PackIcon Kind="Menu" Height="21" Width="21" />
+					</ToggleButton>
+					<Button x:Name="Grid_Technicians_Cancel_Button" Content="Cancel" Margin="0,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                                Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Visibility="Collapsed" IsEnabled="False" Click="Cancel_Button_Click"   />
+					<Button x:Name="Grid_Technicians_Modify_Button" Content="Modify" Margin="7,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                                Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="Modify_Button_Click"  />
+					<Button x:Name="Grid_Technicians_Delete_Button" Content="Delete" Margin="7,0,20,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
+                                Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="Delete_Button_Click"  />
+				</StackPanel>
+			</StackPanel>
+			
+			<Grid Margin="0,40,0,0" Panel.ZIndex="1" Background="#F5F5F5" Visibility="Visible" HorizontalAlignment="Stretch">
+				<Grid.Style>
+					<Style TargetType="Grid">
+						<Setter Property="HorizontalAlignment" Value="Stretch"/>
+						<Setter Property="VerticalAlignment" Value="Bottom"/>
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnTechnicians}" Value="True">
+								<!--<Setter Property="Height" Value="600"/>-->
+
+								<Setter Property="Height" Value="450"/>
+								<Setter Property="Width" Value="750"/>
+								<Setter Property="HorizontalAlignment" Value="Center"/>
+								<Setter Property="VerticalAlignment" Value="Center"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnTechnicians}" Value="False">
+								<Setter Property="Height" Value="0"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Grid.Style>
+				<Border BorderThickness="3" BorderBrush="#D2B48C">
+
+				</Border>
+			</Grid>
+
 			<!-- DataGrid -->
-			<StackPanel Height="595" VerticalAlignment="Top">
-				<DataGrid x:Name="Technicians_DataGrid" Padding="0" Margin="0" Background="{x:Null}" Foreground="Black" Height="620" MaxHeight="620"
+			<StackPanel Margin="0,40,0,0" Height="600" VerticalAlignment="Top">
+				<DataGrid x:Name="Technicians_DataGrid" Padding="0" Margin="0" Background="{x:Null}" Foreground="Black" Height="600" MaxHeight="600"
                                       ItemsSource="{Binding}"
                                       IsReadOnly="True"
                                       CanUserAddRows="False"                                 
@@ -486,6 +625,7 @@
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
 								<Style>
                                     <Setter Property="TextBlock.Margin" Value="20"/>
+									<Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
                                     <Setter Property="TextBlock.TextAlignment" Value="Left"/>
                                     <Setter Property="TextBlock.HorizontalAlignment" Value="Left"/>
                                     <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
@@ -575,7 +715,7 @@
 		<!-- Samples -->
 		<Grid x:Name="Grid_Samples" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
             <!-- Buttons -->
-            <StackPanel Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+			<StackPanel Panel.ZIndex="1" Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Label Margin="0,-6,0,0" Content="Samples" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" />
                 <Button x:Name="Grid_Samples_CreateNewSample_Button" Content="New" Margin="95,0,0,7" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
                         Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="CreateNew_Button_Click"  />
@@ -585,8 +725,7 @@
                     <ToggleButton x:Name="TglBtnSample" Margin="0,0,10,0" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"                    
                           Foreground="White" Background="#4682B4" IsChecked="False" Height="35" Width="35" Visibility="Collapsed">                        
                         <materialDesign:PackIcon Kind="Menu" Height="21" Width="21" />
-					</ToggleButton>
-					<!-- Grid_Samples_Cancel_Button_ClickGrid_Samples_Cancel_Button_Click, Grid_Samples_Delete_Button_Click-->
+					</ToggleButton>					
                     <Button x:Name="Grid_Samples_Cancel_Button" Content="Cancel" Margin="0,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
                                 Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Visibility="Collapsed" IsEnabled="False" Click="Cancel_Button_Click"   />
                     <Button x:Name="Grid_Samples_Modify_Button" Content="Modify" Margin="7,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
@@ -665,6 +804,7 @@
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
 								<Style>
                                     <Setter Property="TextBlock.Margin" Value="20"/>
+									<Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
                                     <Setter Property="TextBlock.TextAlignment" Value="Left"/>
 									<Setter Property="TextBlock.HorizontalAlignment" Value="Left"/>
 									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
@@ -672,7 +812,7 @@
 							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
 						</materialDesign:MaterialDataGridTextColumn>
 
-						<materialDesign:MaterialDataGridTextColumn Header="Quantity" Width="0.4*" Binding="{Binding Quantity}">
+						<materialDesign:MaterialDataGridTextColumn Header="Quantity" Width="0.4*" Binding="{Binding Quantity, StringFormat={}{0} m3}">
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
 								<Style>
                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -718,9 +858,9 @@
 		</Grid>
 
 		<!-- Equipment -->
-		<Grid x:Name="Grid_Equipment" Panel.ZIndex="0" Grid.Row="1" Visibility="Visible">
+		<Grid x:Name="Grid_Equipment" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
 			<!-- Buttons -->
-			<StackPanel Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+			<StackPanel Panel.ZIndex="1" Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
 				<Label Margin="0,-6,0,0" Content="Equipment" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" />
 				<Button x:Name="Grid_Equipment_CreateNewPieceOfEquipment_Button" Content="New" Margin="61,0,0,7" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
                         Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Click="CreateNew_Button_Click"  />
@@ -730,8 +870,7 @@
 					<ToggleButton x:Name="TglBtnEquipment" Margin="0,0,10,0" Style="{StaticResource MaterialDesignFlatPrimaryToggleButton}"                    
                           Foreground="White" Background="#4682B4" IsChecked="False" Height="35" Width="35" Visibility="Collapsed">
 						<materialDesign:PackIcon Kind="Menu" Height="21" Width="21" />
-					</ToggleButton>
-					<!-- Grid_Samples_Cancel_Button_ClickGrid_Samples_Cancel_Button_Click, Grid_Samples_Delete_Button_Click-->
+					</ToggleButton>					
 					<Button x:Name="Grid_Equipment_Cancel_Button" Content="Cancel" Margin="0,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
                                 Background="{x:Null}" Style="{StaticResource MaterialDesignRaisedButton}" Visibility="Collapsed" IsEnabled="False" Click="Cancel_Button_Click"   />
 					<Button x:Name="Grid_Equipment_Modify_Button" Content="Modify" Margin="7,0,0,0" Width="65" Padding="0" Foreground="#4682B4" FontFamily="Stencil" BorderThickness="2" BorderBrush="#E6E6FA" 
@@ -810,6 +949,7 @@
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
 								<Style>
                                     <Setter Property="TextBlock.Margin" Value="20"/>
+									<Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
                                     <Setter Property="TextBlock.TextAlignment" Value="Left"/>
 									<Setter Property="TextBlock.HorizontalAlignment" Value="Left"/>
 									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
@@ -817,7 +957,7 @@
 							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
 						</materialDesign:MaterialDataGridTextColumn>
 
-						<materialDesign:MaterialDataGridTextColumn Header="Quantity" Width="0.4*" Binding="{Binding Quantity}">
+						<materialDesign:MaterialDataGridTextColumn Header="Quantity" Width="0.4*" Binding="{Binding Quantity, StringFormat={}{0} pcs.}">
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
 								<Style>
                                     <Setter Property="TextBlock.TextAlignment" Value="Center"/>

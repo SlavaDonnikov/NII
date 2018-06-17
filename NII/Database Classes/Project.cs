@@ -57,14 +57,14 @@ namespace NII.Database_Classes
 		public virtual ICollection<Scientist> Scientists { get; set; }
         public virtual ICollection<Technician> Technicians { get; set; }
         public virtual ICollection<Sample> Samples { get; set; }
-        public virtual ICollection<Equipment> Equipments { get; set; }
+        public virtual ICollection<Equipment> Equipment { get; set; }
         
         public Project()
         {
             this.Scientists = new HashSet<Scientist>();
             this.Technicians = new HashSet<Technician>();
             this.Samples = new HashSet<Sample>();
-            this.Equipments = new HashSet<Equipment>();			
+            this.Equipment = new HashSet<Equipment>();			
         }
 
 		[Column(TypeName = "DateTime2", Order = 9)]
@@ -127,14 +127,14 @@ namespace NII.Database_Classes
         }
 
         [Column(TypeName = "VARCHAR", Order = 13)]
-        public string EquipmentsZ
+        public string EquipmentZ
         {
             get
             {
                 string tmp = "";
-                if(Equipments != null)
+                if(Equipment != null)
                 {
-                    foreach (Equipment eq in this.Equipments)
+                    foreach (Equipment eq in this.Equipment)
                     {
                         tmp += eq.Title + "\n";
                     }

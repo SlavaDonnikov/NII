@@ -34,3 +34,4 @@ E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.AddZPropertiestoScientist
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.UpdateZPropertiesinallEFmodelclasses.resources
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.UpdateProjectclass.resources
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.ZPropertiestmpTrim.resources
+E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.EquipmentstoEquipmentSampleQuantitytypeVARCHARtotypeINT.resources

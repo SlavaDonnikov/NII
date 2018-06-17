@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NII.Database_Classes
 {
-    [Table("Tb_Equipments")]
+    [Table("Tb_Equipment")]
     public class Equipment
     {
         [Key]
