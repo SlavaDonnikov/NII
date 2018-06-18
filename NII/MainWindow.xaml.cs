@@ -2,6 +2,7 @@
 using NII.Support_Classes;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,7 @@ namespace NII   // Программа ведения базы данных "Со
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-		public List<string> Project_CodeName { get; set; }
-
+    {	
         public MainWindow()
         {
             InitializeComponent();
@@ -68,18 +67,66 @@ namespace NII   // Программа ведения базы данных "Со
 		}
         #endregion
 
-        #region Window DragMove()
+        #region Find Control
+        /// <summary>
+        /// Helper function for searching all controls of the specified type.
+        /// </summary>
+        /// <typeparam name="T">Type of control.</typeparam>
+        /// <param name="depObj">Where to look for controls.</param>
+        /// <returns>Enumerable list of controls.</returns>
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Window ClearFocus()
         /// <summary>
         /// Button to move the application window 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			DragMove();
-		}
+		{			
+            Keyboard.ClearFocus();
+        }
         #endregion
 
+        #region Root Grid : DragMove(), UnselectAll()
+        private void Grid_DragMove_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                this.DragMove();
+        }
+
+        private void Grid_DataGrid_UnselectAll_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Grid rootGrid = sender as Grid;
+            if (e.RightButton == MouseButtonState.Released)
+            {
+                foreach (DataGrid dataGrid in FindVisualChildren<DataGrid>(RootGrid))
+                {
+                    dataGrid.UnselectAll();
+                }
+            }
+        }
+        #endregion
+                
         #region Application Shutdown
         /// <summary>
         /// Application "Power" button
@@ -90,6 +137,19 @@ namespace NII   // Программа ведения базы данных "Со
 		{
 			Application.Current.Shutdown();
 		}
+        #endregion
+
+        #region About Application Button
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.Uri.ToString());
+        }
+
+        private void About_Application_Button_Click(object sender, RoutedEventArgs e)
+        {
+            InvisibleGrids();
+            Grid_About_Application.Visibility = Visibility.Visible;
+        }
         #endregion
 
         #region Application Full Format Date & Time
@@ -167,11 +227,96 @@ namespace NII   // Программа ведения базы данных "Со
 					break;
 			}
 		}
-		#endregion
+        #endregion
 
-		#region CRUD
-		// Modify / Save button
-		private void Modify_Button_Click(object sender, RoutedEventArgs e)
+
+        #region CRUD
+
+        #region Clear all input fields
+        // Clear all textBoxes, comboBoxes, datePickers at 'Create New' panels
+        private void ClearInputFields()
+        {
+            foreach (TextBox textBox in FindVisualChildren<TextBox>(RootGrid))
+            {
+                textBox.Clear();
+            }
+            foreach (ComboBox comboBox in FindVisualChildren<ComboBox>(RootGrid))
+            {
+                comboBox.SelectedIndex = -1;
+            }
+            foreach (DatePicker datePicker in FindVisualChildren<DatePicker>(RootGrid))
+            {
+                datePicker.SelectedDate = null;
+            }
+        }
+        #endregion
+
+        #region Is Input Fields Are Not Empty
+        // Check is all input fields are filled up
+        private bool IsInputFieldsAreNotEmpty_Scientists_Technicians_Projects(DependencyObject obj)
+        {
+            int txtCount = 0;
+            int cmbCount = 0;
+            int dtpCount = 0;
+
+            foreach (TextBox child in FindVisualChildren<TextBox>(obj)) txtCount++;
+            foreach (ComboBox child in FindVisualChildren<ComboBox>(obj)) cmbCount++;
+            foreach (DatePicker child in FindVisualChildren<DatePicker>(obj)) dtpCount++;
+
+            List<bool> txt = new List<bool>(txtCount);
+            List<bool> cmb = new List<bool>(cmbCount);
+            List<bool> dtp = new List<bool>(dtpCount);
+
+            foreach (TextBox child in FindVisualChildren<TextBox>(obj))
+            {
+                if (!string.IsNullOrEmpty(child.Text) & !string.IsNullOrWhiteSpace(child.Text)) txt.Add(true);
+            }
+            foreach (ComboBox child in FindVisualChildren<ComboBox>(obj))
+            {
+                if (child.SelectedItem != null & child.SelectedIndex != -1) cmb.Add(true);
+            }
+            foreach (DatePicker child in FindVisualChildren<DatePicker>(obj))
+            {
+                if (child.SelectedDate != null) dtp.Add(true);
+            }
+
+            if ((txt.Any(a => a == true) & txt.Count == txtCount) & (cmb.Any(a => a == true) & cmb.Count == cmbCount) & (dtp.Any(a => a == true) & dtp.Count == dtpCount)) return true;
+            else return false;
+        }
+
+        private bool IsInputFieldsAreNotEmpty_Samples_Equipment(DependencyObject obj)
+        {
+            List<bool> txt = new List<bool>(3);
+            foreach (TextBox child in FindVisualChildren<TextBox>(obj))
+            {
+                if (!string.IsNullOrEmpty(child.Text) & !string.IsNullOrWhiteSpace(child.Text)) txt.Add(true);
+            }
+
+            if(txt.Any(a => a == true) & txt.Count == 3) return true;
+            else return false;
+        }
+
+        #endregion
+
+        #region Number TextBox Validation
+        /// <summary>
+        /// Check is string represents a number
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private bool IsNumber(string text)
+        {
+            return int.TryParse(text, out int output);
+        }
+
+        private void InputValidation_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (IsNumber(e.Text) == false) e.Handled = true;            
+        }
+        #endregion
+
+        // Modify / Save button
+        private void Modify_Button_Click(object sender, RoutedEventArgs e)
 		{
 			switch ((sender as Button).Name)
 			{
@@ -182,15 +327,13 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							TglBtnSample.IsChecked = true;
 							TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-							Samples_DataGrid.IsEnabled = false;
-							//Samples_DataGrid.Visibility = Visibility.Collapsed;
+							Samples_DataGrid.IsEnabled = false;							
 						}
 						else
 						{
 							TglBtnSample.IsChecked = false;
 							TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-							Samples_DataGrid.IsEnabled = true;
-							//Samples_DataGrid.Visibility = Visibility.Visible;
+							Samples_DataGrid.IsEnabled = true;							
 						}
 
 						if (Grid_Samples_Modify_Button.Content.ToString() == "Modify")
@@ -204,10 +347,16 @@ namespace NII   // Программа ведения базы данных "Со
 
 							using (NIIDbContext db = new NIIDbContext())
 							{
-								//
-							}
-						}
-						else if (Grid_Samples_Modify_Button.Content.ToString() == "Save")
+                                Sample sample = new Sample();
+                                int id = (Samples_DataGrid.SelectedItem as Sample).Id;
+                                sample = db.Samples.Find(id);
+
+                                TextBox_Samples_Title.Text = sample.Title;
+                                TextBox_Samples_Quantity.Text = sample.Quantity.ToString();
+                                TextBox_Samples_Description.Text = sample.Description; 
+                            }
+						}           
+						else if (Grid_Samples_Modify_Button.Content.ToString() == "Save")   // Save after modifying
 						{
 							Grid_Samples_Modify_Button.Content = "Modify";
 							Grid_Samples_Delete_Button.IsEnabled = true;
@@ -216,20 +365,36 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Samples_Cancel_Button.IsEnabled = false;
 
-							using (NIIDbContext db = new NIIDbContext())
-							{
-								// Call Save Event or Save function??
-							}
+                            if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Samples))
+                            {
+                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            }
+                            else
+                            {
+                                using (NIIDbContext db = new NIIDbContext())
+                                {
+                                    Sample sample = new Sample();
+                                    int id = (Samples_DataGrid.SelectedItem as Sample).Id;
+                                    sample = db.Samples.Find(id);
+                                    db.Entry(sample).State = EntityState.Modified;
+
+                                    sample.Title = TextBox_Samples_Title.Text;
+                                    sample.Quantity = Convert.ToInt32(TextBox_Samples_Quantity.Text);
+                                    sample.Description = TextBox_Samples_Description.Text;
+                                    
+                                    db.SaveChanges();
+
+                                    LoadDB();
+                                }
+                            }
 						}
-					}               // Чтобы не нужно было выбирать строку датагрида при сохранении новой записи (нажата кнопка "Новый", а событие сохранения переадресовывается кнопке "Сохранить")
+					}                                                               // Save new Sample
 					else if (Samples_DataGrid.SelectedItem == null & Grid_Samples_CreateNewSample_Button.IsEnabled == false & TglBtnSample.IsChecked == true)
 					{
 						
 						TglBtnSample.IsChecked = false;
 						TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-						Samples_DataGrid.IsEnabled = true;
-						//Samples_DataGrid.Visibility = Visibility.Visible;
-						
+						Samples_DataGrid.IsEnabled = true;										
 
 						Grid_Samples_Modify_Button.Content = "Modify";
 						Grid_Samples_Delete_Button.IsEnabled = true;
@@ -238,10 +403,26 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Samples_Cancel_Button.IsEnabled = false;
 
-						using (NIIDbContext db = new NIIDbContext())
-						{
-							// Call Save Event or Save function??
-						}
+                        if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Samples))
+                        {
+                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                        else
+                        {
+                            using (NIIDbContext db = new NIIDbContext())
+                            {
+                                Sample sample = new Sample
+                                {
+                                    Title = TextBox_Samples_Title.Text,
+                                    Quantity = Convert.ToInt32(TextBox_Samples_Quantity.Text),
+                                    Description = TextBox_Samples_Description.Text
+                                };
+                                db.Samples.Add(sample);
+                                db.SaveChanges();
+
+                                LoadDB();
+                            }
+                        }                        
 					}
 					else MessageBox.Show("Please select target record!", "Modify sample", MessageBoxButton.OK, MessageBoxImage.Warning);
 					break;
@@ -623,7 +804,10 @@ namespace NII   // Программа ведения базы данных "Со
 		// Create new record button
 		private void CreateNew_Button_Click(object sender, RoutedEventArgs e)
 		{
-			switch ((sender as Button).Name)
+            // Clear all input fields
+            ClearInputFields();
+
+            switch ((sender as Button).Name)
 			{
 				case "Grid_Samples_CreateNewSample_Button":
 					TglBtnSample.IsChecked = true;
@@ -637,8 +821,6 @@ namespace NII   // Программа ведения базы данных "Со
 
 					Grid_Samples_Cancel_Button.Visibility = Visibility.Visible;
 					Grid_Samples_Cancel_Button.IsEnabled = true;
-
-					// Очистка полей ввода
 					break;
 
 				case "Grid_Equipment_CreateNewPieceOfEquipment_Button":
@@ -653,8 +835,6 @@ namespace NII   // Программа ведения базы данных "Со
 
 					Grid_Equipment_Cancel_Button.Visibility = Visibility.Visible;
 					Grid_Equipment_Cancel_Button.IsEnabled = true;
-
-					// Очистка полей ввода
 					break;
 
 				case "Grid_Technicians_CreateNewTechnician_Button":
@@ -669,8 +849,6 @@ namespace NII   // Программа ведения базы данных "Со
 
 					Grid_Technicians_Cancel_Button.Visibility = Visibility.Visible;
 					Grid_Technicians_Cancel_Button.IsEnabled = true;
-
-					// Очистка полей ввода
 					break;
 
 				case "Grid_Scientists_CreateNewScientist_Button":
@@ -685,8 +863,6 @@ namespace NII   // Программа ведения базы данных "Со
 
 					Grid_Scientists_Cancel_Button.Visibility = Visibility.Visible;
 					Grid_Scientists_Cancel_Button.IsEnabled = true;
-
-					// Очистка полей ввода
 					break;
 
 				case "Grid_Projects_CreateNewProject_Button":
@@ -701,8 +877,6 @@ namespace NII   // Программа ведения базы данных "Со
 
 					Grid_Projects_Cancel_Button.Visibility = Visibility.Visible;
 					Grid_Projects_Cancel_Button.IsEnabled = true;
-
-					// Очистка полей ввода
 					break;
 
 				default:
@@ -724,7 +898,13 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-								// Delete functional
+                                Sample sample;
+                                int id = (Samples_DataGrid.SelectedItem as Sample).Id;
+                                sample = db.Samples.Find(id);
+                                db.Samples.Remove(sample);
+
+                                db.SaveChanges();
+                                LoadDB();
 							}
 						}
 					}
@@ -740,8 +920,14 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-								// Delete functional
-							}
+                                Equipment equipment;
+                                int id = (Equipment_DataGrid.SelectedItem as Equipment).Id;
+                                equipment = db.Equipment.Find(id);
+                                db.Equipment.Remove(equipment);
+
+                                db.SaveChanges();
+                                LoadDB();
+                            }
 						}
 					}
 					else MessageBox.Show("Please select a record you want to delete!", "Deleting the piece of equipment", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -756,8 +942,14 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-								// Delete functional
-							}
+                                Technician technician;
+                                int id = (Technicians_DataGrid.SelectedItem as Technician).Id;
+                                technician = db.Technicians.Find(id);
+                                db.Technicians.Remove(technician);
+
+                                db.SaveChanges();
+                                LoadDB();
+                            }
 						}
 					}
 					else MessageBox.Show("Please select a record you want to delete!", "Deleting a technician", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -772,8 +964,14 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-								// Delete functional
-							}
+                                Scientist scientist;
+                                int id = (Scientists_DataGrid.SelectedItem as Scientist).Id;
+                                scientist = db.Scientists.Find(id);
+                                db.Scientists.Remove(scientist);
+
+                                db.SaveChanges();
+                                LoadDB();
+                            }
 						}
 					}
 					else MessageBox.Show("Please select a record you want to delete!", "Deleting a scientist", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -788,8 +986,14 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-								// Delete functional
-							}
+                                Project project;
+                                int id = (Projects_DataGrid.SelectedItem as Project).Id;
+                                project = db.Projects.Find(id);
+                                db.Projects.Remove(project);
+
+                                db.SaveChanges();
+                                LoadDB();
+                            }
 						}
 					}
 					else MessageBox.Show("Please select a record you want to delete!", "Deleting a project", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -799,18 +1003,9 @@ namespace NII   // Программа ведения базы данных "Со
 					break;
 			}
 		}
-		#endregion
+        #endregion
 
-		private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-		{
-			System.Diagnostics.Process.Start(e.Uri.ToString());
-		}
-
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			InvisibleGrids();
-			Grid_About_Application.Visibility = Visibility.Visible;
-		}
-	}
+        
+    }
 }
 // Chart : https://code.msdn.microsoft.com/Chart-Control-in-WPF-c9727c28  

@@ -9,7 +9,7 @@
         Title="MainWindow" Height="700" Width="1300" WindowStartupLocation="CenterScreen" Topmost="False" 
         ShowInTaskbar="true" ResizeMode="NoResize" WindowStyle="None" AllowsTransparency="False" 
 		Icon="Resources\miranda.ico" Loaded="Window_Loaded" MouseDown="Window_MouseDown" >
-	<Grid x:Name="RootGrid" Background="#F5F5F5">
+    <Grid x:Name="RootGrid" Background="#F5F5F5" MouseDown="Grid_DragMove_MouseDown" MouseRightButtonUp="Grid_DataGrid_UnselectAll_MouseRightButtonUp" >
 		<Grid.RowDefinitions>
 			<RowDefinition Height="0.047*"/>
 			<RowDefinition Height="*"/>
@@ -129,7 +129,7 @@
 			<StackPanel Panel.ZIndex="2" Orientation="Horizontal" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right">
 				<Label x:Name="ApplicationFullDate" Content="Saturday, March 31, 2018" Margin="0,0,10,0" FontFamily="Stencil" FontSize="13" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 				<Label x:Name="ApplicationRealTime" Content="00:00:00 AM" Margin="0,0,8,0" FontFamily="Stencil" FontSize="13" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-				<Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Height="28" Width="28" Margin="0,0,2,0" BorderBrush="{x:Null}" Background="{x:Null}" Click="Button_Click">
+                <Button x:Name="About_Application_Button" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Height="28" Width="28" Margin="0,0,2,0" BorderBrush="{x:Null}" Background="{x:Null}" Click="About_Application_Button_Click">
 					<Button.ToolTip>
 						<ToolTip Content="About Application" Placement="Relative" Background="{x:Null}" Foreground="#4682B4"
                                  HasDropShadow="False" HorizontalOffset="-85" VerticalOffset="-25"
@@ -188,8 +188,8 @@
 								<Setter Property="VerticalAlignment" Value="Center"/>
 							</DataTrigger>
 							<DataTrigger Binding="{Binding IsChecked,ElementName=TglBtnProjects}" Value="False">
-								<Setter Property="Height" Value="0"/>
-							</DataTrigger>
+								<Setter Property="Height" Value="0"/>                                
+                            </DataTrigger>
 						</Style.Triggers>
 					</Style>
 				</Grid.Style>
@@ -215,7 +215,7 @@
 							<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
 								<Label Content="Term" Margin="40,0,361,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
 								<TextBox x:Name="TextBox_Projects_Term" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
-										MaxLength="20" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" />
+										MaxLength="20" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" PreviewTextInput="InputValidation_PreviewTextInput"/>
 								<Label Content="days." Margin="145,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
 							</StackPanel>
 							<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
@@ -400,8 +400,9 @@
 
 						<materialDesign:MaterialDataGridTextColumn Header="Samples" Width="1.4*" Binding="{Binding SamplesZ}">
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
-								<Style>                                    
-									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+								<Style>
+                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                    <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
 									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
 								</Style>
 							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
@@ -410,6 +411,7 @@
 						<materialDesign:MaterialDataGridTextColumn Header="Equipments" Width="1.4*" Binding="{Binding EquipmentZ}">
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
 								<Style>
+                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
 									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
 									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
 								</Style>
@@ -473,7 +475,7 @@
 						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
 							<Label Content="Age" Margin="40,0,304,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
 							<TextBox x:Name="TextBox_Scientists_Age" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
-										MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+										MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" PreviewTextInput="InputValidation_PreviewTextInput"/>
 						</StackPanel>
 						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
 							<Label Content="Personal ID" Margin="40,0,194,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
@@ -694,7 +696,7 @@
 						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
 							<Label Content="Age" Margin="40,0,304,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
 							<TextBox x:Name="TextBox_Technicians_Age" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
-										MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>								
+										MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" PreviewTextInput="InputValidation_PreviewTextInput"/>								
 						</StackPanel>
 						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
 							<Label Content="Personal ID" Margin="40,0,194,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" HorizontalContentAlignment="Center" />
@@ -917,7 +919,7 @@
 						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
 							<Label Content="Quantity" Margin="40,0,170,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
 							<TextBox x:Name="TextBox_Samples_Quantity" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
-                                        MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+                                        MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" PreviewTextInput="InputValidation_PreviewTextInput" />
 							<Label Content="m3." Margin="110,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
 						</StackPanel>
 						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
@@ -1079,7 +1081,7 @@
 						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
 							<Label Content="Quantity" Margin="40,0,170,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
 							<TextBox x:Name="TextBox_Equipment_Quantity" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  
-                                        MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C"/>
+                                        MaxLength="34" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="#D2B48C" PreviewTextInput="InputValidation_PreviewTextInput"/>
 							<Label Content="pcs." Margin="110,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black"/>
 						</StackPanel>
 						<StackPanel Margin="0,10,0,0" Orientation="Horizontal">
@@ -1190,7 +1192,7 @@
 
 		<!-- About application -->
 		<Grid x:Name="Grid_About_Application" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
-			<Grid Margin="0,40,0,0" Panel.ZIndex="1" Background="#F5F5F5" HorizontalAlignment="Stretch">
+			<Grid Margin="0,-20,0,0" Panel.ZIndex="1" Background="#F5F5F5" HorizontalAlignment="Stretch">
 				<Grid.Style>
 					<Style TargetType="Grid">
 						<Setter Property="Height" Value="550"/>
@@ -1200,18 +1202,19 @@
 					</Style>
 				</Grid.Style>
 
-				<Border BorderThickness="4" BorderBrush="#D2B48C">
+				<Border BorderThickness="0" BorderBrush="#D2B48C">
 					<StackPanel Margin="0,20,0,0" Orientation="Vertical">
 						<Label Content="Dudkin Viachaslau " Margin="0,10,0,0" Padding="0" FontFamily="Papyrus" FontSize="38" FontWeight="Bold" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 						<Label Content="College Of Business and Law, " Margin="0,20,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 						<Label Content="Software Engineering" Margin="0,-10,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-						<Label Content="3rd year, T-591 group" Margin="0,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-						<TextBlock Margin="25,10,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" >GitHub :
+						<Label Content="3rd year, T-591 group" Margin="0,5,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						<TextBlock Margin="25,15,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" >GitHub :
 							<Hyperlink FontSize="34" NavigateUri="https://github.com/SlavaDonnikov" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/SlavaDonnikov</Hyperlink>
 						</TextBlock>
 						<Label Content="Main technologies:" Margin="0,30,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" FontWeight="Bold" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-						<Label Content="Entity Framework Code First approach" Margin="0,-10,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-						<Label Content="XAML" Margin="0,-5,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						<Label Content="Entity Framework Code First" Margin="0,-10,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						<Label Content="WPF, XAML" Margin="0,-5,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label Content="MS SQL Server 2017" Margin="0,-5,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 					</StackPanel>
 				</Border>
 			</Grid>
