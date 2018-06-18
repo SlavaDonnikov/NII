@@ -382,8 +382,9 @@
 
 						<materialDesign:MaterialDataGridTextColumn Header="Scientists" Width="1.1*" Binding="{Binding ScientistsZ}">
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
-								<Style>                                    
-									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+								<Style>
+                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                    <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
 									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
 								</Style>
 							</materialDesign:MaterialDataGridTextColumn.ElementStyle>
@@ -391,8 +392,9 @@
 
 						<materialDesign:MaterialDataGridTextColumn Header="Technicians" Width="1.1*" Binding="{Binding TechniciansZ}">
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
-								<Style>                                    
-									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+								<Style>
+                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                    <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
 									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
 								</Style>
 							</materialDesign:MaterialDataGridTextColumn.ElementStyle>

@@ -253,19 +253,11 @@ namespace NII   // Программа ведения базы данных "Со
 
         #region Is Input Fields Are Not Empty
         // Check is all input fields are filled up
-        private bool IsInputFieldsAreNotEmpty_Scientists_Technicians_Projects(DependencyObject obj)
-        {
-            int txtCount = 0;
-            int cmbCount = 0;
-            int dtpCount = 0;
-
-            foreach (TextBox child in FindVisualChildren<TextBox>(obj)) txtCount++;
-            foreach (ComboBox child in FindVisualChildren<ComboBox>(obj)) cmbCount++;
-            foreach (DatePicker child in FindVisualChildren<DatePicker>(obj)) dtpCount++;
-
-            List<bool> txt = new List<bool>(txtCount);
-            List<bool> cmb = new List<bool>(cmbCount);
-            List<bool> dtp = new List<bool>(dtpCount);
+        private bool IsInputFieldsAreNotEmpty_Scientists_Technicians(DependencyObject obj)
+        {          
+            List<bool> txt = new List<bool>(5);
+            List<bool> cmb = new List<bool>(2);
+            List<bool> dtp = new List<bool>(1);
 
             foreach (TextBox child in FindVisualChildren<TextBox>(obj))
             {
@@ -277,11 +269,11 @@ namespace NII   // Программа ведения базы данных "Со
             }
             foreach (DatePicker child in FindVisualChildren<DatePicker>(obj))
             {
-                if (child.SelectedDate != null) dtp.Add(true);
+                if (child.SelectedDate.Value != null) dtp.Add(true);
             }
 
-            if ((txt.Any(a => a == true) & txt.Count == txtCount) & (cmb.Any(a => a == true) & cmb.Count == cmbCount) & (dtp.Any(a => a == true) & dtp.Count == dtpCount)) return true;
-            else return false;
+            if ((txt.Any(a => a == true) & txt.Count == 5) & (cmb.Any(a => a == true) & cmb.Count == 2) & (dtp.Any(a => a == true) & dtp.Count == 1)) return true;
+            else return false;            
         }
 
         private bool IsInputFieldsAreNotEmpty_Samples_Equipment(DependencyObject obj)
@@ -542,14 +534,12 @@ namespace NII   // Программа ведения базы данных "Со
 							TglBtnTechnicians.IsChecked = true;
 							TglBtnTechnicians.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 							Technicians_DataGrid.IsEnabled = false;
-							//Technicians_DataGrid.Visibility = Visibility.Collapsed;
 						}
 						else
 						{
 							TglBtnTechnicians.IsChecked = false;
 							TglBtnTechnicians.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 							Technicians_DataGrid.IsEnabled = true;
-							//Technicians_DataGrid.Visibility = Visibility.Visible;
 						}
 
 						if (Grid_Technicians_Modify_Button.Content.ToString() == "Modify")
@@ -561,12 +551,22 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Technicians_Cancel_Button.Visibility = Visibility.Visible;
 							Grid_Technicians_Cancel_Button.IsEnabled = true;
 
-							using (NIIDbContext db = new NIIDbContext())
-							{
-								//
-							}
-						}
-						else if (Grid_Technicians_Modify_Button.Content.ToString() == "Save")
+                            using (NIIDbContext db = new NIIDbContext())
+                            {
+                                Technician technician = new Technician();
+                                int id = (Technicians_DataGrid.SelectedItem as Technician).Id;
+                                technician = db.Technicians.Find(id);
+
+                                TextBox_Technicians_Name.Text = technician.Name;
+                                TextBox_Technicians_Age.Text = technician.Age.ToString();
+                                TextBox_Technicians_Personal_Id.Text = technician.Personal_Identification_Number;
+                                ComboBox_Technicians_Position.SelectedValue = technician.Position;
+                                ComboBox_Technicians_Qualification.SelectedValue = technician.Qualification;
+                                TextBox_Technicians_EducationalBackground.Text = technician.EducationalBackground;
+                                DatePicker_Technicians_DateOfEmployment.SelectedDate = technician.DateOfEmployment;
+                            }
+                        }
+						else if (Grid_Technicians_Modify_Button.Content.ToString() == "Save")       // Save after Modifying
 						{
 							Grid_Technicians_Modify_Button.Content = "Modify";
 							Grid_Technicians_Delete_Button.IsEnabled = true;
@@ -575,20 +575,40 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Technicians_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Technicians_Cancel_Button.IsEnabled = false;
 
-							using (NIIDbContext db = new NIIDbContext())
-							{
-								// Call Save Event or Save function??
-							}
-						}
-					}
+                            if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Technicians))
+                            {
+                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            }
+                            else
+                            {
+                                using (NIIDbContext db = new NIIDbContext())
+                                {
+                                    Technician technician = new Technician();
+                                    int id = (Technicians_DataGrid.SelectedItem as Technician).Id;
+                                    technician = db.Technicians.Find(id);
+                                    db.Entry(technician).State = EntityState.Modified;
+
+                                    technician.Name = TextBox_Technicians_Name.Text;
+                                    technician.Age = Convert.ToInt32(TextBox_Technicians_Age.Text);
+                                    technician.Personal_Identification_Number = TextBox_Technicians_Personal_Id.Text;
+                                    technician.Position = ComboBox_Technicians_Position.SelectedValue.ToString();
+                                    technician.Qualification = ComboBox_Technicians_Qualification.SelectedValue.ToString();
+                                    technician.EducationalBackground = TextBox_Technicians_EducationalBackground.Text;
+                                    technician.DateOfEmployment = DatePicker_Technicians_DateOfEmployment.SelectedDate.Value;
+                                        
+                                    db.SaveChanges();
+
+                                    LoadDB();
+                                }
+                            }
+                        }
+					}                                   // Save new technician record
 					else if (Technicians_DataGrid.SelectedItem == null & Grid_Technicians_CreateNewTechnician_Button.IsEnabled == false & TglBtnTechnicians.IsChecked == true)
 					{
 						
 						TglBtnTechnicians.IsChecked = false;
 						TglBtnTechnicians.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 						Technicians_DataGrid.IsEnabled = true;
-						//Technicians_DataGrid.Visibility = Visibility.Visible;
-
 
 						Grid_Technicians_Modify_Button.Content = "Modify";
 						Grid_Technicians_Delete_Button.IsEnabled = true;
@@ -597,11 +617,31 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Technicians_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Technicians_Cancel_Button.IsEnabled = false;
 
-						using (NIIDbContext db = new NIIDbContext())
-						{
-							// Call Save Event or Save function??
-						}
-					}
+                        if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Technicians))
+                        {
+                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                        else
+                        {
+                            using (NIIDbContext db = new NIIDbContext())
+                            {
+                                Technician technician = new Technician
+                                {
+                                    Name = TextBox_Technicians_Name.Text,
+                                    Age = Convert.ToInt32(TextBox_Technicians_Age.Text),
+                                    Personal_Identification_Number = TextBox_Technicians_Personal_Id.Text,
+                                    Position = ComboBox_Technicians_Position.SelectedValue.ToString(),
+                                    Qualification = ComboBox_Technicians_Qualification.SelectedValue.ToString(),
+                                    EducationalBackground = TextBox_Technicians_EducationalBackground.Text,
+                                    DateOfEmployment = DatePicker_Technicians_DateOfEmployment.SelectedDate.Value
+                                };
+                                db.Technicians.Add(technician);
+                                db.SaveChanges();
+
+                                LoadDB();
+                            }
+                        }
+                    }
 					else MessageBox.Show("Please select target record!", "Modify a technician", MessageBoxButton.OK, MessageBoxImage.Warning);
 					break;
 
