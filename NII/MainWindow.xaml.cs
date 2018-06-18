@@ -348,8 +348,8 @@ namespace NII   // Программа ведения базы данных "Со
                                 TextBox_Samples_Description.Text = sample.Description; 
                             }
 						}           
-						else if (Grid_Samples_Modify_Button.Content.ToString() == "Save")   // Save after modifying
-						{
+						else if (Grid_Samples_Modify_Button.Content.ToString() == "Save")   // Save MODIFIED Sample
+                        {
 							Grid_Samples_Modify_Button.Content = "Modify";
 							Grid_Samples_Delete_Button.IsEnabled = true;
 							Grid_Samples_CreateNewSample_Button.IsEnabled = true;
@@ -380,7 +380,7 @@ namespace NII   // Программа ведения базы данных "Со
                                 }
                             }
 						}
-					}                                                               // Save new Sample
+					}                                                               // Save NEW Sample
 					else if (Samples_DataGrid.SelectedItem == null & Grid_Samples_CreateNewSample_Button.IsEnabled == false & TglBtnSample.IsChecked == true)
 					{
 						
@@ -455,8 +455,8 @@ namespace NII   // Программа ведения базы данных "Со
                                 TextBox_Equipment_Description.Text = equipment.Description;
                             }
 						}
-						else if (Grid_Equipment_Modify_Button.Content.ToString() == "Save")     // Save after modifying
-						{
+						else if (Grid_Equipment_Modify_Button.Content.ToString() == "Save")     // Save MODIFIED Equipment
+                        {
 							Grid_Equipment_Modify_Button.Content = "Modify";
 							Grid_Equipment_Delete_Button.IsEnabled = true;
 							Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled = true;
@@ -487,7 +487,7 @@ namespace NII   // Программа ведения базы данных "Со
                                 }
                             }
                         }
-					}                                   // Save new equipment record
+					}                                               // Save NEW Equipment
 					else if (Equipment_DataGrid.SelectedItem == null & Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled == false & TglBtnEquipment.IsChecked == true)
 					{
 						
@@ -566,8 +566,8 @@ namespace NII   // Программа ведения базы данных "Со
                                 DatePicker_Technicians_DateOfEmployment.SelectedDate = technician.DateOfEmployment;
                             }
                         }
-						else if (Grid_Technicians_Modify_Button.Content.ToString() == "Save")       // Save after Modifying
-						{
+						else if (Grid_Technicians_Modify_Button.Content.ToString() == "Save")       // Save MODIFIED Technician
+                        {
 							Grid_Technicians_Modify_Button.Content = "Modify";
 							Grid_Technicians_Delete_Button.IsEnabled = true;
 							Grid_Technicians_CreateNewTechnician_Button.IsEnabled = true;
@@ -602,7 +602,7 @@ namespace NII   // Программа ведения базы данных "Со
                                 }
                             }
                         }
-					}                                   // Save new technician record
+					}                                   // Save NEW Technician
 					else if (Technicians_DataGrid.SelectedItem == null & Grid_Technicians_CreateNewTechnician_Button.IsEnabled == false & TglBtnTechnicians.IsChecked == true)
 					{
 						
@@ -653,14 +653,12 @@ namespace NII   // Программа ведения базы данных "Со
 							TglBtnScientists.IsChecked = true;
 							TglBtnScientists.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 							Scientists_DataGrid.IsEnabled = false;
-							//Scientists_DataGrid.Visibility = Visibility.Collapsed;
 						}
 						else
 						{
 							TglBtnScientists.IsChecked = false;
 							TglBtnScientists.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 							Scientists_DataGrid.IsEnabled = true;
-							//Scientists_DataGrid.Visibility = Visibility.Visible;
 						}
 
 						if (Grid_Scientists_Modify_Button.Content.ToString() == "Modify")
@@ -672,13 +670,23 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Scientists_Cancel_Button.Visibility = Visibility.Visible;
 							Grid_Scientists_Cancel_Button.IsEnabled = true;
 
-							using (NIIDbContext db = new NIIDbContext())
-							{
-								//
-							}
-						}
-						else if (Grid_Scientists_Modify_Button.Content.ToString() == "Save")
-						{
+                            using (NIIDbContext db = new NIIDbContext())
+                            {
+                                Scientist scientist = new Scientist();
+                                int id = (Scientists_DataGrid.SelectedItem as Scientist).Id;
+                                scientist = db.Scientists.Find(id);
+
+                                TextBox_Scientists_Name.Text = scientist.Name;
+                                TextBox_Scientists_Age.Text = scientist.Age.ToString();
+                                TextBox_Scientists_Personal_Id.Text = scientist.Personal_Identification_Number;
+                                ComboBox_Scientists_Position.SelectedValue = scientist.Position;
+                                ComboBox_Scientists_Qualification.SelectedValue = scientist.Qualification;
+                                TextBox_Scientists_EducationalBackground.Text = scientist.EducationalBackground;
+                                DatePicker_Scientists_DateOfEmployment.SelectedDate = scientist.DateOfEmployment;
+                            }
+                        }
+						else if (Grid_Scientists_Modify_Button.Content.ToString() == "Save")    // Save MODIFIED Scientist
+                        {
 							Grid_Scientists_Modify_Button.Content = "Modify";
 							Grid_Scientists_Delete_Button.IsEnabled = true;
 							Grid_Scientists_CreateNewScientist_Button.IsEnabled = true;
@@ -686,20 +694,40 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Scientists_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Scientists_Cancel_Button.IsEnabled = false;
 
-							using (NIIDbContext db = new NIIDbContext())
-							{
-								// Call Save Event or Save function??
-							}
-						}
-					}
-					else if (Scientists_DataGrid.SelectedItem == null & Grid_Scientists_CreateNewScientist_Button.IsEnabled == false & TglBtnScientists.IsChecked == true)
+                            if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Scientists))
+                            {
+                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            }
+                            else
+                            {
+                                using (NIIDbContext db = new NIIDbContext())
+                                {
+                                    Scientist scientist = new Scientist();
+                                    int id = (Scientists_DataGrid.SelectedItem as Scientist).Id;
+                                    scientist = db.Scientists.Find(id);
+                                    db.Entry(scientist).State = EntityState.Modified;
+
+                                    scientist.Name = TextBox_Scientists_Name.Text;
+                                    scientist.Age = Convert.ToInt32(TextBox_Scientists_Age.Text);
+                                    scientist.Personal_Identification_Number = TextBox_Scientists_Personal_Id.Text;
+                                    scientist.Position = ComboBox_Scientists_Position.SelectedValue.ToString();
+                                    scientist.Qualification = ComboBox_Scientists_Qualification.SelectedValue.ToString();
+                                    scientist.EducationalBackground = TextBox_Scientists_EducationalBackground.Text;
+                                    scientist.DateOfEmployment = DatePicker_Scientists_DateOfEmployment.SelectedDate.Value;
+
+                                    db.SaveChanges();
+
+                                    LoadDB();
+                                }
+                            }
+                        }
+                    }                                                        // Save NEW Scientist
+                    else if (Scientists_DataGrid.SelectedItem == null & Grid_Scientists_CreateNewScientist_Button.IsEnabled == false & TglBtnScientists.IsChecked == true)
 					{
 
 						TglBtnScientists.IsChecked = false;
 						TglBtnScientists.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 						Scientists_DataGrid.IsEnabled = true;
-						//Scientists_DataGrid.Visibility = Visibility.Visible;
-
 
 						Grid_Scientists_Modify_Button.Content = "Modify";
 						Grid_Scientists_Delete_Button.IsEnabled = true;
@@ -708,11 +736,31 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Scientists_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Scientists_Cancel_Button.IsEnabled = false;
 
-						using (NIIDbContext db = new NIIDbContext())
-						{
-							// Call Save Event or Save function??
-						}
-					}
+                        if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Scientists))
+                        {
+                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                        else
+                        {
+                            using (NIIDbContext db = new NIIDbContext())
+                            {
+                                Scientist scientist = new Scientist
+                                {
+                                    Name = TextBox_Scientists_Name.Text,
+                                    Age = Convert.ToInt32(TextBox_Scientists_Age.Text),
+                                    Personal_Identification_Number = TextBox_Scientists_Personal_Id.Text,
+                                    Position = ComboBox_Scientists_Position.SelectedValue.ToString(),
+                                    Qualification = ComboBox_Scientists_Qualification.SelectedValue.ToString(),
+                                    EducationalBackground = TextBox_Scientists_EducationalBackground.Text,
+                                    DateOfEmployment = DatePicker_Scientists_DateOfEmployment.SelectedDate.Value
+                                };
+                                db.Scientists.Add(scientist);
+                                db.SaveChanges();
+
+                                LoadDB();
+                            }
+                        }
+                    }
 					else MessageBox.Show("Please select target record!", "Modify a scientist", MessageBoxButton.OK, MessageBoxImage.Warning);
 					break;
 
@@ -748,8 +796,8 @@ namespace NII   // Программа ведения базы данных "Со
 								//
 							}
 						}
-						else if (Grid_Projects_Modify_Button.Content.ToString() == "Save")
-						{
+						else if (Grid_Projects_Modify_Button.Content.ToString() == "Save")  // Save MODIFIED Project
+                        {
 							Grid_Projects_Modify_Button.Content = "Modify";
 							Grid_Projects_Delete_Button.IsEnabled = true;
 							Grid_Projects_CreateNewProject_Button.IsEnabled = true;
