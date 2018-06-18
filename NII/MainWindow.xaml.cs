@@ -107,7 +107,7 @@ namespace NII   // Программа ведения базы данных "Со
         }
         #endregion
 
-        #region Root Grid : DragMove(), UnselectAll()
+        #region RootGrid : DragMove(), UnselectAll()
         private void Grid_DragMove_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -435,14 +435,12 @@ namespace NII   // Программа ведения базы данных "Со
 							TglBtnEquipment.IsChecked = true;
 							TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 							Equipment_DataGrid.IsEnabled = false;
-							//Equipment_DataGrid.Visibility = Visibility.Collapsed;
 						}
 						else
 						{
 							TglBtnEquipment.IsChecked = false;
 							TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 							Equipment_DataGrid.IsEnabled = true;
-							//Equipment_DataGrid.Visibility = Visibility.Visible;
 						}
 
 						if (Grid_Equipment_Modify_Button.Content.ToString() == "Modify")
@@ -456,10 +454,16 @@ namespace NII   // Программа ведения базы данных "Со
 
 							using (NIIDbContext db = new NIIDbContext())
 							{
-								//
-							}
+                                Equipment equipment = new Equipment();
+                                int id = (Equipment_DataGrid.SelectedItem as Equipment).Id;
+                                equipment = db.Equipment.Find(id);
+
+                                TextBox_Equipment_Title.Text = equipment.Title;
+                                TextBox_Equipment_Quantity.Text = equipment.Quantity.ToString();
+                                TextBox_Equipment_Description.Text = equipment.Description;
+                            }
 						}
-						else if (Grid_Equipment_Modify_Button.Content.ToString() == "Save")
+						else if (Grid_Equipment_Modify_Button.Content.ToString() == "Save")     // Save after modifying
 						{
 							Grid_Equipment_Modify_Button.Content = "Modify";
 							Grid_Equipment_Delete_Button.IsEnabled = true;
@@ -468,20 +472,36 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Equipment_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Equipment_Cancel_Button.IsEnabled = false;
 
-							using (NIIDbContext db = new NIIDbContext())
-							{
-								// Call Save Event or Save function??
-							}
-						}
-					}
+                            if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Equipment))
+                            {
+                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            }
+                            else
+                            {
+                                using (NIIDbContext db = new NIIDbContext())
+                                {
+                                    Equipment equipment = new Equipment();
+                                    int id = (Equipment_DataGrid.SelectedItem as Equipment).Id;
+                                    equipment = db.Equipment.Find(id);
+                                    db.Entry(equipment).State = EntityState.Modified;
+
+                                    equipment.Title = TextBox_Equipment_Title.Text;
+                                    equipment.Quantity = Convert.ToInt32(TextBox_Equipment_Quantity.Text);
+                                    equipment.Description = TextBox_Equipment_Description.Text;
+
+                                    db.SaveChanges();
+
+                                    LoadDB();
+                                }
+                            }
+                        }
+					}                                   // Save new equipment record
 					else if (Equipment_DataGrid.SelectedItem == null & Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled == false & TglBtnEquipment.IsChecked == true)
 					{
 						
 						TglBtnEquipment.IsChecked = false;
 						TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 						Equipment_DataGrid.IsEnabled = true;
-						//Equipment_DataGrid.Visibility = Visibility.Visible;
-
 
 						Grid_Equipment_Modify_Button.Content = "Modify";
 						Grid_Equipment_Delete_Button.IsEnabled = true;
@@ -490,11 +510,27 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Equipment_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Equipment_Cancel_Button.IsEnabled = false;
 
-						using (NIIDbContext db = new NIIDbContext())
-						{
-							// Call Save Event or Save function??
-						}
-					}
+                        if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Equipment))
+                        {
+                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                        else
+                        {
+                            using (NIIDbContext db = new NIIDbContext())
+                            {
+                                Equipment equipment = new Equipment
+                                {
+                                    Title = TextBox_Equipment_Title.Text,
+                                    Quantity = Convert.ToInt32(TextBox_Equipment_Quantity.Text),
+                                    Description = TextBox_Equipment_Description.Text
+                                };
+                                db.Equipment.Add(equipment);
+                                db.SaveChanges();
+
+                                LoadDB();
+                            }
+                        }
+                    }
 					else MessageBox.Show("Please select target record!", "Modify piece of equipment", MessageBoxButton.OK, MessageBoxImage.Warning);
 					break;
 
