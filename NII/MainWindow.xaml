@@ -129,7 +129,7 @@
 			<StackPanel Panel.ZIndex="2" Orientation="Horizontal" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right">
 				<Label x:Name="ApplicationFullDate" Content="Saturday, March 31, 2018" Margin="0,0,10,0" FontFamily="Stencil" FontSize="13" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 				<Label x:Name="ApplicationRealTime" Content="00:00:00 AM" Margin="0,0,8,0" FontFamily="Stencil" FontSize="13" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-				<Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Height="28" Width="28" Margin="0,0,2,0" BorderBrush="{x:Null}" Background="{x:Null}">
+				<Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Height="28" Width="28" Margin="0,0,2,0" BorderBrush="{x:Null}" Background="{x:Null}" Click="Button_Click">
 					<Button.ToolTip>
 						<ToolTip Content="About Application" Placement="Relative" Background="{x:Null}" Foreground="#4682B4"
                                  HasDropShadow="False" HorizontalOffset="-85" VerticalOffset="-25"
@@ -153,7 +153,7 @@
 		<Grid x:Name="Grid_Home_Page" Background="#E6E6FA" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed"/>
 
 		<!-- Projects -->
-		<Grid x:Name="Grid_Projects" Panel.ZIndex="0" Grid.Row="1" Visibility="Visible">
+		<Grid x:Name="Grid_Projects" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
 			<!-- Buttons -->
 			<StackPanel Panel.ZIndex="1" Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
 				<Label Margin="0,-6,0,0" Content="Projects" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" />
@@ -1186,6 +1186,35 @@
 					</DataGrid.Columns>
 				</DataGrid>
 			</StackPanel>
+		</Grid>
+
+		<!-- About application -->
+		<Grid x:Name="Grid_About_Application" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
+			<Grid Margin="0,40,0,0" Panel.ZIndex="1" Background="#F5F5F5" HorizontalAlignment="Stretch">
+				<Grid.Style>
+					<Style TargetType="Grid">
+						<Setter Property="Height" Value="550"/>
+						<Setter Property="Width" Value="750"/>
+						<Setter Property="HorizontalAlignment" Value="Center"/>
+						<Setter Property="VerticalAlignment" Value="Center"/>
+					</Style>
+				</Grid.Style>
+
+				<Border BorderThickness="4" BorderBrush="#D2B48C">
+					<StackPanel Margin="0,20,0,0" Orientation="Vertical">
+						<Label Content="Dudkin Viachaslau " Margin="0,10,0,0" Padding="0" FontFamily="Papyrus" FontSize="38" FontWeight="Bold" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						<Label Content="College Of Business and Law, " Margin="0,20,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						<Label Content="Software Engineering" Margin="0,-10,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						<Label Content="3rd year, T-591 group" Margin="0,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						<TextBlock Margin="25,10,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" >GitHub :
+							<Hyperlink FontSize="34" NavigateUri="https://github.com/SlavaDonnikov" RequestNavigate="Hyperlink_RequestNavigate">https://github.com/SlavaDonnikov</Hyperlink>
+						</TextBlock>
+						<Label Content="Main technologies:" Margin="0,30,0,0" Padding="0" FontFamily="Papyrus" FontSize="36" FontWeight="Bold" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						<Label Content="Entity Framework Code First approach" Margin="0,-10,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+						<Label Content="XAML" Margin="0,-5,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+					</StackPanel>
+				</Border>
+			</Grid>
 		</Grid>
 	</Grid>
 </Window>

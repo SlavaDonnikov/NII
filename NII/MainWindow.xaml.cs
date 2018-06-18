@@ -133,6 +133,7 @@ namespace NII   // Программа ведения базы данных "Со
 			Grid_Technicians.Visibility = Visibility.Collapsed;
 			Grid_Samples.Visibility = Visibility.Collapsed;
 			Grid_Equipment.Visibility = Visibility.Collapsed;
+			Grid_About_Application.Visibility = Visibility.Collapsed;
 		}
 		#endregion
 
@@ -799,7 +800,17 @@ namespace NII   // Программа ведения базы данных "Со
 			}
 		}
 		#endregion
-				
+
+		private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+		{
+			System.Diagnostics.Process.Start(e.Uri.ToString());
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			InvisibleGrids();
+			Grid_About_Application.Visibility = Visibility.Visible;
+		}
 	}
 }
 // Chart : https://code.msdn.microsoft.com/Chart-Control-in-WPF-c9727c28  
