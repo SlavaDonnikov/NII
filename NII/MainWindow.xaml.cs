@@ -248,11 +248,51 @@ namespace NII   // Программа ведения базы данных "Со
             {
                 datePicker.SelectedDate = null;
             }
-        }
-        #endregion
 
-        #region Is Input Fields Are Not Empty
-        // Check is all input fields are filled up
+			UnceslectAllListBoxes_and_CloseAllExpanders();
+		}
+		#endregion
+
+		#region Unselect All ListBoxes
+		private void UnceslectAllListBoxes_and_CloseAllExpanders()
+		{
+			ListBox_Projects_Technicians.UnselectAll();
+			ListBox_Projects_Scientists.UnselectAll();
+			ListBox_Projects_Samples.UnselectAll();
+			ListBox_Projects_Equipment.UnselectAll();
+
+			Expander_Projects_Equipment.IsExpanded = false;
+			Expander_Projects_Samples.IsExpanded = false;
+			Expander_Projects_Scientists.IsExpanded = false;
+			Expander_Projects_Technicians.IsExpanded = false;
+		}
+		#endregion
+
+		#region Is Input Fields Are Not Empty
+		// Check is all input fields are filled up
+		private bool IsInputFieldsAreNotEmpty_Project(DependencyObject obj)
+        {
+            List<bool> txt = new List<bool>(7);
+            List<bool> lstbx = new List<bool>(4);
+            List<bool> dtp = new List<bool>(1);
+
+            foreach (TextBox child in FindVisualChildren<TextBox>(obj))
+            {
+                if (!string.IsNullOrEmpty(child.Text) & !string.IsNullOrWhiteSpace(child.Text)) txt.Add(true);
+            }
+            foreach (ListBox child in FindVisualChildren<ListBox>(obj))
+            {
+                if (child.SelectedItems != null & child.SelectedIndex != -1) lstbx.Add(true);
+            }
+            foreach (DatePicker child in FindVisualChildren<DatePicker>(obj))
+            {
+                if (child.SelectedDate.Value != null) dtp.Add(true);
+            }
+
+            if ((txt.Any(a => a == true) & txt.Count == 7) & (lstbx.Any(a => a == true) & lstbx.Count == 4) & (dtp.Any(a => a == true) & dtp.Count == 1)) return true;
+            else return false;
+        }
+
         private bool IsInputFieldsAreNotEmpty_Scientists_Technicians(DependencyObject obj)
         {          
             List<bool> txt = new List<bool>(5);
@@ -287,7 +327,6 @@ namespace NII   // Программа ведения базы данных "Со
             if(txt.Any(a => a == true) & txt.Count == 3) return true;
             else return false;
         }
-
         #endregion
 
         #region Number TextBox Validation
@@ -772,14 +811,12 @@ namespace NII   // Программа ведения базы данных "Со
 							TglBtnProjects.IsChecked = true;
 							TglBtnProjects.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 							Projects_DataGrid.IsEnabled = false;
-							//Projects_DataGrid.Visibility = Visibility.Collapsed;
 						}
 						else
 						{
 							TglBtnProjects.IsChecked = false;
 							TglBtnProjects.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 							Projects_DataGrid.IsEnabled = true;
-							//Projects_DataGrid.Visibility = Visibility.Visible;
 						}
 
 						if (Grid_Projects_Modify_Button.Content.ToString() == "Modify")
@@ -789,11 +826,65 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Projects_CreateNewProject_Button.IsEnabled = false;
 
 							Grid_Projects_Cancel_Button.Visibility = Visibility.Visible;
-							Grid_Projects_Cancel_Button.IsEnabled = true;
+							Grid_Projects_Cancel_Button.IsEnabled = true;													
 
 							using (NIIDbContext db = new NIIDbContext())
 							{
-								//
+								Project project = new Project();
+								int id = (Projects_DataGrid.SelectedItem as Project).Id;
+								project = db.Projects.Find(id);
+
+								TextBox_Projects_Name.Text = project.Name;
+								TextBox_Projects_CodeName.Text = project.CodeName;
+								TextBox_Projects_Location.Text = project.Location;
+								TextBox_Projects_Term.Text = project.Term.ToString();
+								TextBox_Projects_Cost.Text = project.Cost.ToString();
+								DatePicker_Projects_DateOfBeginning.SelectedDate = project.DateOfBeginning;
+								TextBox_Projects_Description.Text = project.Description;
+								
+								List<Sample> samplesFromProject = db.Samples.Where(s => s.Projects.Any(p => p.Id == id)).ToList();
+								List<string> samplesTitles = new List<string>();
+								foreach (Sample smp in samplesFromProject)
+								{
+									samplesTitles.Add(smp.Title);
+								}
+								foreach (string title in samplesTitles)
+								{
+									ListBox_Projects_Samples.SelectedItems.Add(title);
+								}
+
+								List<Equipment> equipmentFromProject = db.Equipment.Where(eq => eq.Projects.Any(p => p.Id == id)).ToList();
+								List<string> equipmentTitles = new List<string>();
+								foreach (Equipment eq in equipmentFromProject)
+								{
+									equipmentTitles.Add(eq.Title);
+								}
+								foreach (string title in equipmentTitles)
+								{
+									ListBox_Projects_Equipment.SelectedItems.Add(title);
+								}
+
+								List<Scientist> scientistsFromProject = db.Scientists.Where(sc => sc.Projects.Any(p => p.Id == id)).ToList();
+								List<string> scientistsNames = new List<string>();
+								foreach (Scientist sc in scientistsFromProject)
+								{
+									scientistsNames.Add(sc.Name);
+								}
+								foreach(string name in scientistsNames)
+								{
+									ListBox_Projects_Scientists.SelectedItems.Add(name);
+								}
+
+								List<Technician> techniciansFromProject = db.Technicians.Where(th => th.Projects.Any(p => p.Id == id)).ToList();
+								List<string> techniciansNames = new List<string>();
+								foreach(Technician th in techniciansFromProject)
+								{
+									techniciansNames.Add(th.Name);
+								}
+								foreach(string name in techniciansNames)
+								{
+									ListBox_Projects_Technicians.SelectedItems.Add(name);
+								}								
 							}
 						}
 						else if (Grid_Projects_Modify_Button.Content.ToString() == "Save")  // Save MODIFIED Project
@@ -805,20 +896,92 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Projects_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Projects_Cancel_Button.IsEnabled = false;
 
-							using (NIIDbContext db = new NIIDbContext())
-							{
-								// Call Save Event or Save function??
-							}
+                            if (!IsInputFieldsAreNotEmpty_Project(Grid_Projects))
+                            {
+                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            }
+                            else
+                            {
+                                using (NIIDbContext db = new NIIDbContext())
+                                {
+                                    Project project = new Project();
+                                    int id = (Projects_DataGrid.SelectedItem as Project).Id;
+                                    project = db.Projects.Find(id);
+                                    db.Entry(project).State = EntityState.Modified;
+
+                                    project.Name = TextBox_Projects_Name.Text;
+                                    project.CodeName = TextBox_Projects_CodeName.Text;
+                                    project.Location = TextBox_Projects_Location.Text;
+                                    project.Term = Convert.ToInt32(TextBox_Projects_Term.Text);
+                                    project.Cost = Convert.ToDecimal(TextBox_Projects_Cost.Text);
+                                    project.DateOfBeginning = DatePicker_Projects_DateOfBeginning.SelectedDate.Value;
+									project.Description = TextBox_Projects_Description.Text;
+
+									List<string> scientistsFromListBox = new List<string>();
+									foreach(string scientist in ListBox_Projects_Scientists.SelectedItems)
+									{
+										scientistsFromListBox.Add(scientist);
+									}
+									List<Scientist> scientstsFromDb = new List<Scientist>();
+									foreach(string scientist in scientistsFromListBox)
+									{
+										scientstsFromDb.Add(db.Scientists.Where(scs => scs.Name == scientist).FirstOrDefault());
+									}
+									project.Scientists = scientstsFromDb;
+
+									
+									List <string> techniciansFromListBox = new List<string>();
+									foreach(string technician in ListBox_Projects_Technicians.SelectedItems)
+									{
+										techniciansFromListBox.Add(technician);
+									}
+									List<Technician> techniciansFromDb = new List<Technician>();
+									foreach(string technician in techniciansFromListBox)
+									{
+										techniciansFromDb.Add(db.Technicians.Where(thc => thc.Name == technician).FirstOrDefault());
+									}
+									project.Technicians = techniciansFromDb;
+
+									
+									List<string> samplesFromListBox = new List<string>();
+									foreach(string sample in ListBox_Projects_Samples.SelectedItems)
+									{
+										samplesFromListBox.Add(sample);
+									}
+									List<Sample> samplesFromDb = new List<Sample>();
+									foreach(string sample in samplesFromListBox)
+									{
+										samplesFromDb.Add(db.Samples.Where(smp => smp.Title == sample).FirstOrDefault());
+									}
+									project.Samples = samplesFromDb;
+
+
+									List<string> equipmentFromListBox = new List<string>();
+									foreach(string pieceOfEquipment in ListBox_Projects_Equipment.SelectedItems)
+									{
+										equipmentFromListBox.Add(pieceOfEquipment);
+									}
+									List<Equipment> equipmentFromDb = new List<Equipment>();
+									foreach(string pieceOfEquipment in equipmentFromListBox)
+									{
+										equipmentFromDb.Add(db.Equipment.Where(eqp => eqp.Title == pieceOfEquipment).FirstOrDefault());
+									}
+									project.Equipment = equipmentFromDb;																	
+                                    
+                                    db.SaveChanges();
+
+                                    LoadDB();
+                                }
+                            }
+							UnceslectAllListBoxes_and_CloseAllExpanders();
 						}
-					}
+					}                                               // Save NEW Project
 					else if (Projects_DataGrid.SelectedItem == null & Grid_Projects_CreateNewProject_Button.IsEnabled == false & TglBtnProjects.IsChecked == true)
 					{
 
 						TglBtnProjects.IsChecked = false;
 						TglBtnProjects.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 						Projects_DataGrid.IsEnabled = true;
-						//Projects_DataGrid.Visibility = Visibility.Visible;
-
 
 						Grid_Projects_Modify_Button.Content = "Modify";
 						Grid_Projects_Delete_Button.IsEnabled = true;
@@ -827,10 +990,79 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Projects_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Projects_Cancel_Button.IsEnabled = false;
 
-						using (NIIDbContext db = new NIIDbContext())
-						{
-							// Call Save Event or Save function??
-						}
+                        if (!IsInputFieldsAreNotEmpty_Project(Grid_Projects))
+                        {
+                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                        else
+                        {
+                            using (NIIDbContext db = new NIIDbContext())
+                            {
+								List<string> scientistsFromListBox = new List<string>();
+								foreach (string scientist in ListBox_Projects_Scientists.SelectedItems)
+								{
+									scientistsFromListBox.Add(scientist);
+								}
+								List<Scientist> scientstsFromDb = new List<Scientist>();
+								foreach (string scientist in scientistsFromListBox)
+								{
+									scientstsFromDb.Add(db.Scientists.Where(scs => scs.Name == scientist).FirstOrDefault());
+								}
+								
+								List<string> techniciansFromListBox = new List<string>();
+								foreach (string technician in ListBox_Projects_Technicians.SelectedItems)
+								{
+									techniciansFromListBox.Add(technician);
+								}
+								List<Technician> techniciansFromDb = new List<Technician>();
+								foreach (string technician in techniciansFromListBox)
+								{
+									techniciansFromDb.Add(db.Technicians.Where(thc => thc.Name == technician).FirstOrDefault());
+								}
+
+								List<string> samplesFromListBox = new List<string>();
+								foreach (string sample in ListBox_Projects_Samples.SelectedItems)
+								{
+									samplesFromListBox.Add(sample);
+								}
+								List<Sample> samplesFromDb = new List<Sample>();
+								foreach (string sample in samplesFromListBox)
+								{
+									samplesFromDb.Add(db.Samples.Where(smp => smp.Title == sample).FirstOrDefault());
+								}
+								
+								List<string> equipmentFromListBox = new List<string>();
+								foreach (string pieceOfEquipment in ListBox_Projects_Equipment.SelectedItems)
+								{
+									equipmentFromListBox.Add(pieceOfEquipment);
+								}
+								List<Equipment> equipmentFromDb = new List<Equipment>();
+								foreach (string pieceOfEquipment in equipmentFromListBox)
+								{
+									equipmentFromDb.Add(db.Equipment.Where(eqp => eqp.Title == pieceOfEquipment).FirstOrDefault());
+								}								
+
+								Project project = new Project
+                                {
+                                    Name = TextBox_Projects_Name.Text,
+                                    CodeName = TextBox_Projects_CodeName.Text,
+                                    Location = TextBox_Projects_Location.Text,
+                                    Term = Convert.ToInt32(TextBox_Projects_Term.Text),
+                                    Cost = Convert.ToDecimal(TextBox_Projects_Cost.Text),
+                                    DateOfBeginning = DatePicker_Projects_DateOfBeginning.SelectedDate.Value,
+                                    Scientists = scientstsFromDb,
+									Technicians = techniciansFromDb,
+									Samples = samplesFromDb,
+									Equipment = equipmentFromDb,
+									Description = TextBox_Projects_Description.Text
+                                };
+                                db.Projects.Add(project);
+                                db.SaveChanges();
+
+                                LoadDB();
+                            }
+                        }
+						UnceslectAllListBoxes_and_CloseAllExpanders();
 					}
 					else MessageBox.Show("Please select target record!", "Modify a project", MessageBoxButton.OK, MessageBoxImage.Warning);
 					break;
@@ -850,7 +1082,6 @@ namespace NII   // Программа ведения базы данных "Со
 					TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
 					Samples_DataGrid.IsEnabled = true;
-					//Samples_DataGrid.Visibility = Visibility.Visible;
 
 					Grid_Samples_Modify_Button.Content = "Modify";
 					Grid_Samples_Delete_Button.IsEnabled = true;
@@ -865,7 +1096,6 @@ namespace NII   // Программа ведения базы данных "Со
 					TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
 					Equipment_DataGrid.IsEnabled = true;
-					//Equipment_DataGrid.Visibility = Visibility.Visible;
 
 					Grid_Equipment_Modify_Button.Content = "Modify";
 					Grid_Equipment_Delete_Button.IsEnabled =true;
@@ -880,7 +1110,6 @@ namespace NII   // Программа ведения базы данных "Со
 					TglBtnTechnicians.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
 					Technicians_DataGrid.IsEnabled = true;
-					//Technicians_DataGrid.Visibility = Visibility.Visible;
 
 					Grid_Technicians_Modify_Button.Content = "Modify";
 					Grid_Technicians_Delete_Button.IsEnabled = true;
@@ -895,7 +1124,6 @@ namespace NII   // Программа ведения базы данных "Со
 					TglBtnScientists.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
 					Scientists_DataGrid.IsEnabled = true;
-					//Scientists_DataGrid.Visibility = Visibility.Visible;
 
 					Grid_Scientists_Modify_Button.Content = "Modify";
 					Grid_Scientists_Delete_Button.IsEnabled = true;
@@ -910,7 +1138,6 @@ namespace NII   // Программа ведения базы данных "Со
 					TglBtnProjects.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
 					Projects_DataGrid.IsEnabled = true;
-					//Scientists_DataGrid.Visibility = Visibility.Visible;
 
 					Grid_Projects_Modify_Button.Content = "Modify";
 					Grid_Projects_Delete_Button.IsEnabled = true;
@@ -918,6 +1145,8 @@ namespace NII   // Программа ведения базы данных "Со
 
 					Grid_Projects_Cancel_Button.Visibility = Visibility.Collapsed;
 					Grid_Projects_Cancel_Button.IsEnabled = false;
+
+					UnceslectAllListBoxes_and_CloseAllExpanders();
 					break;
 
 				default:
