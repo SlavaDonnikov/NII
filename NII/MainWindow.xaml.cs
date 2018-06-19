@@ -229,7 +229,6 @@ namespace NII   // Программа ведения базы данных "Со
 		}
         #endregion
 
-
         #region CRUD
 
         #region Clear all input fields
@@ -346,7 +345,7 @@ namespace NII   // Программа ведения базы данных "Со
         }
         #endregion
 
-        // Modify / Save button
+        // Modify / Save button event
         private void Modify_Button_Click(object sender, RoutedEventArgs e)
 		{
 			switch ((sender as Button).Name)
@@ -1072,7 +1071,7 @@ namespace NII   // Программа ведения базы данных "Со
 			}
 		}
 
-		// Cancel button
+		// Cancel button event
 		private void Cancel_Button_Click(object sender, RoutedEventArgs e)
 		{
 			switch ((sender as Button).Name)
@@ -1154,7 +1153,7 @@ namespace NII   // Программа ведения базы данных "Со
 			}
 		}
 
-		// Create new record button
+		// Create new record button event
 		private void CreateNew_Button_Click(object sender, RoutedEventArgs e)
 		{
             // Clear all input fields
@@ -1237,7 +1236,7 @@ namespace NII   // Программа ведения базы данных "Со
 			}
 		}
 
-		// Delete button
+		// Delete button event
 		private void Delete_Button_Click(object sender, RoutedEventArgs e)
 		{
 			switch ((sender as Button).Name)

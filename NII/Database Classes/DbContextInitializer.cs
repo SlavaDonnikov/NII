@@ -62,8 +62,7 @@ namespace NII.Database_Classes
 				new Sample { Title = "Cryoprotectant Solution",  Quantity = 4500,		Description = "The base elements present in certain synthetic oils can, at extreme temperatures, produce habitable environments for genetically engineered extremophile. The byproduct of their rapid life-death cycle is a highly thermal resistant solution ideal for hybrid electronics." },
 				new Sample { Title = "Biotech Research Reports", Quantity = 5400,		Description = "As the core fundamentals of organic life constantly evolve and develop on micro and macro levels, the constant production and distribution of biotech research is a mandatory part of ongoing advances in countless scientific disciplines." }
 			};
-			samples.ForEach(smp => db.Samples.Add(smp));
-            //db.Samples.AddRange(samples);
+			samples.ForEach(smp => db.Samples.Add(smp));            
 			db.SaveChanges();
 
 			List<Equipment> equipments = new List<Equipment>
@@ -87,8 +86,7 @@ namespace NII.Database_Classes
                 new Equipment { Title = "Camera Drones",			Quantity = 1500,	Description = "Most visibly used in starship development, especially on capsuleer craft, other types of camera drones are also employed in the fields of nano-medicine, surveillance, and entertainment."},
                 new Equipment { Title = "Biotech Research Reports", Quantity = 8000,	Description = "As the core fundamentals of organic life constantly evolve and develop on micro and macro levels, the constant production and distribution of biotech research is a mandatory part of ongoing advances in countless scientific disciplines. "},
             };
-			equipments.ForEach(eq => db.Equipment.Add(eq));
-            //db.Equipment.AddRange(equipments);
+			equipments.ForEach(eq => db.Equipment.Add(eq));            
 			db.SaveChanges();
 						
 			List<Technician> technicians = new List<Technician>
@@ -124,8 +122,7 @@ namespace NII.Database_Classes
                 new Technician { Name = "Skye Greene",       Age = 21, Position = "Laboratory Assistant",              Personal_Identification_Number = "THN0029", Qualification = "Machine design",           EducationalBackground = "The Ohio State University, 43210 Enarson Hall 154 W 12th Avenue Columbus, OH 43210 United States",				DateOfEmployment = new DateTime(2016,6,28) },
                 new Technician { Name = "Abbie Lambert",     Age = 29, Position = "Laboratory Assistant",              Personal_Identification_Number = "THN0030", Qualification = "Machine design",           EducationalBackground = "Rice University, 77005 6100 MainHouston, TX 77005 United States",												DateOfEmployment = new DateTime(2016,6,28) }
             };
-			technicians.ForEach(t => db.Technicians.Add(t));
-			//db.Technicians.AddRange(technicians);
+			technicians.ForEach(t => db.Technicians.Add(t));			
 			db.SaveChanges();
 						
 			List<Scientist> scientists = new List<Scientist>
@@ -161,8 +158,7 @@ namespace NII.Database_Classes
                 new Scientist { Name = "Dale Tyler",		 Age = 58, Position = "Scientific Programmer",             Personal_Identification_Number = "SCS0029", Qualification = "Electromagnetic Physics",       EducationalBackground = "North Carolina State University, 2801 Founders Drive, 2300 Nelson HallRaleigh, North Carolina 27695 United States", DateOfEmployment = new DateTime(2016,6,28) },
                 new Scientist { Name = "Scout Vikander",	 Age = 47, Position = "Scientific Programmer",             Personal_Identification_Number = "SCS0030", Qualification = "Electromagnetic Physics",       EducationalBackground = "University of California, Santa Cruz, 95064 1156 High Street Santa Cruz, CA 95064 United States",					DateOfEmployment = new DateTime(2016,6,28) }
             };
-			scientists.ForEach(s => db.Scientists.Add(s));
-			//db.Scientists.AddRange(scientists);
+			scientists.ForEach(s => db.Scientists.Add(s));			
 			db.SaveChanges();
 			
 			List<Project> projects = new List<Project>
@@ -190,90 +186,13 @@ namespace NII.Database_Classes
             db.SaveChanges();
             base.Seed(db);
 
-            //new Equipment { Title = "Wetware Mainframe",		Quantity = 5,		Description = "So advanced and energy-demanding are wetware mainframes that they require vehicle-scale power cores and the constant attention of maintenance personnel. When operating at peak performance levels, nothing in New Eden can match the raw computing power of these machines, from calculating warp coordinates to administrating the core functions of an entire space station. "},
-            //new Equipment { Title = "Sterile Conduits",		Quantity = 11,		Description = "Sustaining diverse populations of station inhabitants – many of whom come from different worlds with different ecologies – was a medical nightmare until the development of sterile conduits. Each length of flexible, self-repairing tube is powered by breaking down the chemical energy in the water they convey, which itself is laced with smart vaccines able to identify and destroy almost any known antigen. "},
-            //new Equipment { Title = "Self-Harmonizing Power Core", Quantity = 33, Description = "With camera drones diligently monitoring the temperature, radioactivity, and electrical output of these advanced nuclear reactors, instant adjustments can be made to a dynamic, adaptive layer of hermetic membranes, which keeps the power core functioning safely at maximum capacity, with no human attention required whatsoever. "},
-            //new Equipment { Title = "Recursive Computing Module", Quantity = 50,	Description = "Not all automated functions are delicate or complicated enough to warrant advanced computer hardware; relatively mundane tasks are best when assigned to an RCM bank. These sturdy, reliable processing units are able to effectively handle most of the day-to-day operations of stations, starships, and stargates. "},
-            //new Equipment { Title = "Nano-Factory",			Quantity = 200,		Description = "Only the highly advanced Ukomi superconductor can be rendered small enough for use in nano-factories, microscopic devices programmed to absorb and recycle ambient material into useful matter. Each factory is built from reactive metals, ensuring that they interact properly – or not at all – with their environment, while a mote of industrial explosive automatically destroys them when they have completed their task. "},
-            //new Equipment { Title = "Integrity Response Drones", Quantity = 5000, Description = "Hull breaches are a constant, serious threat during space travel, as well as a dangerous reality to orbital stations, which are too massive to avoid incoming objects. Integrity response drones help mitigate that threat by providing the automated, immediate application of sealants to any detected impact or pressure fracture in the structure they patrol. "}                
-
-            //List<Project> projects = new List<Project>
-            //         {
-            //             new Project { Name = "Organic Mortar Applicators", Term = 65, Location = "Alaska", DateOfBeginning = new DateTime(2017,1,21), Cost = 10000, CodeName = "OMA-17", Description = "While nanites are ideal for many forms of construction, sealing joints between large structural bulkheads is a job best left to organic mortar, a thick gel that actively permeates every microscopic gap between two parts. Due to the aggressive nature of the genetically engineered bacteria that intelligently guides into place the hardening condensate material, this paste is extremely hazardous to humans and must be applied by robots.",
-            //                 Scientists = new List<Scientist> { scientists.Find(x => x.Name == "Agalle Vacoloure"), scientists.Find(x => x.Name == "Arcadia Mcguire"), scientists.Find(x => x.Name == "Vienna Jacobs"), scientists.Find(x => x.Name == "Gemma Ross"), scientists.Find(x => x.Name == "Summer Good") },
-            //                 Technicians = new List<Technician> { technicians.Find(x => x.Name == "Coco Garza"), technicians.Find(x => x.Name == "Juniper Parks"), technicians.Find(x => x.Name == "Anique Tucker"), technicians.Find(x => x.Name == "Fern Macias"), technicians.Find(x => x.Name == "Summer Ramirez"), technicians.Find(x => x.Name == "Morena Malone") },
-            //                 Samples = new List<Sample> { samples.Find(x => x.Title == "Bacteria"), samples.Find(x => x.Title == "Condensates") },
-            //                 Equipments = new List<Equipment> { equipments.Find(x => x.Title == "Robotics") } },
-
-            //             new Project { Name = "Integrity Response Drones", Term = 80, Location = "New Zeland", DateOfBeginning = new DateTime(2018,3,27), Cost = 23000, CodeName = "IRD-24", Description = "Hull breaches are a constant, serious threat during space travel, as well as a dangerous reality to orbital stations, which are too massive to avoid incoming objects. Integrity response drones help mitigate that threat by providing the automated, immediate application of sealants to any detected impact or pressure fracture in the structure they patrol.",
-            //                 Scientists = new List<Scientist> { scientists.Find(x => x.Name == "Abenar Zindob"), scientists.Find(x => x.Name == "Sorrell Russell"), scientists.Find(x => x.Name == "Bela Doherty"), scientists.Find(x => x.Name == "Summer Good"), scientists.Find(x => x.Name == "Scout Vikander") },
-            //                 Technicians = new List<Technician> { technicians.Find(x => x.Name == "Anique Tucker"), technicians.Find(x => x.Name == "Fern Macias"), technicians.Find(x => x.Name == "Kimberly Shepherd"), technicians.Find(x => x.Name == "Shannon Mccarthy"), technicians.Find(x => x.Name == "Terra Parkinson") },
-            //        Samples = new List<Sample> { samples.Find(x => x.Title == "Gel-Matrix Biopaste") },
-            //        Equipments = new List<Equipment> { equipments.Find(x => x.Title == "Planetary Vehicles"), equipments.Find(x => x.Title == "Hazmat Detection Systems") } },
-
-            //             new Project { Name = "Wetware Mainframe", Term = 165, Location = "USA", DateOfBeginning = new DateTime(2012,8,13), Cost = 500000, CodeName = "WMF-00-19", Description = "So advanced and energy-demanding are wetware mainframes that they require vehicle-scale power cores and the constant attention of maintenance personnel. When operating at peak performance levels, nothing in New Eden can match the raw computing power of these machines, from calculating warp coordinates to administrating the core functions of an entire space station.",
-            //                 Scientists = new List<Scientist> { scientists.Find(x => x.Name == "Delta Downs"), scientists.Find(x => x.Name == "Bela Dohert"), scientists.Find(x => x.Name == "Carson Kumar"), scientists.Find(x => x.Name == "Dale Tyler") },
-            //                 Technicians = new List<Technician> { technicians.Find(x => x.Name == "Anique Tucker"), technicians.Find(x => x.Name == "Fern Macias"), technicians.Find(x => x.Name == "Olive Haworth"), technicians.Find(x => x.Name == "Shannon Mccarthy"), technicians.Find(x => x.Name == "Snow Prentice"), technicians.Find(x => x.Name == "Morena Malone"), technicians.Find(x => x.Name == "Sienna Frazier") },
-            //                 Samples = new List<Sample> { samples.Find(x => x.Title == "Cryoprotectant Solution"), samples.Find(x => x.Title == "Biotech Research Reports")  },
-            //                 Equipments = new List<Equipment> { equipments.Find(x => x.Title == "Supercomputers") } }
-            //};
-            //db.Projects.AddRange(projects);
-            ////db.SaveChanges();          
-
-            //scientists.Find(x => x.Name == "Agalle Vacoloure").Projects = scientists.Find(x => x.Name == "Arcadia Mcguire").Projects = scientists.Find(x => x.Name == "Vienna Jacobs").Projects = scientists.Find(x => x.Name == "Gemma Ross").Projects = scientists.Find(x => x.Name == "Summer Good").Projects =
-            //    technicians.Find(x => x.Name == "Coco Garza").Projects = technicians.Find(x => x.Name == "Juniper Parks").Projects = technicians.Find(x => x.Name == "Anique Tucker").Projects = technicians.Find(x => x.Name == "Fern Macias").Projects = technicians.Find(x => x.Name == "Summer Ramirez").Projects = technicians.Find(x => x.Name == "Morena Malone").Projects =
-            //        samples.Find(x => x.Title == "Bacteria").Projects = samples.Find(x => x.Title == "Condensates").Projects =
-            //            equipments.Find(x => x.Title == "Robotics").Projects = new List<Project> { projects.Find(x => x.Name == "Organic Mortar Applicators") };
-
-            //scientists.Find(x => x.Name == "Abenar Zindob").Projects = scientists.Find(x => x.Name == "Sorrell Russell").Projects = scientists.Find(x => x.Name == "Bela Doherty").Projects = scientists.Find(x => x.Name == "Summer Good").Projects = scientists.Find(x => x.Name == "Scout Vikander").Projects =
-            //    technicians.Find(x => x.Name == "Anique Tucker").Projects = technicians.Find(x => x.Name == "Fern Macias").Projects = technicians.Find(x => x.Name == "Kimberly Shepherd").Projects = technicians.Find(x => x.Name == "Shannon Mccarthy").Projects = technicians.Find(x => x.Name == "Terra Parkinson").Projects =
-            //        samples.Find(x => x.Title == "Gel-Matrix Biopaste").Projects =
-            //            equipments.Find(x => x.Title == "Planetary Vehicles").Projects = equipments.Find(x => x.Title == "Hazmat Detection Systems").Projects = new List<Project> { projects.Find(x => x.Name == "Integrity Response Drones") };
-
-            //scientists.Find(x => x.Name == "Delta Downs").Projects = scientists.Find(x => x.Name == "Bela Dohert").Projects = scientists.Find(x => x.Name == "Carson Kumar").Projects = scientists.Find(x => x.Name == "Dale Tyler").Projects =
-            //    technicians.Find(x => x.Name == "Anique Tucker").Projects = technicians.Find(x => x.Name == "Fern Macias").Projects = technicians.Find(x => x.Name == "Olive Haworth").Projects = technicians.Find(x => x.Name == "Shannon Mccarthy").Projects = technicians.Find(x => x.Name == "Snow Prentice").Projects = technicians.Find(x => x.Name == "Morena Malone").Projects = technicians.Find(x => x.Name == "Sienna Frazier").Projects =
-            //        samples.Find(x => x.Title == "Cryoprotectant Solution").Projects = samples.Find(x => x.Title == "Biotech Research Reports").Projects =
-            //            equipments.Find(x => x.Title == "Supercomputers").Projects = new List<Project> { projects.Find(x => x.Name == "Wetware Mainframe") };
-
-
-            //db.Entry(projects[0]).State = db.Entry(projects[1]).State = db.Entry(projects[2]).State = EntityState.Modified;
-
-            //db.Entry(scientists[0]).State = db.Entry(scientists[5]).State = db.Entry(scientists[8]).State = db.Entry(scientists[15]).State = db.Entry(scientists[20]).State =
-            //	db.Entry(technicians[0]).State = db.Entry(technicians[1]).State = db.Entry(technicians[2]).State = db.Entry(technicians[3]).State = db.Entry(technicians[15]).State = db.Entry(technicians[24]).State =
-            //		db.Entry(samples[15]).State = db.Entry(samples[43]).State = 
-            //			db.Entry(equipments[10]).State = EntityState.Modified;
-
-            //scientists[0].Projects = scientists[5].Projects = scientists[8].Projects = scientists[15].Projects = scientists[20].Projects =
-            //             technicians[0].Projects = technicians[1].Projects = technicians[2].Projects = technicians[3].Projects = technicians[15].Projects = technicians[24].Projects =
-            //                 samples[15].Projects = samples[43].Projects =
-            //                     equipments[10].Projects = new List<Project> { projects[0] };
-
-            //db.SaveChanges(); // here project 2: 5 scientist -> 4, 5 technicians -> 3
-
-            //db.Entry(scientists[2]).State = db.Entry(scientists[14]).State = db.Entry(scientists[19]).State = db.Entry(scientists[20]).State = db.Entry(scientists[29]).State =
-            //	db.Entry(technicians[2]).State = db.Entry(technicians[3]).State = db.Entry(technicians[12]).State = db.Entry(technicians[14]).State = db.Entry(technicians[21]).State =
-            //		db.Entry(samples[44]).State = 
-            //			db.Entry(equipments[11]).State = db.Entry(equipments[13]).State = EntityState.Modified;
-
-            //scientists[2].Projects = scientists[14].Projects = scientists[19].Projects = scientists[20].Projects = scientists[29].Projects =
-            //             technicians[2].Projects = technicians[3].Projects = technicians[12].Projects = technicians[14].Projects = technicians[21].Projects =
-            //                 samples[44].Projects =
-            //                     equipments[11].Projects = equipments[13].Projects = new List<Project> { projects[1] };
-
-            //db.SaveChanges(); // here: 6 scientist -> 4, 5 technician -> 4
-
-            //db.Entry(scientists[17]).State = db.Entry(scientists[19]).State = db.Entry(scientists[21]).State = db.Entry(scientists[28]).State =
-            //	db.Entry(technicians[2]).State = db.Entry(technicians[3]).State = db.Entry(technicians[6]).State = db.Entry(technicians[14]).State = db.Entry(technicians[22]).State = db.Entry(technicians[24]).State = db.Entry(technicians[26]).State =
-            //		db.Entry(samples[45]).State = db.Entry(samples[46]).State =
-            //			db.Entry(equipments[8]).State = EntityState.Modified;
-
-            //scientists[17].Projects = scientists[19].Projects = scientists[21].Projects = scientists[28].Projects =
-            //             technicians[2].Projects = technicians[3].Projects = technicians[6].Projects = technicians[14].Projects = technicians[22].Projects = technicians[24].Projects = technicians[26].Projects =
-            //                 samples[45].Projects = samples[46].Projects =
-            //                     equipments[8].Projects = new List<Project> { projects[2] };
-
-            //db.SaveChanges(); 			
-            //base.Seed(db);			
-        }
+			//new Equipment { Title = "Wetware Mainframe",		Quantity = 5,		Description = "So advanced and energy-demanding are wetware mainframes that they require vehicle-scale power cores and the constant attention of maintenance personnel. When operating at peak performance levels, nothing in New Eden can match the raw computing power of these machines, from calculating warp coordinates to administrating the core functions of an entire space station. "},
+			//new Equipment { Title = "Sterile Conduits",		Quantity = 11,		Description = "Sustaining diverse populations of station inhabitants – many of whom come from different worlds with different ecologies – was a medical nightmare until the development of sterile conduits. Each length of flexible, self-repairing tube is powered by breaking down the chemical energy in the water they convey, which itself is laced with smart vaccines able to identify and destroy almost any known antigen. "},
+			//new Equipment { Title = "Self-Harmonizing Power Core", Quantity = 33, Description = "With camera drones diligently monitoring the temperature, radioactivity, and electrical output of these advanced nuclear reactors, instant adjustments can be made to a dynamic, adaptive layer of hermetic membranes, which keeps the power core functioning safely at maximum capacity, with no human attention required whatsoever. "},
+			//new Equipment { Title = "Recursive Computing Module", Quantity = 50,	Description = "Not all automated functions are delicate or complicated enough to warrant advanced computer hardware; relatively mundane tasks are best when assigned to an RCM bank. These sturdy, reliable processing units are able to effectively handle most of the day-to-day operations of stations, starships, and stargates. "},
+			//new Equipment { Title = "Nano-Factory",			Quantity = 200,		Description = "Only the highly advanced Ukomi superconductor can be rendered small enough for use in nano-factories, microscopic devices programmed to absorb and recycle ambient material into useful matter. Each factory is built from reactive metals, ensuring that they interact properly – or not at all – with their environment, while a mote of industrial explosive automatically destroys them when they have completed their task. "},
+			//new Equipment { Title = "Integrity Response Drones", Quantity = 5000, Description = "Hull breaches are a constant, serious threat during space travel, as well as a dangerous reality to orbital stations, which are too massive to avoid incoming objects. Integrity response drones help mitigate that threat by providing the automated, immediate application of sealants to any detected impact or pressure fracture in the structure they patrol. "}               
+			
+		}
 	}
 }

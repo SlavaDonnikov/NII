@@ -375,6 +375,7 @@
                         <materialDesign:MaterialDataGridTextColumn Header="Location" Width="0.7*" Binding="{Binding Location }">
 							<materialDesign:MaterialDataGridTextColumn.ElementStyle>
 								<Style>
+									<Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
 									<Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
 									<Setter Property="TextBlock.VerticalAlignment" Value="Center"/>									
 								</Style>
