@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+		xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:NII"
-        mc:Ignorable="d"
+        mc:Ignorable="d"		
         Title="MainWindow" Height="700" Width="1300" WindowStartupLocation="CenterScreen" Topmost="False" 
         ShowInTaskbar="true" ResizeMode="NoResize" WindowStyle="None" AllowsTransparency="False" 
 		Icon="Resources\miranda.ico" Loaded="Window_Loaded" MouseDown="Window_MouseDown" >
@@ -150,10 +151,61 @@
 		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 		
 		<!-- Home Page -->
-		<Grid x:Name="Grid_Home_Page" Background="#E6E6FA" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed"/>
+		<Grid x:Name="Grid_Home_Page" Background="#F5F5F5" Panel.ZIndex="0" Grid.Row="1" Visibility="Visible">
+			<StackPanel Panel.ZIndex="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="40" Orientation="Horizontal">
+				<Label Content="Select a chart" Margin="370,-3.5,20,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" HorizontalContentAlignment="Center" />
+				<ComboBox x:Name="ComboBox_Chart_Selection" Margin="0,0,0,0"  Width="200" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" 
+						  FontFamily="Papyrus" FontSize="30" Padding="0"
+                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center"                          
+                          SelectedIndex="0" SelectionChanged="ComboBox_Chart_Selection_SelectionChanged">					
+					<ComboBoxItem Content="Samples" />
+					<ComboBoxItem Content="Equipment"/>
+				</ComboBox>
+			</StackPanel>
+			
+			<!-- Samples Chart -->
+			<Grid x:Name="Grid_Samples_Chart" Panel.ZIndex="0" Margin="10,45,10,0" Visibility="Visible" >
+				<lvc:CartesianChart Series="{Binding SamplesSeriesCollection}" Background="#F5F5F5" LegendLocation="None">
+					<lvc:CartesianChart.AxisX>
+						<lvc:Axis Title="Samples" Labels="{Binding SamplesLabels}" Foreground="Black" FontFamily="Papyrus" FontSize="16" LabelsRotation="89.99" Position="LeftBottom">
+							<lvc:Axis.Separator >
+								<lvc:Separator Step="1" >
+									<lvc:Separator.Stroke>
+										<SolidColorBrush Color="Transparent" />
+									</lvc:Separator.Stroke>
+								</lvc:Separator>
+							</lvc:Axis.Separator>
+						</lvc:Axis>
+					</lvc:CartesianChart.AxisX>
+					<lvc:CartesianChart.AxisY>
+						<lvc:Axis Title="Quantity, m3" Foreground="Black" FontFamily="Papyrus" FontSize="16" LabelFormatter="{Binding SamplesFormatter}"></lvc:Axis>
+					</lvc:CartesianChart.AxisY>
+				</lvc:CartesianChart>
+			</Grid>
+			
+			<!-- Equipment Chart -->
+			<Grid x:Name="Grid_Equipment_Chart" Margin="10,40,10,0" Visibility="Collapsed">
+				<lvc:CartesianChart Series="{Binding EquipmentSeriesCollection}" Background="#F5F5F5" LegendLocation="None">
+					<lvc:CartesianChart.AxisX>
+						<lvc:Axis Title="Samples" Labels="{Binding EquipmentLabels}" Foreground="Black" FontFamily="Papyrus" FontSize="16" LabelsRotation="89.99" Position="LeftBottom">
+							<lvc:Axis.Separator >
+								<lvc:Separator Step="1" >
+									<lvc:Separator.Stroke>
+										<SolidColorBrush Color="Transparent" />
+									</lvc:Separator.Stroke>
+								</lvc:Separator>
+							</lvc:Axis.Separator>
+						</lvc:Axis>
+					</lvc:CartesianChart.AxisX>
+					<lvc:CartesianChart.AxisY>
+						<lvc:Axis Title="Quantity, m3" Foreground="Black" FontFamily="Papyrus" FontSize="16" LabelFormatter="{Binding EquipmentFormatter}"></lvc:Axis>
+					</lvc:CartesianChart.AxisY>
+				</lvc:CartesianChart>
+			</Grid>
+		</Grid>
 
 		<!-- Projects -->
-		<Grid x:Name="Grid_Projects" Panel.ZIndex="0" Grid.Row="1" Visibility="Visible">
+		<Grid x:Name="Grid_Projects" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
 			<!-- Buttons -->
 			<StackPanel Panel.ZIndex="1" Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
 				<Label Margin="0,-6,0,0" Content="Projects" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" />
@@ -220,7 +272,8 @@
 										</Expander.Header>
 										<ListBox x:Name="ListBox_Projects_Technicians" SelectionMode="Multiple" Width="250" Height="305" 
 												 ScrollViewer.VerticalScrollBarVisibility="Auto" 
-												 ItemsSource="{Binding TechnicianCollection }" ItemContainerStyle="{StaticResource ListBoxItemSelectionColour}">
+												 ItemsSource="{Binding TechnicianCollection }" 
+												 ItemContainerStyle="{StaticResource ListBoxItemSelectionColour}">
 											<!--<ListBox.ItemContainerStyle>
 												<Style TargetType="ListBoxItem">
 													<Setter Property="Background" Value="#F5f5f5"/>
@@ -250,7 +303,8 @@
 											<Label Content="Samples" Margin="-14,-12,-5,-10" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" />
 										</Expander.Header>
 										<ListBox x:Name="ListBox_Projects_Samples" SelectionMode="Multiple" Width="250" Height="305" 
-												 ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SampleCollection }"
+												 ScrollViewer.VerticalScrollBarVisibility="Auto" 
+												 ItemsSource="{Binding SampleCollection }"
 												 ItemContainerStyle="{StaticResource ListBoxItemSelectionColour}"/>
 									</Expander>
 								</StackPanel>
@@ -260,7 +314,8 @@
 											<Label Content="Equipment" Margin="-14,-12,-5,-10" Padding="0" FontFamily="Papyrus" FontSize="34" Foreground="Black" />
 										</Expander.Header>
 										<ListBox x:Name="ListBox_Projects_Equipment" SelectionMode="Multiple" Width="250" Height="305" 
-												 ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding EquipmentCollection }"
+												 ScrollViewer.VerticalScrollBarVisibility="Auto" 
+												 ItemsSource="{Binding EquipmentCollection }"
 												 ItemContainerStyle="{StaticResource ListBoxItemSelectionColour}"/>
 									</Expander>
 								</StackPanel>

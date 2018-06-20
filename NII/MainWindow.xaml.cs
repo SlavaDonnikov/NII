@@ -15,145 +15,146 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace NII   // Программа ведения базы данных "Сотрудники" научного учреждения "Прогресс"
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {	
-        public MainWindow()
-        {
-            InitializeComponent();
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
+	public partial class MainWindow : Window
+	{		
+		public MainWindow()
+		{
+			InitializeComponent();
 
 			InvisibleGrids();
 
 			Grid_Home_Page.Visibility = Visibility.Visible;
 
-			LoadDB();
+			LoadDB();			
 		}
-
+		
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
 			GetFullDate();
 			GetRealTime();
+		}
 
-            DataContext = new ComboBoxViewModel();
-        }
-
-        #region Load DB
-        /// <summary>
-        /// Loading data from DB with Context
-        /// </summary>
-        private void LoadDB()
+		#region Load DB
+		/// <summary>
+		/// Loading data from DB with Context
+		/// </summary>
+		private void LoadDB()
 		{
-			using(NIIDbContext db = new NIIDbContext())
+			using (NIIDbContext db = new NIIDbContext())
 			{
 				Equipment_DataGrid.ItemsSource = Samples_DataGrid.ItemsSource = null;
-                try
-                {                      
-                    Projects_DataGrid.ItemsSource = db.Projects.Include("Scientists").Include("Technicians").Include("Samples").Include("Equipment").ToList();      
-                    Scientists_DataGrid.ItemsSource = db.Scientists.Include("Projects").ToList();
-                    Technicians_DataGrid.ItemsSource = db.Technicians.Include("Projects").ToList();
-                    Samples_DataGrid.ItemsSource = db.Samples.Include("Projects").ToList();                    
-					Equipment_DataGrid.ItemsSource = db.Equipment.Include("Projects").ToList();					
+				try
+				{
+					Projects_DataGrid.ItemsSource = db.Projects.Include("Scientists").Include("Technicians").Include("Samples").Include("Equipment").ToList();
+					Scientists_DataGrid.ItemsSource = db.Scientists.Include("Projects").ToList();
+					Technicians_DataGrid.ItemsSource = db.Technicians.Include("Projects").ToList();
+					Samples_DataGrid.ItemsSource = db.Samples.Include("Projects").ToList();
+					Equipment_DataGrid.ItemsSource = db.Equipment.Include("Projects").ToList();
 				}
 				catch (Exception e)
 				{
 					MessageBox.Show("DB loading error : " + e.Message + ", " + e.Source);
 				}
 			}
+			DataContext = new DbDataObservableCollections_and_ChartsFunctionality();
 		}
-        #endregion
+		#endregion
 
-        #region Find Control
-        /// <summary>
-        /// Helper function for searching all controls of the specified type.
-        /// </summary>
-        /// <typeparam name="T">Type of control.</typeparam>
-        /// <param name="depObj">Where to look for controls.</param>
-        /// <returns>Enumerable list of controls.</returns>
-        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
-        {
-            if (depObj != null)
-            {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
-                {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                    if (child != null && child is T)
-                    {
-                        yield return (T)child;
-                    }
+		#region Find Control
+		/// <summary>
+		/// Helper function for searching all controls of the specified type.
+		/// </summary>
+		/// <typeparam name="T">Type of control.</typeparam>
+		/// <param name="depObj">Where to look for controls.</param>
+		/// <returns>Enumerable list of controls.</returns>
+		public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+		{
+			if (depObj != null)
+			{
+				for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+				{
+					DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+					if (child != null && child is T)
+					{
+						yield return (T)child;
+					}
 
-                    foreach (T childOfChild in FindVisualChildren<T>(child))
-                    {
-                        yield return childOfChild;
-                    }
-                }
-            }
-        }
-        #endregion
+					foreach (T childOfChild in FindVisualChildren<T>(child))
+					{
+						yield return childOfChild;
+					}
+				}
+			}
+		}
+		#endregion
 
-        #region Window ClearFocus()
-        /// <summary>
-        /// Button to move the application window 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-		{			
-            Keyboard.ClearFocus();
-        }
-        #endregion
+		#region Window ClearFocus()
+		/// <summary>
+		/// Button to move the application window 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			Keyboard.ClearFocus();
+		}
+		#endregion
 
-        #region RootGrid : DragMove(), UnselectAll()
-        private void Grid_DragMove_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-                this.DragMove();
-        }
+		#region RootGrid : DragMove(), UnselectAll()
+		private void Grid_DragMove_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+				this.DragMove();
+		}
 
-        private void Grid_DataGrid_UnselectAll_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Grid rootGrid = sender as Grid;
-            if (e.RightButton == MouseButtonState.Released)
-            {
-                foreach (DataGrid dataGrid in FindVisualChildren<DataGrid>(RootGrid))
-                {
-                    dataGrid.UnselectAll();
-                }
-            }
-        }
-        #endregion
-                
-        #region Application Shutdown
-        /// <summary>
-        /// Application "Power" button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Application_Shutdown_Click(object sender, RoutedEventArgs e)
+		private void Grid_DataGrid_UnselectAll_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			Grid rootGrid = sender as Grid;
+			if (e.RightButton == MouseButtonState.Released)
+			{
+				foreach (DataGrid dataGrid in FindVisualChildren<DataGrid>(RootGrid))
+				{
+					dataGrid.UnselectAll();
+				}
+			}
+		}
+		#endregion
+
+		#region Application Shutdown
+		/// <summary>
+		/// Application "Power" button
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Application_Shutdown_Click(object sender, RoutedEventArgs e)
 		{
 			Application.Current.Shutdown();
 		}
-        #endregion
+		#endregion
 
-        #region About Application Button
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            System.Diagnostics.Process.Start(e.Uri.ToString());
-        }
+		#region About Application Button
+		private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+		{
+			System.Diagnostics.Process.Start(e.Uri.ToString());
+		}
 
-        private void About_Application_Button_Click(object sender, RoutedEventArgs e)
-        {
-            InvisibleGrids();
-            Grid_About_Application.Visibility = Visibility.Visible;
-        }
-        #endregion
+		private void About_Application_Button_Click(object sender, RoutedEventArgs e)
+		{
+			InvisibleGrids();
+			Grid_About_Application.Visibility = Visibility.Visible;
+		}
+		#endregion
 
-        #region Application Full Format Date & Time
-        public void GetFullDate()
+		#region Application Full Format Date & Time
+		public void GetFullDate()
 		{
 			ApplicationFullDate.Content = DateTime.Now.ToLongDateString();
 			// In ru-RU culture : ApplicationFullDate.Content = DateTime.Now.DayOfWeek.ToString() + ", " + DateTime.Now.ToLongDateString();
@@ -182,10 +183,10 @@ namespace NII   // Программа ведения базы данных "Со
 
 			// In ru-RU culture : ApplicationRealTime.Content = DateTime.Now.ToLongTimeString() + " " + DateTime.Now.AddHours(12).ToString("tt", CultureInfo.InvariantCulture)
 		}
-        #endregion
+		#endregion
 
-        #region InvisibleGrids()
-        private void InvisibleGrids()
+		#region InvisibleGrids()
+		private void InvisibleGrids()
 		{
 			Grid_Home_Page.Visibility = Visibility.Collapsed;
 			Grid_Projects.Visibility = Visibility.Collapsed;
@@ -221,32 +222,32 @@ namespace NII   // Программа ведения базы данных "Со
 					break;
 				case "Menu_Equipment":
 					Grid_Equipment.Visibility = Visibility.Visible;
-					break;				
+					break;
 
-				default: 
+				default:
 					break;
 			}
 		}
-        #endregion
+		#endregion
 
-        #region CRUD
+		#region CRUD
 
-        #region Clear all input fields
-        // Clear all textBoxes, comboBoxes, datePickers at 'Create New' panels
-        private void ClearInputFields()
-        {
-            foreach (TextBox textBox in FindVisualChildren<TextBox>(RootGrid))
-            {
-                textBox.Clear();
-            }
-            foreach (ComboBox comboBox in FindVisualChildren<ComboBox>(RootGrid))
-            {
-                comboBox.SelectedIndex = -1;
-            }
-            foreach (DatePicker datePicker in FindVisualChildren<DatePicker>(RootGrid))
-            {
-                datePicker.SelectedDate = null;
-            }
+		#region Clear all input fields
+		// Clear all textBoxes, comboBoxes, datePickers at 'Create New' panels
+		private void ClearInputFields()
+		{
+			foreach (TextBox textBox in FindVisualChildren<TextBox>(RootGrid))
+			{
+				textBox.Clear();
+			}
+			foreach (ComboBox comboBox in FindVisualChildren<ComboBox>(RootGrid))
+			{
+				comboBox.SelectedIndex = -1;
+			}
+			foreach (DatePicker datePicker in FindVisualChildren<DatePicker>(RootGrid))
+			{
+				datePicker.SelectedDate = null;
+			}
 
 			UnceslectAllListBoxes_and_CloseAllExpanders();
 		}
@@ -270,83 +271,83 @@ namespace NII   // Программа ведения базы данных "Со
 		#region Is Input Fields Are Not Empty
 		// Check is all input fields are filled up
 		private bool IsInputFieldsAreNotEmpty_Project(DependencyObject obj)
-        {
-            List<bool> txt = new List<bool>(7);
-            List<bool> lstbx = new List<bool>(4);
-            List<bool> dtp = new List<bool>(1);
+		{
+			List<bool> txt = new List<bool>(7);
+			List<bool> lstbx = new List<bool>(4);
+			List<bool> dtp = new List<bool>(1);
 
-            foreach (TextBox child in FindVisualChildren<TextBox>(obj))
-            {
-                if (!string.IsNullOrEmpty(child.Text) & !string.IsNullOrWhiteSpace(child.Text)) txt.Add(true);
-            }
-            foreach (ListBox child in FindVisualChildren<ListBox>(obj))
-            {
-                if (child.SelectedItems != null & child.SelectedIndex != -1) lstbx.Add(true);
-            }
-            foreach (DatePicker child in FindVisualChildren<DatePicker>(obj))
-            {
-                if (child.SelectedDate.Value != null) dtp.Add(true);
-            }
+			foreach (TextBox child in FindVisualChildren<TextBox>(obj))
+			{
+				if (!string.IsNullOrEmpty(child.Text) & !string.IsNullOrWhiteSpace(child.Text)) txt.Add(true);
+			}
+			foreach (ListBox child in FindVisualChildren<ListBox>(obj))
+			{
+				if (child.SelectedItems != null & child.SelectedIndex != -1) lstbx.Add(true);
+			}
+			foreach (DatePicker child in FindVisualChildren<DatePicker>(obj))
+			{
+				if (child.SelectedDate.Value != null) dtp.Add(true);
+			}
 
-            if ((txt.Any(a => a == true) & txt.Count == 7) & (lstbx.Any(a => a == true) & lstbx.Count == 4) & (dtp.Any(a => a == true) & dtp.Count == 1)) return true;
-            else return false;
-        }
+			if ((txt.Any(a => a == true) & txt.Count == 7) & (lstbx.Any(a => a == true) & lstbx.Count == 4) & (dtp.Any(a => a == true) & dtp.Count == 1)) return true;
+			else return false;
+		}
 
-        private bool IsInputFieldsAreNotEmpty_Scientists_Technicians(DependencyObject obj)
-        {          
-            List<bool> txt = new List<bool>(5);
-            List<bool> cmb = new List<bool>(2);
-            List<bool> dtp = new List<bool>(1);
+		private bool IsInputFieldsAreNotEmpty_Scientists_Technicians(DependencyObject obj)
+		{
+			List<bool> txt = new List<bool>(5);
+			List<bool> cmb = new List<bool>(2);
+			List<bool> dtp = new List<bool>(1);
 
-            foreach (TextBox child in FindVisualChildren<TextBox>(obj))
-            {
-                if (!string.IsNullOrEmpty(child.Text) & !string.IsNullOrWhiteSpace(child.Text)) txt.Add(true);
-            }
-            foreach (ComboBox child in FindVisualChildren<ComboBox>(obj))
-            {
-                if (child.SelectedItem != null & child.SelectedIndex != -1) cmb.Add(true);
-            }
-            foreach (DatePicker child in FindVisualChildren<DatePicker>(obj))
-            {
-                if (child.SelectedDate.Value != null) dtp.Add(true);
-            }
+			foreach (TextBox child in FindVisualChildren<TextBox>(obj))
+			{
+				if (!string.IsNullOrEmpty(child.Text) & !string.IsNullOrWhiteSpace(child.Text)) txt.Add(true);
+			}
+			foreach (ComboBox child in FindVisualChildren<ComboBox>(obj))
+			{
+				if (child.SelectedItem != null & child.SelectedIndex != -1) cmb.Add(true);
+			}
+			foreach (DatePicker child in FindVisualChildren<DatePicker>(obj))
+			{
+				if (child.SelectedDate.Value != null) dtp.Add(true);
+			}
 
-            if ((txt.Any(a => a == true) & txt.Count == 5) & (cmb.Any(a => a == true) & cmb.Count == 2) & (dtp.Any(a => a == true) & dtp.Count == 1)) return true;
-            else return false;            
-        }
+			if ((txt.Any(a => a == true) & txt.Count == 5) & (cmb.Any(a => a == true) & cmb.Count == 2) & (dtp.Any(a => a == true) & dtp.Count == 1)) return true;
+			else return false;
+		}
 
-        private bool IsInputFieldsAreNotEmpty_Samples_Equipment(DependencyObject obj)
-        {
-            List<bool> txt = new List<bool>(3);
-            foreach (TextBox child in FindVisualChildren<TextBox>(obj))
-            {
-                if (!string.IsNullOrEmpty(child.Text) & !string.IsNullOrWhiteSpace(child.Text)) txt.Add(true);
-            }
+		private bool IsInputFieldsAreNotEmpty_Samples_Equipment(DependencyObject obj)
+		{
+			List<bool> txt = new List<bool>(3);
+			foreach (TextBox child in FindVisualChildren<TextBox>(obj))
+			{
+				if (!string.IsNullOrEmpty(child.Text) & !string.IsNullOrWhiteSpace(child.Text)) txt.Add(true);
+			}
 
-            if(txt.Any(a => a == true) & txt.Count == 3) return true;
-            else return false;
-        }
-        #endregion
+			if (txt.Any(a => a == true) & txt.Count == 3) return true;
+			else return false;
+		}
+		#endregion
 
-        #region Number TextBox Validation
-        /// <summary>
-        /// Check is string represents a number
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        private bool IsNumber(string text)
-        {
-            return int.TryParse(text, out int output);
-        }
+		#region Number TextBox Validation
+		/// <summary>
+		/// Check is string represents a number
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
+		private bool IsNumber(string text)
+		{
+			return int.TryParse(text, out int output);
+		}
 
-        private void InputValidation_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (IsNumber(e.Text) == false) e.Handled = true;            
-        }
-        #endregion
+		private void InputValidation_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			if (IsNumber(e.Text) == false) e.Handled = true;
+		}
+		#endregion
 
-        // Modify / Save button event
-        private void Modify_Button_Click(object sender, RoutedEventArgs e)
+		// Modify / Save button event
+		private void Modify_Button_Click(object sender, RoutedEventArgs e)
 		{
 			switch ((sender as Button).Name)
 			{
@@ -357,13 +358,13 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							TglBtnSample.IsChecked = true;
 							TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-							Samples_DataGrid.IsEnabled = false;							
+							Samples_DataGrid.IsEnabled = false;
 						}
 						else
 						{
 							TglBtnSample.IsChecked = false;
 							TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-							Samples_DataGrid.IsEnabled = true;							
+							Samples_DataGrid.IsEnabled = true;
 						}
 
 						if (Grid_Samples_Modify_Button.Content.ToString() == "Modify")
@@ -377,17 +378,17 @@ namespace NII   // Программа ведения базы данных "Со
 
 							using (NIIDbContext db = new NIIDbContext())
 							{
-                                Sample sample = new Sample();
-                                int id = (Samples_DataGrid.SelectedItem as Sample).Id;
-                                sample = db.Samples.Find(id);
+								Sample sample = new Sample();
+								int id = (Samples_DataGrid.SelectedItem as Sample).Id;
+								sample = db.Samples.Find(id);
 
-                                TextBox_Samples_Title.Text = sample.Title;
-                                TextBox_Samples_Quantity.Text = sample.Quantity.ToString();
-                                TextBox_Samples_Description.Text = sample.Description; 
-                            }
-						}           
+								TextBox_Samples_Title.Text = sample.Title;
+								TextBox_Samples_Quantity.Text = sample.Quantity.ToString();
+								TextBox_Samples_Description.Text = sample.Description;
+							}
+						}
 						else if (Grid_Samples_Modify_Button.Content.ToString() == "Save")   // Save MODIFIED Sample
-                        {
+						{
 							Grid_Samples_Modify_Button.Content = "Modify";
 							Grid_Samples_Delete_Button.IsEnabled = true;
 							Grid_Samples_CreateNewSample_Button.IsEnabled = true;
@@ -395,36 +396,36 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Samples_Cancel_Button.IsEnabled = false;
 
-                            if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Samples))
-                            {
-                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            }
-                            else
-                            {
-                                using (NIIDbContext db = new NIIDbContext())
-                                {
-                                    Sample sample = new Sample();
-                                    int id = (Samples_DataGrid.SelectedItem as Sample).Id;
-                                    sample = db.Samples.Find(id);
-                                    db.Entry(sample).State = EntityState.Modified;
+							if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Samples))
+							{
+								MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+							}
+							else
+							{
+								using (NIIDbContext db = new NIIDbContext())
+								{
+									Sample sample = new Sample();
+									int id = (Samples_DataGrid.SelectedItem as Sample).Id;
+									sample = db.Samples.Find(id);
+									db.Entry(sample).State = EntityState.Modified;
 
-                                    sample.Title = TextBox_Samples_Title.Text;
-                                    sample.Quantity = Convert.ToInt32(TextBox_Samples_Quantity.Text);
-                                    sample.Description = TextBox_Samples_Description.Text;
-                                    
-                                    db.SaveChanges();
+									sample.Title = TextBox_Samples_Title.Text;
+									sample.Quantity = Convert.ToInt32(TextBox_Samples_Quantity.Text);
+									sample.Description = TextBox_Samples_Description.Text;
 
-                                    LoadDB();
-                                }
-                            }
+									db.SaveChanges();
+
+									LoadDB();
+								}
+							}
 						}
 					}                                                               // Save NEW Sample
 					else if (Samples_DataGrid.SelectedItem == null & Grid_Samples_CreateNewSample_Button.IsEnabled == false & TglBtnSample.IsChecked == true)
 					{
-						
+
 						TglBtnSample.IsChecked = false;
 						TglBtnSample.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-						Samples_DataGrid.IsEnabled = true;										
+						Samples_DataGrid.IsEnabled = true;
 
 						Grid_Samples_Modify_Button.Content = "Modify";
 						Grid_Samples_Delete_Button.IsEnabled = true;
@@ -433,26 +434,26 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Samples_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Samples_Cancel_Button.IsEnabled = false;
 
-                        if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Samples))
-                        {
-                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                        else
-                        {
-                            using (NIIDbContext db = new NIIDbContext())
-                            {
-                                Sample sample = new Sample
-                                {
-                                    Title = TextBox_Samples_Title.Text,
-                                    Quantity = Convert.ToInt32(TextBox_Samples_Quantity.Text),
-                                    Description = TextBox_Samples_Description.Text
-                                };
-                                db.Samples.Add(sample);
-                                db.SaveChanges();
+						if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Samples))
+						{
+							MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+						}
+						else
+						{
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								Sample sample = new Sample
+								{
+									Title = TextBox_Samples_Title.Text,
+									Quantity = Convert.ToInt32(TextBox_Samples_Quantity.Text),
+									Description = TextBox_Samples_Description.Text
+								};
+								db.Samples.Add(sample);
+								db.SaveChanges();
 
-                                LoadDB();
-                            }
-                        }                        
+								LoadDB();
+							}
+						}
 					}
 					else MessageBox.Show("Please select target record!", "Modify sample", MessageBoxButton.OK, MessageBoxImage.Warning);
 					break;
@@ -484,17 +485,17 @@ namespace NII   // Программа ведения базы данных "Со
 
 							using (NIIDbContext db = new NIIDbContext())
 							{
-                                Equipment equipment = new Equipment();
-                                int id = (Equipment_DataGrid.SelectedItem as Equipment).Id;
-                                equipment = db.Equipment.Find(id);
+								Equipment equipment = new Equipment();
+								int id = (Equipment_DataGrid.SelectedItem as Equipment).Id;
+								equipment = db.Equipment.Find(id);
 
-                                TextBox_Equipment_Title.Text = equipment.Title;
-                                TextBox_Equipment_Quantity.Text = equipment.Quantity.ToString();
-                                TextBox_Equipment_Description.Text = equipment.Description;
-                            }
+								TextBox_Equipment_Title.Text = equipment.Title;
+								TextBox_Equipment_Quantity.Text = equipment.Quantity.ToString();
+								TextBox_Equipment_Description.Text = equipment.Description;
+							}
 						}
 						else if (Grid_Equipment_Modify_Button.Content.ToString() == "Save")     // Save MODIFIED Equipment
-                        {
+						{
 							Grid_Equipment_Modify_Button.Content = "Modify";
 							Grid_Equipment_Delete_Button.IsEnabled = true;
 							Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled = true;
@@ -502,33 +503,33 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Equipment_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Equipment_Cancel_Button.IsEnabled = false;
 
-                            if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Equipment))
-                            {
-                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            }
-                            else
-                            {
-                                using (NIIDbContext db = new NIIDbContext())
-                                {
-                                    Equipment equipment = new Equipment();
-                                    int id = (Equipment_DataGrid.SelectedItem as Equipment).Id;
-                                    equipment = db.Equipment.Find(id);
-                                    db.Entry(equipment).State = EntityState.Modified;
+							if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Equipment))
+							{
+								MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+							}
+							else
+							{
+								using (NIIDbContext db = new NIIDbContext())
+								{
+									Equipment equipment = new Equipment();
+									int id = (Equipment_DataGrid.SelectedItem as Equipment).Id;
+									equipment = db.Equipment.Find(id);
+									db.Entry(equipment).State = EntityState.Modified;
 
-                                    equipment.Title = TextBox_Equipment_Title.Text;
-                                    equipment.Quantity = Convert.ToInt32(TextBox_Equipment_Quantity.Text);
-                                    equipment.Description = TextBox_Equipment_Description.Text;
+									equipment.Title = TextBox_Equipment_Title.Text;
+									equipment.Quantity = Convert.ToInt32(TextBox_Equipment_Quantity.Text);
+									equipment.Description = TextBox_Equipment_Description.Text;
 
-                                    db.SaveChanges();
+									db.SaveChanges();
 
-                                    LoadDB();
-                                }
-                            }
-                        }
+									LoadDB();
+								}
+							}
+						}
 					}                                               // Save NEW Equipment
 					else if (Equipment_DataGrid.SelectedItem == null & Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled == false & TglBtnEquipment.IsChecked == true)
 					{
-						
+
 						TglBtnEquipment.IsChecked = false;
 						TglBtnEquipment.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 						Equipment_DataGrid.IsEnabled = true;
@@ -540,27 +541,27 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Equipment_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Equipment_Cancel_Button.IsEnabled = false;
 
-                        if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Equipment))
-                        {
-                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                        else
-                        {
-                            using (NIIDbContext db = new NIIDbContext())
-                            {
-                                Equipment equipment = new Equipment
-                                {
-                                    Title = TextBox_Equipment_Title.Text,
-                                    Quantity = Convert.ToInt32(TextBox_Equipment_Quantity.Text),
-                                    Description = TextBox_Equipment_Description.Text
-                                };
-                                db.Equipment.Add(equipment);
-                                db.SaveChanges();
+						if (!IsInputFieldsAreNotEmpty_Samples_Equipment(Grid_Equipment))
+						{
+							MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+						}
+						else
+						{
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								Equipment equipment = new Equipment
+								{
+									Title = TextBox_Equipment_Title.Text,
+									Quantity = Convert.ToInt32(TextBox_Equipment_Quantity.Text),
+									Description = TextBox_Equipment_Description.Text
+								};
+								db.Equipment.Add(equipment);
+								db.SaveChanges();
 
-                                LoadDB();
-                            }
-                        }
-                    }
+								LoadDB();
+							}
+						}
+					}
 					else MessageBox.Show("Please select target record!", "Modify piece of equipment", MessageBoxButton.OK, MessageBoxImage.Warning);
 					break;
 
@@ -589,23 +590,23 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Technicians_Cancel_Button.Visibility = Visibility.Visible;
 							Grid_Technicians_Cancel_Button.IsEnabled = true;
 
-                            using (NIIDbContext db = new NIIDbContext())
-                            {
-                                Technician technician = new Technician();
-                                int id = (Technicians_DataGrid.SelectedItem as Technician).Id;
-                                technician = db.Technicians.Find(id);
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								Technician technician = new Technician();
+								int id = (Technicians_DataGrid.SelectedItem as Technician).Id;
+								technician = db.Technicians.Find(id);
 
-                                TextBox_Technicians_Name.Text = technician.Name;
-                                TextBox_Technicians_Age.Text = technician.Age.ToString();
-                                TextBox_Technicians_Personal_Id.Text = technician.Personal_Identification_Number;
-                                ComboBox_Technicians_Position.SelectedValue = technician.Position;
-                                ComboBox_Technicians_Qualification.SelectedValue = technician.Qualification;
-                                TextBox_Technicians_EducationalBackground.Text = technician.EducationalBackground;
-                                DatePicker_Technicians_DateOfEmployment.SelectedDate = technician.DateOfEmployment;
-                            }
-                        }
+								TextBox_Technicians_Name.Text = technician.Name;
+								TextBox_Technicians_Age.Text = technician.Age.ToString();
+								TextBox_Technicians_Personal_Id.Text = technician.Personal_Identification_Number;
+								ComboBox_Technicians_Position.SelectedValue = technician.Position;
+								ComboBox_Technicians_Qualification.SelectedValue = technician.Qualification;
+								TextBox_Technicians_EducationalBackground.Text = technician.EducationalBackground;
+								DatePicker_Technicians_DateOfEmployment.SelectedDate = technician.DateOfEmployment;
+							}
+						}
 						else if (Grid_Technicians_Modify_Button.Content.ToString() == "Save")       // Save MODIFIED Technician
-                        {
+						{
 							Grid_Technicians_Modify_Button.Content = "Modify";
 							Grid_Technicians_Delete_Button.IsEnabled = true;
 							Grid_Technicians_CreateNewTechnician_Button.IsEnabled = true;
@@ -613,37 +614,37 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Technicians_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Technicians_Cancel_Button.IsEnabled = false;
 
-                            if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Technicians))
-                            {
-                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            }
-                            else
-                            {
-                                using (NIIDbContext db = new NIIDbContext())
-                                {
-                                    Technician technician = new Technician();
-                                    int id = (Technicians_DataGrid.SelectedItem as Technician).Id;
-                                    technician = db.Technicians.Find(id);
-                                    db.Entry(technician).State = EntityState.Modified;
+							if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Technicians))
+							{
+								MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+							}
+							else
+							{
+								using (NIIDbContext db = new NIIDbContext())
+								{
+									Technician technician = new Technician();
+									int id = (Technicians_DataGrid.SelectedItem as Technician).Id;
+									technician = db.Technicians.Find(id);
+									db.Entry(technician).State = EntityState.Modified;
 
-                                    technician.Name = TextBox_Technicians_Name.Text;
-                                    technician.Age = Convert.ToInt32(TextBox_Technicians_Age.Text);
-                                    technician.Personal_Identification_Number = TextBox_Technicians_Personal_Id.Text;
-                                    technician.Position = ComboBox_Technicians_Position.SelectedValue.ToString();
-                                    technician.Qualification = ComboBox_Technicians_Qualification.SelectedValue.ToString();
-                                    technician.EducationalBackground = TextBox_Technicians_EducationalBackground.Text;
-                                    technician.DateOfEmployment = DatePicker_Technicians_DateOfEmployment.SelectedDate.Value;
-                                        
-                                    db.SaveChanges();
+									technician.Name = TextBox_Technicians_Name.Text;
+									technician.Age = Convert.ToInt32(TextBox_Technicians_Age.Text);
+									technician.Personal_Identification_Number = TextBox_Technicians_Personal_Id.Text;
+									technician.Position = ComboBox_Technicians_Position.SelectedValue.ToString();
+									technician.Qualification = ComboBox_Technicians_Qualification.SelectedValue.ToString();
+									technician.EducationalBackground = TextBox_Technicians_EducationalBackground.Text;
+									technician.DateOfEmployment = DatePicker_Technicians_DateOfEmployment.SelectedDate.Value;
 
-                                    LoadDB();
-                                }
-                            }
-                        }
+									db.SaveChanges();
+
+									LoadDB();
+								}
+							}
+						}
 					}                                   // Save NEW Technician
 					else if (Technicians_DataGrid.SelectedItem == null & Grid_Technicians_CreateNewTechnician_Button.IsEnabled == false & TglBtnTechnicians.IsChecked == true)
 					{
-						
+
 						TglBtnTechnicians.IsChecked = false;
 						TglBtnTechnicians.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 						Technicians_DataGrid.IsEnabled = true;
@@ -655,31 +656,31 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Technicians_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Technicians_Cancel_Button.IsEnabled = false;
 
-                        if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Technicians))
-                        {
-                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                        else
-                        {
-                            using (NIIDbContext db = new NIIDbContext())
-                            {
-                                Technician technician = new Technician
-                                {
-                                    Name = TextBox_Technicians_Name.Text,
-                                    Age = Convert.ToInt32(TextBox_Technicians_Age.Text),
-                                    Personal_Identification_Number = TextBox_Technicians_Personal_Id.Text,
-                                    Position = ComboBox_Technicians_Position.SelectedValue.ToString(),
-                                    Qualification = ComboBox_Technicians_Qualification.SelectedValue.ToString(),
-                                    EducationalBackground = TextBox_Technicians_EducationalBackground.Text,
-                                    DateOfEmployment = DatePicker_Technicians_DateOfEmployment.SelectedDate.Value
-                                };
-                                db.Technicians.Add(technician);
-                                db.SaveChanges();
+						if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Technicians))
+						{
+							MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+						}
+						else
+						{
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								Technician technician = new Technician
+								{
+									Name = TextBox_Technicians_Name.Text,
+									Age = Convert.ToInt32(TextBox_Technicians_Age.Text),
+									Personal_Identification_Number = TextBox_Technicians_Personal_Id.Text,
+									Position = ComboBox_Technicians_Position.SelectedValue.ToString(),
+									Qualification = ComboBox_Technicians_Qualification.SelectedValue.ToString(),
+									EducationalBackground = TextBox_Technicians_EducationalBackground.Text,
+									DateOfEmployment = DatePicker_Technicians_DateOfEmployment.SelectedDate.Value
+								};
+								db.Technicians.Add(technician);
+								db.SaveChanges();
 
-                                LoadDB();
-                            }
-                        }
-                    }
+								LoadDB();
+							}
+						}
+					}
 					else MessageBox.Show("Please select target record!", "Modify a technician", MessageBoxButton.OK, MessageBoxImage.Warning);
 					break;
 
@@ -708,23 +709,23 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Scientists_Cancel_Button.Visibility = Visibility.Visible;
 							Grid_Scientists_Cancel_Button.IsEnabled = true;
 
-                            using (NIIDbContext db = new NIIDbContext())
-                            {
-                                Scientist scientist = new Scientist();
-                                int id = (Scientists_DataGrid.SelectedItem as Scientist).Id;
-                                scientist = db.Scientists.Find(id);
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								Scientist scientist = new Scientist();
+								int id = (Scientists_DataGrid.SelectedItem as Scientist).Id;
+								scientist = db.Scientists.Find(id);
 
-                                TextBox_Scientists_Name.Text = scientist.Name;
-                                TextBox_Scientists_Age.Text = scientist.Age.ToString();
-                                TextBox_Scientists_Personal_Id.Text = scientist.Personal_Identification_Number;
-                                ComboBox_Scientists_Position.SelectedValue = scientist.Position;
-                                ComboBox_Scientists_Qualification.SelectedValue = scientist.Qualification;
-                                TextBox_Scientists_EducationalBackground.Text = scientist.EducationalBackground;
-                                DatePicker_Scientists_DateOfEmployment.SelectedDate = scientist.DateOfEmployment;
-                            }
-                        }
+								TextBox_Scientists_Name.Text = scientist.Name;
+								TextBox_Scientists_Age.Text = scientist.Age.ToString();
+								TextBox_Scientists_Personal_Id.Text = scientist.Personal_Identification_Number;
+								ComboBox_Scientists_Position.SelectedValue = scientist.Position;
+								ComboBox_Scientists_Qualification.SelectedValue = scientist.Qualification;
+								TextBox_Scientists_EducationalBackground.Text = scientist.EducationalBackground;
+								DatePicker_Scientists_DateOfEmployment.SelectedDate = scientist.DateOfEmployment;
+							}
+						}
 						else if (Grid_Scientists_Modify_Button.Content.ToString() == "Save")    // Save MODIFIED Scientist
-                        {
+						{
 							Grid_Scientists_Modify_Button.Content = "Modify";
 							Grid_Scientists_Delete_Button.IsEnabled = true;
 							Grid_Scientists_CreateNewScientist_Button.IsEnabled = true;
@@ -732,35 +733,35 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Scientists_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Scientists_Cancel_Button.IsEnabled = false;
 
-                            if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Scientists))
-                            {
-                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            }
-                            else
-                            {
-                                using (NIIDbContext db = new NIIDbContext())
-                                {
-                                    Scientist scientist = new Scientist();
-                                    int id = (Scientists_DataGrid.SelectedItem as Scientist).Id;
-                                    scientist = db.Scientists.Find(id);
-                                    db.Entry(scientist).State = EntityState.Modified;
+							if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Scientists))
+							{
+								MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+							}
+							else
+							{
+								using (NIIDbContext db = new NIIDbContext())
+								{
+									Scientist scientist = new Scientist();
+									int id = (Scientists_DataGrid.SelectedItem as Scientist).Id;
+									scientist = db.Scientists.Find(id);
+									db.Entry(scientist).State = EntityState.Modified;
 
-                                    scientist.Name = TextBox_Scientists_Name.Text;
-                                    scientist.Age = Convert.ToInt32(TextBox_Scientists_Age.Text);
-                                    scientist.Personal_Identification_Number = TextBox_Scientists_Personal_Id.Text;
-                                    scientist.Position = ComboBox_Scientists_Position.SelectedValue.ToString();
-                                    scientist.Qualification = ComboBox_Scientists_Qualification.SelectedValue.ToString();
-                                    scientist.EducationalBackground = TextBox_Scientists_EducationalBackground.Text;
-                                    scientist.DateOfEmployment = DatePicker_Scientists_DateOfEmployment.SelectedDate.Value;
+									scientist.Name = TextBox_Scientists_Name.Text;
+									scientist.Age = Convert.ToInt32(TextBox_Scientists_Age.Text);
+									scientist.Personal_Identification_Number = TextBox_Scientists_Personal_Id.Text;
+									scientist.Position = ComboBox_Scientists_Position.SelectedValue.ToString();
+									scientist.Qualification = ComboBox_Scientists_Qualification.SelectedValue.ToString();
+									scientist.EducationalBackground = TextBox_Scientists_EducationalBackground.Text;
+									scientist.DateOfEmployment = DatePicker_Scientists_DateOfEmployment.SelectedDate.Value;
 
-                                    db.SaveChanges();
+									db.SaveChanges();
 
-                                    LoadDB();
-                                }
-                            }
-                        }
-                    }                                                        // Save NEW Scientist
-                    else if (Scientists_DataGrid.SelectedItem == null & Grid_Scientists_CreateNewScientist_Button.IsEnabled == false & TglBtnScientists.IsChecked == true)
+									LoadDB();
+								}
+							}
+						}
+					}                                                        // Save NEW Scientist
+					else if (Scientists_DataGrid.SelectedItem == null & Grid_Scientists_CreateNewScientist_Button.IsEnabled == false & TglBtnScientists.IsChecked == true)
 					{
 
 						TglBtnScientists.IsChecked = false;
@@ -774,31 +775,31 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Scientists_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Scientists_Cancel_Button.IsEnabled = false;
 
-                        if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Scientists))
-                        {
-                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                        else
-                        {
-                            using (NIIDbContext db = new NIIDbContext())
-                            {
-                                Scientist scientist = new Scientist
-                                {
-                                    Name = TextBox_Scientists_Name.Text,
-                                    Age = Convert.ToInt32(TextBox_Scientists_Age.Text),
-                                    Personal_Identification_Number = TextBox_Scientists_Personal_Id.Text,
-                                    Position = ComboBox_Scientists_Position.SelectedValue.ToString(),
-                                    Qualification = ComboBox_Scientists_Qualification.SelectedValue.ToString(),
-                                    EducationalBackground = TextBox_Scientists_EducationalBackground.Text,
-                                    DateOfEmployment = DatePicker_Scientists_DateOfEmployment.SelectedDate.Value
-                                };
-                                db.Scientists.Add(scientist);
-                                db.SaveChanges();
+						if (!IsInputFieldsAreNotEmpty_Scientists_Technicians(Grid_Scientists))
+						{
+							MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+						}
+						else
+						{
+							using (NIIDbContext db = new NIIDbContext())
+							{
+								Scientist scientist = new Scientist
+								{
+									Name = TextBox_Scientists_Name.Text,
+									Age = Convert.ToInt32(TextBox_Scientists_Age.Text),
+									Personal_Identification_Number = TextBox_Scientists_Personal_Id.Text,
+									Position = ComboBox_Scientists_Position.SelectedValue.ToString(),
+									Qualification = ComboBox_Scientists_Qualification.SelectedValue.ToString(),
+									EducationalBackground = TextBox_Scientists_EducationalBackground.Text,
+									DateOfEmployment = DatePicker_Scientists_DateOfEmployment.SelectedDate.Value
+								};
+								db.Scientists.Add(scientist);
+								db.SaveChanges();
 
-                                LoadDB();
-                            }
-                        }
-                    }
+								LoadDB();
+							}
+						}
+					}
 					else MessageBox.Show("Please select target record!", "Modify a scientist", MessageBoxButton.OK, MessageBoxImage.Warning);
 					break;
 
@@ -825,7 +826,7 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Projects_CreateNewProject_Button.IsEnabled = false;
 
 							Grid_Projects_Cancel_Button.Visibility = Visibility.Visible;
-							Grid_Projects_Cancel_Button.IsEnabled = true;													
+							Grid_Projects_Cancel_Button.IsEnabled = true;
 
 							using (NIIDbContext db = new NIIDbContext())
 							{
@@ -840,7 +841,7 @@ namespace NII   // Программа ведения базы данных "Со
 								TextBox_Projects_Cost.Text = project.Cost.ToString();
 								DatePicker_Projects_DateOfBeginning.SelectedDate = project.DateOfBeginning;
 								TextBox_Projects_Description.Text = project.Description;
-								
+
 								List<Sample> samplesFromProject = db.Samples.Where(s => s.Projects.Any(p => p.Id == id)).ToList();
 								List<string> samplesTitles = new List<string>();
 								foreach (Sample smp in samplesFromProject)
@@ -869,25 +870,25 @@ namespace NII   // Программа ведения базы данных "Со
 								{
 									scientistsNames.Add(sc.Name);
 								}
-								foreach(string name in scientistsNames)
+								foreach (string name in scientistsNames)
 								{
 									ListBox_Projects_Scientists.SelectedItems.Add(name);
 								}
 
 								List<Technician> techniciansFromProject = db.Technicians.Where(th => th.Projects.Any(p => p.Id == id)).ToList();
 								List<string> techniciansNames = new List<string>();
-								foreach(Technician th in techniciansFromProject)
+								foreach (Technician th in techniciansFromProject)
 								{
 									techniciansNames.Add(th.Name);
 								}
-								foreach(string name in techniciansNames)
+								foreach (string name in techniciansNames)
 								{
 									ListBox_Projects_Technicians.SelectedItems.Add(name);
-								}								
+								}
 							}
 						}
 						else if (Grid_Projects_Modify_Button.Content.ToString() == "Save")  // Save MODIFIED Project
-                        {
+						{
 							Grid_Projects_Modify_Button.Content = "Modify";
 							Grid_Projects_Delete_Button.IsEnabled = true;
 							Grid_Projects_CreateNewProject_Button.IsEnabled = true;
@@ -895,60 +896,60 @@ namespace NII   // Программа ведения базы данных "Со
 							Grid_Projects_Cancel_Button.Visibility = Visibility.Collapsed;
 							Grid_Projects_Cancel_Button.IsEnabled = false;
 
-                            if (!IsInputFieldsAreNotEmpty_Project(Grid_Projects))
-                            {
-                                MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            }
-                            else
-                            {
-                                using (NIIDbContext db = new NIIDbContext())
-                                {
-                                    Project project = new Project();
-                                    int id = (Projects_DataGrid.SelectedItem as Project).Id;
-                                    project = db.Projects.Find(id);
-                                    db.Entry(project).State = EntityState.Modified;
+							if (!IsInputFieldsAreNotEmpty_Project(Grid_Projects))
+							{
+								MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+							}
+							else
+							{
+								using (NIIDbContext db = new NIIDbContext())
+								{
+									Project project = new Project();
+									int id = (Projects_DataGrid.SelectedItem as Project).Id;
+									project = db.Projects.Find(id);
+									db.Entry(project).State = EntityState.Modified;
 
-                                    project.Name = TextBox_Projects_Name.Text;
-                                    project.CodeName = TextBox_Projects_CodeName.Text;
-                                    project.Location = TextBox_Projects_Location.Text;
-                                    project.Term = Convert.ToInt32(TextBox_Projects_Term.Text);
-                                    project.Cost = Convert.ToDecimal(TextBox_Projects_Cost.Text);
-                                    project.DateOfBeginning = DatePicker_Projects_DateOfBeginning.SelectedDate.Value;
+									project.Name = TextBox_Projects_Name.Text;
+									project.CodeName = TextBox_Projects_CodeName.Text;
+									project.Location = TextBox_Projects_Location.Text;
+									project.Term = Convert.ToInt32(TextBox_Projects_Term.Text);
+									project.Cost = Convert.ToDecimal(TextBox_Projects_Cost.Text);
+									project.DateOfBeginning = DatePicker_Projects_DateOfBeginning.SelectedDate.Value;
 									project.Description = TextBox_Projects_Description.Text;
 
 									List<string> scientistsFromListBox = new List<string>();
-									foreach(string scientist in ListBox_Projects_Scientists.SelectedItems)
+									foreach (string scientist in ListBox_Projects_Scientists.SelectedItems)
 									{
 										scientistsFromListBox.Add(scientist);
 									}
 									List<Scientist> scientstsFromDb = new List<Scientist>();
-									foreach(string scientist in scientistsFromListBox)
+									foreach (string scientist in scientistsFromListBox)
 									{
 										scientstsFromDb.Add(db.Scientists.Where(scs => scs.Name == scientist).FirstOrDefault());
 									}
 									project.Scientists = scientstsFromDb;
 
-									
-									List <string> techniciansFromListBox = new List<string>();
-									foreach(string technician in ListBox_Projects_Technicians.SelectedItems)
+
+									List<string> techniciansFromListBox = new List<string>();
+									foreach (string technician in ListBox_Projects_Technicians.SelectedItems)
 									{
 										techniciansFromListBox.Add(technician);
 									}
 									List<Technician> techniciansFromDb = new List<Technician>();
-									foreach(string technician in techniciansFromListBox)
+									foreach (string technician in techniciansFromListBox)
 									{
 										techniciansFromDb.Add(db.Technicians.Where(thc => thc.Name == technician).FirstOrDefault());
 									}
 									project.Technicians = techniciansFromDb;
 
-									
+
 									List<string> samplesFromListBox = new List<string>();
-									foreach(string sample in ListBox_Projects_Samples.SelectedItems)
+									foreach (string sample in ListBox_Projects_Samples.SelectedItems)
 									{
 										samplesFromListBox.Add(sample);
 									}
 									List<Sample> samplesFromDb = new List<Sample>();
-									foreach(string sample in samplesFromListBox)
+									foreach (string sample in samplesFromListBox)
 									{
 										samplesFromDb.Add(db.Samples.Where(smp => smp.Title == sample).FirstOrDefault());
 									}
@@ -956,22 +957,22 @@ namespace NII   // Программа ведения базы данных "Со
 
 
 									List<string> equipmentFromListBox = new List<string>();
-									foreach(string pieceOfEquipment in ListBox_Projects_Equipment.SelectedItems)
+									foreach (string pieceOfEquipment in ListBox_Projects_Equipment.SelectedItems)
 									{
 										equipmentFromListBox.Add(pieceOfEquipment);
 									}
 									List<Equipment> equipmentFromDb = new List<Equipment>();
-									foreach(string pieceOfEquipment in equipmentFromListBox)
+									foreach (string pieceOfEquipment in equipmentFromListBox)
 									{
 										equipmentFromDb.Add(db.Equipment.Where(eqp => eqp.Title == pieceOfEquipment).FirstOrDefault());
 									}
-									project.Equipment = equipmentFromDb;																	
-                                    
-                                    db.SaveChanges();
+									project.Equipment = equipmentFromDb;
 
-                                    LoadDB();
-                                }
-                            }
+									db.SaveChanges();
+
+									LoadDB();
+								}
+							}
 							UnceslectAllListBoxes_and_CloseAllExpanders();
 						}
 					}                                               // Save NEW Project
@@ -989,14 +990,14 @@ namespace NII   // Программа ведения базы данных "Со
 						Grid_Projects_Cancel_Button.Visibility = Visibility.Collapsed;
 						Grid_Projects_Cancel_Button.IsEnabled = false;
 
-                        if (!IsInputFieldsAreNotEmpty_Project(Grid_Projects))
-                        {
-                            MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                        else
-                        {
-                            using (NIIDbContext db = new NIIDbContext())
-                            {
+						if (!IsInputFieldsAreNotEmpty_Project(Grid_Projects))
+						{
+							MessageBox.Show("All fields must be filled!", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+						}
+						else
+						{
+							using (NIIDbContext db = new NIIDbContext())
+							{
 								List<string> scientistsFromListBox = new List<string>();
 								foreach (string scientist in ListBox_Projects_Scientists.SelectedItems)
 								{
@@ -1007,7 +1008,7 @@ namespace NII   // Программа ведения базы данных "Со
 								{
 									scientstsFromDb.Add(db.Scientists.Where(scs => scs.Name == scientist).FirstOrDefault());
 								}
-								
+
 								List<string> techniciansFromListBox = new List<string>();
 								foreach (string technician in ListBox_Projects_Technicians.SelectedItems)
 								{
@@ -1029,7 +1030,7 @@ namespace NII   // Программа ведения базы данных "Со
 								{
 									samplesFromDb.Add(db.Samples.Where(smp => smp.Title == sample).FirstOrDefault());
 								}
-								
+
 								List<string> equipmentFromListBox = new List<string>();
 								foreach (string pieceOfEquipment in ListBox_Projects_Equipment.SelectedItems)
 								{
@@ -1039,28 +1040,28 @@ namespace NII   // Программа ведения базы данных "Со
 								foreach (string pieceOfEquipment in equipmentFromListBox)
 								{
 									equipmentFromDb.Add(db.Equipment.Where(eqp => eqp.Title == pieceOfEquipment).FirstOrDefault());
-								}								
+								}
 
 								Project project = new Project
-                                {
-                                    Name = TextBox_Projects_Name.Text,
-                                    CodeName = TextBox_Projects_CodeName.Text,
-                                    Location = TextBox_Projects_Location.Text,
-                                    Term = Convert.ToInt32(TextBox_Projects_Term.Text),
-                                    Cost = Convert.ToDecimal(TextBox_Projects_Cost.Text),
-                                    DateOfBeginning = DatePicker_Projects_DateOfBeginning.SelectedDate.Value,
-                                    Scientists = scientstsFromDb,
+								{
+									Name = TextBox_Projects_Name.Text,
+									CodeName = TextBox_Projects_CodeName.Text,
+									Location = TextBox_Projects_Location.Text,
+									Term = Convert.ToInt32(TextBox_Projects_Term.Text),
+									Cost = Convert.ToDecimal(TextBox_Projects_Cost.Text),
+									DateOfBeginning = DatePicker_Projects_DateOfBeginning.SelectedDate.Value,
+									Scientists = scientstsFromDb,
 									Technicians = techniciansFromDb,
 									Samples = samplesFromDb,
 									Equipment = equipmentFromDb,
 									Description = TextBox_Projects_Description.Text
-                                };
-                                db.Projects.Add(project);
-                                db.SaveChanges();
+								};
+								db.Projects.Add(project);
+								db.SaveChanges();
 
-                                LoadDB();
-                            }
-                        }
+								LoadDB();
+							}
+						}
 						UnceslectAllListBoxes_and_CloseAllExpanders();
 					}
 					else MessageBox.Show("Please select target record!", "Modify a project", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -1097,7 +1098,7 @@ namespace NII   // Программа ведения базы данных "Со
 					Equipment_DataGrid.IsEnabled = true;
 
 					Grid_Equipment_Modify_Button.Content = "Modify";
-					Grid_Equipment_Delete_Button.IsEnabled =true;
+					Grid_Equipment_Delete_Button.IsEnabled = true;
 					Grid_Equipment_CreateNewPieceOfEquipment_Button.IsEnabled = true;
 
 					Grid_Equipment_Cancel_Button.Visibility = Visibility.Collapsed;
@@ -1156,10 +1157,10 @@ namespace NII   // Программа ведения базы данных "Со
 		// Create new record button event
 		private void CreateNew_Button_Click(object sender, RoutedEventArgs e)
 		{
-            // Clear all input fields
-            ClearInputFields();
+			// Clear all input fields
+			ClearInputFields();
 
-            switch ((sender as Button).Name)
+			switch ((sender as Button).Name)
 			{
 				case "Grid_Samples_CreateNewSample_Button":
 					TglBtnSample.IsChecked = true;
@@ -1250,13 +1251,13 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-                                Sample sample;
-                                int id = (Samples_DataGrid.SelectedItem as Sample).Id;
-                                sample = db.Samples.Find(id);
-                                db.Samples.Remove(sample);
+								Sample sample;
+								int id = (Samples_DataGrid.SelectedItem as Sample).Id;
+								sample = db.Samples.Find(id);
+								db.Samples.Remove(sample);
 
-                                db.SaveChanges();
-                                LoadDB();
+								db.SaveChanges();
+								LoadDB();
 							}
 						}
 					}
@@ -1272,14 +1273,14 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-                                Equipment equipment;
-                                int id = (Equipment_DataGrid.SelectedItem as Equipment).Id;
-                                equipment = db.Equipment.Find(id);
-                                db.Equipment.Remove(equipment);
+								Equipment equipment;
+								int id = (Equipment_DataGrid.SelectedItem as Equipment).Id;
+								equipment = db.Equipment.Find(id);
+								db.Equipment.Remove(equipment);
 
-                                db.SaveChanges();
-                                LoadDB();
-                            }
+								db.SaveChanges();
+								LoadDB();
+							}
 						}
 					}
 					else MessageBox.Show("Please select a record you want to delete!", "Deleting the piece of equipment", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -1294,14 +1295,14 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-                                Technician technician;
-                                int id = (Technicians_DataGrid.SelectedItem as Technician).Id;
-                                technician = db.Technicians.Find(id);
-                                db.Technicians.Remove(technician);
+								Technician technician;
+								int id = (Technicians_DataGrid.SelectedItem as Technician).Id;
+								technician = db.Technicians.Find(id);
+								db.Technicians.Remove(technician);
 
-                                db.SaveChanges();
-                                LoadDB();
-                            }
+								db.SaveChanges();
+								LoadDB();
+							}
 						}
 					}
 					else MessageBox.Show("Please select a record you want to delete!", "Deleting a technician", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -1316,14 +1317,14 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-                                Scientist scientist;
-                                int id = (Scientists_DataGrid.SelectedItem as Scientist).Id;
-                                scientist = db.Scientists.Find(id);
-                                db.Scientists.Remove(scientist);
+								Scientist scientist;
+								int id = (Scientists_DataGrid.SelectedItem as Scientist).Id;
+								scientist = db.Scientists.Find(id);
+								db.Scientists.Remove(scientist);
 
-                                db.SaveChanges();
-                                LoadDB();
-                            }
+								db.SaveChanges();
+								LoadDB();
+							}
 						}
 					}
 					else MessageBox.Show("Please select a record you want to delete!", "Deleting a scientist", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -1338,14 +1339,14 @@ namespace NII   // Программа ведения базы данных "Со
 						{
 							using (NIIDbContext db = new NIIDbContext())
 							{
-                                Project project;
-                                int id = (Projects_DataGrid.SelectedItem as Project).Id;
-                                project = db.Projects.Find(id);
-                                db.Projects.Remove(project);
+								Project project;
+								int id = (Projects_DataGrid.SelectedItem as Project).Id;
+								project = db.Projects.Find(id);
+								db.Projects.Remove(project);
 
-                                db.SaveChanges();
-                                LoadDB();
-                            }
+								db.SaveChanges();
+								LoadDB();
+							}
 						}
 					}
 					else MessageBox.Show("Please select a record you want to delete!", "Deleting a project", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -1355,9 +1356,31 @@ namespace NII   // Программа ведения базы данных "Со
 					break;
 			}
 		}
-        #endregion
+		#endregion
 
-        
-    }
+		private void ComboBox_Chart_Selection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (Grid_Equipment_Chart == null || Grid_Samples_Chart == null) return;
+			ComboBox cmb = sender as ComboBox;
+			switch (((ComboBoxItem)cmb.SelectedItem).Content.ToString())
+			{
+				case "Samples":					
+					Grid_Equipment_Chart.Visibility = Visibility.Collapsed;
+					Grid_Equipment_Chart.IsEnabled = false;
+
+					Grid_Samples_Chart.Visibility = Visibility.Visible;
+					Grid_Samples_Chart.IsEnabled = true;
+					break;
+
+				case "Equipment":
+					Grid_Equipment_Chart.Visibility = Visibility.Visible;
+					Grid_Equipment_Chart.IsEnabled = true;
+
+					Grid_Samples_Chart.Visibility = Visibility.Collapsed;
+					Grid_Samples_Chart.IsEnabled = false;
+					break;
+			}
+		}
+	}
 }
 // Chart : https://code.msdn.microsoft.com/Chart-Control-in-WPF-c9727c28  
