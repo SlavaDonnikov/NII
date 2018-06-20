@@ -18,11 +18,8 @@ using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
 
-namespace NII   // Программа ведения базы данных "Сотрудники" научного учреждения "Прогресс"
+namespace NII   
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{		
 		public MainWindow()
@@ -228,13 +225,44 @@ namespace NII   // Программа ведения базы данных "Со
 					break;
 			}
 		}
-		#endregion
+        #endregion
 
-		#region CRUD
+        #region Charts ComboBox SelectionChanged
+        /// <summary>
+        /// SelectionChanged event of ChartSelection_ComboBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBox_Chart_Selection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Grid_Equipment_Chart == null || Grid_Samples_Chart == null) return;
+            ComboBox cmb = sender as ComboBox;
+            switch (((ComboBoxItem)cmb.SelectedItem).Content.ToString())
+            {
+                case "Samples":
+                    Grid_Equipment_Chart.Visibility = Visibility.Collapsed;
+                    Grid_Equipment_Chart.IsEnabled = false;
 
-		#region Clear all input fields
-		// Clear all textBoxes, comboBoxes, datePickers at 'Create New' panels
-		private void ClearInputFields()
+                    Grid_Samples_Chart.Visibility = Visibility.Visible;
+                    Grid_Samples_Chart.IsEnabled = true;
+                    break;
+
+                case "Equipment":
+                    Grid_Equipment_Chart.Visibility = Visibility.Visible;
+                    Grid_Equipment_Chart.IsEnabled = true;
+
+                    Grid_Samples_Chart.Visibility = Visibility.Collapsed;
+                    Grid_Samples_Chart.IsEnabled = false;
+                    break;
+            }
+        }
+        #endregion
+
+        #region CRUD
+
+        #region Clear all input fields
+        // Clear all textBoxes, comboBoxes, datePickers at 'Create New' panels
+        private void ClearInputFields()
 		{
 			foreach (TextBox textBox in FindVisualChildren<TextBox>(RootGrid))
 			{
@@ -242,6 +270,7 @@ namespace NII   // Программа ведения базы данных "Со
 			}
 			foreach (ComboBox comboBox in FindVisualChildren<ComboBox>(RootGrid))
 			{
+                if (comboBox.Name == "ComboBox_Chart_Selection") continue;
 				comboBox.SelectedIndex = -1;
 			}
 			foreach (DatePicker datePicker in FindVisualChildren<DatePicker>(RootGrid))
@@ -286,8 +315,10 @@ namespace NII   // Программа ведения базы данных "Со
 			}
 			foreach (DatePicker child in FindVisualChildren<DatePicker>(obj))
 			{
-				if (child.SelectedDate.Value != null) dtp.Add(true);
-			}
+                var date = new DateTime(1016, 1, 1);
+                child.SelectedDate = date;
+                if (child.SelectedDate.Value != null && child.SelectedDate != date) dtp.Add(true);   
+            }
 
 			if ((txt.Any(a => a == true) & txt.Count == 7) & (lstbx.Any(a => a == true) & lstbx.Count == 4) & (dtp.Any(a => a == true) & dtp.Count == 1)) return true;
 			else return false;
@@ -309,8 +340,10 @@ namespace NII   // Программа ведения базы данных "Со
 			}
 			foreach (DatePicker child in FindVisualChildren<DatePicker>(obj))
 			{
-				if (child.SelectedDate.Value != null) dtp.Add(true);
-			}
+                var date = new DateTime(1016, 1, 1);
+                child.SelectedDate = date;
+                if (child.SelectedDate.Value != null && child.SelectedDate != date) dtp.Add(true);
+            }
 
 			if ((txt.Any(a => a == true) & txt.Count == 5) & (cmb.Any(a => a == true) & cmb.Count == 2) & (dtp.Any(a => a == true) & dtp.Count == 1)) return true;
 			else return false;
@@ -1356,31 +1389,6 @@ namespace NII   // Программа ведения базы данных "Со
 					break;
 			}
 		}
-		#endregion
-
-		private void ComboBox_Chart_Selection_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (Grid_Equipment_Chart == null || Grid_Samples_Chart == null) return;
-			ComboBox cmb = sender as ComboBox;
-			switch (((ComboBoxItem)cmb.SelectedItem).Content.ToString())
-			{
-				case "Samples":					
-					Grid_Equipment_Chart.Visibility = Visibility.Collapsed;
-					Grid_Equipment_Chart.IsEnabled = false;
-
-					Grid_Samples_Chart.Visibility = Visibility.Visible;
-					Grid_Samples_Chart.IsEnabled = true;
-					break;
-
-				case "Equipment":
-					Grid_Equipment_Chart.Visibility = Visibility.Visible;
-					Grid_Equipment_Chart.IsEnabled = true;
-
-					Grid_Samples_Chart.Visibility = Visibility.Collapsed;
-					Grid_Samples_Chart.IsEnabled = false;
-					break;
-			}
-		}
-	}
+        #endregion
+    }
 }
-// Chart : https://code.msdn.microsoft.com/Chart-Control-in-WPF-c9727c28  

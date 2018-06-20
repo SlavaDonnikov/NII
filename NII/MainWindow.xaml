@@ -60,8 +60,8 @@
 
 						<Border x:Name="Menu_Home_Page" Style="{StaticResource BorderEdge}" Margin="1,35,0,1" MouseLeftButtonDown="Menu_MouseLeftButtonDown" >
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
-								<Label Style="{DynamicResource MenuLabel}" Content="Home page" />
-								<materialDesign:PackIcon Kind="HomeAssistant" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
+								<Label Style="{DynamicResource MenuLabel}" Content="Charts" />
+								<materialDesign:PackIcon Kind="ChartBar" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
 							</StackPanel>
 						</Border>
 						<Border x:Name="Menu_Projects" Style="{StaticResource BorderEdge}" MouseLeftButtonDown="Menu_MouseLeftButtonDown"   >
@@ -94,24 +94,6 @@
 								<materialDesign:PackIcon Kind="Chip" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
 							</StackPanel>
 						</Border>
-						<Border Style="{StaticResource BorderEdge}" >
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
-								<Label Style="{DynamicResource MenuLabel}" Content="Add Record" />
-								<materialDesign:PackIcon Kind="DatabasePlus" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
-							</StackPanel>
-						</Border>
-						<Border Style="{StaticResource BorderEdge}" >
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center"  >
-								<Label Style="{DynamicResource MenuLabel}" Content="Delete Record" />
-								<materialDesign:PackIcon Kind="DatabaseMinus" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
-							</StackPanel>
-						</Border>
-						<Border Style="{StaticResource BorderEdge}" Margin="1,1,0,0">
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
-								<Label Style="{DynamicResource MenuLabel}" Content="Settings" />
-								<materialDesign:PackIcon Kind="Settings" Foreground="#E6E6FA" Width="30" Height="30" Margin="45,0,0,0" VerticalAlignment="Center"/>
-							</StackPanel>
-						</Border>
 					</StackPanel>
 				</Border>
 			</Canvas>
@@ -140,18 +122,16 @@
 				</Button>
 			</StackPanel>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch" >
-				<Ellipse Margin="20,0" Height="10" Width="10" HorizontalAlignment="Left" VerticalAlignment="Center" Fill="#12ae44" StrokeStartLineCap="Round">
-
-				</Ellipse>
-				<Label x:Name="CurrentApplicationActionStatus" Content="Current Application Status" Margin="0,0,0,0" FontFamily="Stencil" FontSize="12"
+                <Ellipse Margin="20,-1,15,0" Height="10" Width="10" HorizontalAlignment="Left" VerticalAlignment="Center" Fill="#E6E6FA" StrokeStartLineCap="Round"/>
+                <Label x:Name="CurrentApplicationActionStatus" Content="Research Institute Application" Margin="0,0,0,0" FontFamily="Stencil" FontSize="12"
                        HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 			</StackPanel>
 		</Grid>
 
 		<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 		
-		<!-- Home Page -->
-		<Grid x:Name="Grid_Home_Page" Background="#F5F5F5" Panel.ZIndex="0" Grid.Row="1" Visibility="Visible">
+		<!-- Chart Page -->
+		<Grid x:Name="Grid_Home_Page" Background="#F5F5F5" Panel.ZIndex="0" Grid.Row="1" Visibility="Collapsed">
 			<StackPanel Panel.ZIndex="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="40" Orientation="Horizontal">
 				<Label Content="Select a chart" Margin="370,-3.5,20,0" Padding="0" FontFamily="Papyrus" FontSize="36" Foreground="Black" HorizontalContentAlignment="Center" />
 				<ComboBox x:Name="ComboBox_Chart_Selection" Margin="0,0,0,0"  Width="200" BorderThickness="0 0 0 1" BorderBrush="#D2B48C" 
@@ -1283,7 +1263,7 @@
 			<Grid Margin="0,-20,0,0" Panel.ZIndex="1" Background="#F5F5F5" HorizontalAlignment="Stretch">
 				<Grid.Style>
 					<Style TargetType="Grid">
-						<Setter Property="Height" Value="550"/>
+						<Setter Property="Height" Value="600"/>
 						<Setter Property="Width" Value="750"/>
 						<Setter Property="HorizontalAlignment" Value="Center"/>
 						<Setter Property="VerticalAlignment" Value="Center"/>
@@ -1303,7 +1283,10 @@
 						<Label Content="Entity Framework Code First" Margin="0,-10,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 						<Label Content="WPF, XAML" Margin="0,-5,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                         <Label Content="MS SQL Server 2017" Margin="0,-5,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-					</StackPanel>
+                        <TextBlock Margin="0,0,0,0" Padding="0" FontFamily="Papyrus" FontSize="26" Foreground="Black" HorizontalAlignment="Center" >LiveCharts.Wpf : 
+							<Hyperlink FontSize="26" NavigateUri="https://lvcharts.net" RequestNavigate="Hyperlink_RequestNavigate">https://lvcharts.net</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
 				</Border>
 			</Grid>
 		</Grid>

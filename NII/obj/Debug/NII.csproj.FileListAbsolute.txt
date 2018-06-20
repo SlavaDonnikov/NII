@@ -18,7 +18,6 @@ E:\KPYP\CourseProject\NII\NII\obj\Debug\MainWindow.baml
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.g.resources
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Properties.Resources.resources
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.csproj.GenerateResource.Cache
-E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.csproj.CoreCompileInputs.cache
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.exe
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.pdb
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.Migrations.InitialCreate.resources
@@ -41,3 +40,4 @@ E:\KPYP\CourseProject\NII\NII\bin\Debug\LiveCharts.xml
 E:\KPYP\CourseProject\NII\NII\bin\Debug\LiveCharts.Wpf.pdb
 E:\KPYP\CourseProject\NII\NII\bin\Debug\LiveCharts.Wpf.xml
 E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.csprojResolveAssemblyReference.cache
+E:\KPYP\CourseProject\NII\NII\obj\Debug\NII.csproj.CoreCompileInputs.cache
